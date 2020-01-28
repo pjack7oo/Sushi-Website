@@ -15,14 +15,18 @@ ul {
     width: 100%;
 }
 
-li {
-    float: left;
+li:last-child{
+    border-right: none;
 }
 li a {
+    float: left;
+    font-size: large;
+    border-right: 1px solid #bbb;
     display: block;
     color: white;
     text-align: center;
-    padding:  14px 16px;
+    position: relative;
+    padding:  20px 40px;
     text-decoration: none;
 }
 
@@ -34,6 +38,7 @@ h1 {
 }
 p {
     color: red;
+    font-size: large;
 }
 
 .active {
