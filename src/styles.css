@@ -53,6 +53,8 @@ p {
 }
 #content-wrap {
     padding-bottom: 2.5rem;
+    padding: 25px;
+    margin: 10px;
 }
 #footer {
     position: absolute;
