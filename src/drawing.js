@@ -27,10 +27,22 @@ var gctx;
 var offsetX, offsetY;
 var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
 
-
 const shapeType = {
     RECTANGLE: 'Rectangle',
     CIRCLE: 'Circle'
+}
+
+const rollingMatt = {
+    type: shapeType.RECTANGLE,
+    x: 300,
+    y: 300,
+    w: 100,
+    h: 100,
+    Intcolor: '#444444',
+    Outcolor: '#444444',
+    fill: true,
+    lineWidth: 1,
+    image: null
 }
 
 context.fillStyle = 'Gray';
@@ -98,7 +110,7 @@ function myDbkClick(e)
 {
     var mouse = getMouse(e);
     addBox(shapeType.RECTANGLE, mouse.x - 10, mouse.y - 10, 20, 20, 
-        true, 'Blue', 'Red');
+        true, 'Blue', 'Blue');
     Invalidate();
 }
 
@@ -116,7 +128,6 @@ function myDown(e)
 
         if (inBounds(mouse, boxes[i]))
         {
-            console.log("true");
             mySelect   = boxes[i];
             offsetX    = mouse.x - mySelect.x;
             offsetY    = mouse.y - mySelect.y;
@@ -151,11 +162,22 @@ function myDown(e)
 }
 function inBounds(mouse, shape)
 {
-    console.log('mx:'+mouse.x + ' my: ' + mouse.y)
     return ((mouse.x >= shape.x) && (mouse.y >= shape.y) && 
         (mouse.x < shape.x + shape.w) && (mouse.y < shape.y + shape.h));
 }
 
+function Contains(mShape, oShape)
+{
+    if ((oShape.x >= mShape.x) && (oShape.x + oShape.w < mShape.x + mShape.w) &&
+        (oShape.y >= mShape.y) && (oShape.y + oShape.h < mShape.y + mShape.h))
+        {
+            return true;
+        }
+    else 
+    {
+        return false;
+    }
+}
 function myMove(e)
 {
     if (isDrag)
@@ -172,8 +194,10 @@ function myMove(e)
 function myUp()
 {
     isDrag = false;
+    console.log(Contains(rollingMatt,mySelect));
     mySelect = null;
     canvas.onmousemove = null;
+    
     Invalidate();
 }
 
@@ -188,7 +212,6 @@ function Box() {
     this.y = 0;
     this.w = 1;
     this.h = 1;
-    this.radius = 1;
     this.Intcolor = '#444444';
     this.Outcolor = '#444444';
     this.fill = true;
@@ -233,6 +256,7 @@ function draw()
         clear(context);
 
         //background
+        drawShape(context,rollingMatt);
 
         //draw all shapes
         
