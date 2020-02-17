@@ -40,7 +40,12 @@ p {
     color: red;
     font-size: large;
 }
-
+a:link {
+    text-decoration: none;
+}
+a:hover {
+    color: green;
+}
 .active {
     background-color: green;
 }
