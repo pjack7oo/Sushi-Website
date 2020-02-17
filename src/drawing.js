@@ -24,16 +24,39 @@ var ghostcanvas;
 /**@type {CanvasRenderingContext2D} */
 var gctx;
 
-var offsetx, offsety;
+var offsetX, offsetY;
 var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
 
+
+const shapeType = {
+    RECTANGLE: 'Rectangle',
+    CIRCLE: 'Circle'
+}
+
 context.fillStyle = 'Gray';
-context.fillRect(0,0,600,400);
 init();
 
-const shape = {
-    RECTANGLE,
-    CIRCLE
+function getMouse(e) 
+{
+    // var element = canvas, offsetX = 0, offsetY = 0, mx, my;
+
+    // if(element.offsetParent !== undefined)
+    // {
+    //     do {
+    //        offsetX += element.offsetLeft;
+    //        offsetY += element.offsetTop;
+    //     } while ((element = element.offsetParent));
+    // }
+
+    // offsetX += this.stylePaddingLeft + this.styleBorderLeft + this.htmlLeft;
+    // offsetY += this.stylePaddingTop + this.styleBorderTop + this.htmlTop;
+
+    // mx = e.pageX - offsetX;
+    // my = e.pageY - offsetY;
+
+    var rect = canvas.getBoundingClientRect();
+
+    return {x: e.clientX - rect.left, y: e.clientY - Math.floor(rect.top)};
 }
 
 function init()
@@ -63,10 +86,95 @@ function init()
 
     // add custom init
 
-    addBox(200, 200, 40, 40, true, 'Orange', 'Orange');
+    addBox(shapeType.RECTANGLE, 200, 200, 40, 40, true, 'Orange', 'Orange');
 
-    addBox(25, 90, 25, 25, true, 'Blue', 'Green');
+    addBox(shapeType.RECTANGLE, 25, 90, 25, 25, true, 'Blue', 'Green');
 
+    console.log(boxes.length);
+
+}
+
+function myDbkClick(e)
+{
+    var mouse = getMouse(e);
+    addBox(shapeType.RECTANGLE, mouse.x - 10, mouse.y - 10, 20, 20, 
+        true, 'Blue', 'Red');
+    Invalidate();
+}
+
+function myDown(e)
+{
+    var mouse = getMouse(e);
+    clear(gctx);
+
+    for (var i = 0; i < boxes.length; i++)
+    {
+        drawShape(gctx, boxes[i]);
+
+        var imageData = gctx.getImageData(mouse.x, mouse.y, 1, 1).data;
+        var index = (mouse.x + mouse.y * imageData.width) * 4;
+
+        if (inBounds(mouse, boxes[i]))
+        {
+            console.log("true");
+            mySelect   = boxes[i];
+            offsetX    = mouse.x - mySelect.x;
+            offsetY    = mouse.y - mySelect.y;
+            mySelect.x = mouse.x - offsetX;
+            mySelect.y = mouse.y - offsetY;
+            isDrag = true;
+            canvas.onmousemove = myMove; 
+            Invalidate();
+            clear(gctx);
+            return;
+        }
+        // if (imageData[3] > 0) {
+        //     console.log("true");
+        //     mySelect   = boxes[i];
+        //     offsetX    = mouse.x - mySelect.x;
+        //     offsetY    = mouse.y - mySelect.y;
+        //     mySelect.x = mouse.x - offsetX;
+        //     mySelect.y = mouse.y - offsetY;
+        //     isDrag = true;
+        //     canvas.onmousemove = myMove; 
+        //     Invalidate();
+        //     clear(gctx);
+        //     return;
+        // }
+    }
+
+    mySelect = null;
+
+    clear(gctx);
+
+    Invalidate();
+}
+function inBounds(mouse, shape)
+{
+    console.log('mx:'+mouse.x + ' my: ' + mouse.y)
+    return ((mouse.x >= shape.x) && (mouse.y >= shape.y) && 
+        (mouse.x < shape.x + shape.w) && (mouse.y < shape.y + shape.h));
+}
+
+function myMove(e)
+{
+    if (isDrag)
+    {
+        var mouse = getMouse(e);
+
+        mySelect.x = mouse.x - offsetX;
+        mySelect.y = mouse.y - offsetY;
+
+        Invalidate();
+    }
+}
+
+function myUp()
+{
+    isDrag = false;
+    mySelect = null;
+    canvas.onmousemove = null;
+    Invalidate();
 }
 
 function Invalidate()
@@ -75,7 +183,7 @@ function Invalidate()
 }
 
 function Box() {
-    this.type = shape.RECTANGLE;
+    this.type = shapeType.RECTANGLE;
     this.x = 0;
     this.y = 0;
     this.w = 1;
@@ -111,7 +219,7 @@ function addBox(type ,x, y, w, h, fill, Intcolor, Outcolor, lineWidth = 4, hasIm
 
 function addCircle()
 {
-    
+
 }
 function clear(ctx)
 {
@@ -122,37 +230,53 @@ function draw()
 {
     if (validCanvas == false)
     {
-        clear(ctx);
+        clear(context);
 
         //background
 
-        //draw all boxes
-        drawShapes(boxes);
+        //draw all shapes
+        
+        drawShapes(context, boxes);
 
+        if (mySelect != null)
+        {
+            context.strokeStyle = mySelectColor;
+            context.lineWidth = mySelectWidth;
+            context.strokeRect(mySelect.x, mySelect.y, mySelect.w, mySelect.h);
+        }
+
+        //draw on top like stats
+
+        validCanvas = true;
     }
 }
 
-function drawShapes(boxes)
+function drawShapes(ctx, boxes)
 {
     for (var i = 0; i < boxes.length; i++)
     {
-        drawShape(context, boxes[i]);
+        drawShape(ctx, boxes[i]);
     }
 }
 
 function drawShape(ctx, shape)
 {
-    switch(shape)
+    switch(shape.type)
     {
-        case shape.type.RECTANGLE:
+        case shapeType.RECTANGLE:
             drawRectangle(ctx, shape.x, shape.y, shape.w, shape.h, 
                 shape.fill, shape.Intcolor, shape.Outcolor, shape.lineWidth);
-        case shape.type.CIRCLE:
-            
+            break;
+        case shapeType.CIRCLE:
+            drawCircle(ctx,shape.x, shape.y, shape.radius, 
+                shape.fill, shape.Intcolor, shape.Outcolor, shape.lineWidth);
+            break;
+        default:
+            break;
     }
 }
 
-function drawRectangle(ctx ,x, y, w, h, fill, Intcolor, Outcolor, lineWidth){
+function drawRectangle(ctx, x, y, w, h, fill, Intcolor, Outcolor, lineWidth){
     ctx.strokeStyle = Outcolor;
     ctx.lineWidth = lineWidth;
     ctx.strokeRect(x,y,w,h);
