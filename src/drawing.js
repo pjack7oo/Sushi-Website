@@ -32,6 +32,13 @@ const shapeType = {
     CIRCLE: 'Circle'
 }
 
+const ingredients = {
+    avocado: 'Avocado',
+    cucumber: 'Cucumber',
+    crab: 'Crab',
+    rice: 'Rice'
+}
+
 const rollingMatt = {
     type: shapeType.RECTANGLE,
     x: 300,
@@ -45,6 +52,12 @@ const rollingMatt = {
     image: null
 }
 
+const CaliforniaRoll = {
+    name: 'California Roll',
+    inner: [ingredients.avocado, ingredients.cucumber, ingredients.crab],
+    outer: [ingredients.rice],
+    nori: true
+}
 context.fillStyle = 'Gray';
 init();
 
@@ -168,14 +181,16 @@ function inBounds(mouse, shape)
 
 function Contains(mShape, oShape)
 {
-    if ((oShape.x >= mShape.x) && (oShape.x + oShape.w < mShape.x + mShape.w) &&
-        (oShape.y >= mShape.y) && (oShape.y + oShape.h < mShape.y + mShape.h))
+    if (oShape != null){
+        if ((oShape.x >= mShape.x) && (oShape.x + oShape.w < mShape.x + mShape.w) &&
+            (oShape.y >= mShape.y) && (oShape.y + oShape.h < mShape.y + mShape.h))
+            {
+                return true;
+            }
+        else 
         {
-            return true;
+            return false;
         }
-    else 
-    {
-        return false;
     }
 }
 function myMove(e)
@@ -204,6 +219,38 @@ function myUp()
 function Invalidate()
 {
     validCanvas = false;
+}
+
+function roll()
+{
+    this.nori = true;
+    this.name = '';
+    this.inner = [];
+    this.outer = [];
+}
+
+function createRoll(nori, inner, outer)
+{
+    var roll   = new roll;
+    roll.nori  = nori;
+    roll.inner = inner;
+    roll.outer = outer;
+    roll.name  = getRollName(roll);
+}
+
+
+
+function getRollName(roll)
+{
+    for(var i = 0;i < roll.inner.length; i++)
+    {
+
+    }
+
+    for(var i = 0;i < roll.outer.length; i++)
+    {
+
+    }
 }
 
 function Box() {
