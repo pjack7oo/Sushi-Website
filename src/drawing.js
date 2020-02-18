@@ -598,6 +598,10 @@ function draw()
         {
             drawShapes(context, outerIngredients);
         }
+        if(madeRolls.length > 0)
+        {
+            drawRolls(context, madeRolls);
+        }
 
         if (mySelect != null)
         {
@@ -634,6 +638,14 @@ function drawShape(ctx, shape)
             break;
         default:
             break;
+    }
+}
+
+function drawRolls(ctx, rolls)
+{
+    for (var i = 0; i < rolls.length; i++)
+    {
+        drawShape(ctx, rolls[i].box);
     }
 }
 
