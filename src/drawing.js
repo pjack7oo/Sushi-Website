@@ -292,7 +292,7 @@ function myUp()
             delete boxes[boxes.findIndex(findIngredient)];
             boxes.sort();
             boxes.pop();
-            //console.log(innerIngredients);
+            console.log(innerIngredients);
         }
         else
         {
