@@ -306,7 +306,7 @@ function myUp()
     if (mySelect != null){
     if (!Contains(rollingMatt,mySelect))
     {
-        if (isInner)
+        if (isInner && fromMatt)
         {
             boxes.push(mySelect);
             delete innerIngredients[innerIngredients.findIndex(findIngredient)];
