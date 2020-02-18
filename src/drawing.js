@@ -6,7 +6,9 @@ var boxes = [];
 var innerIngredients = [];
 var outerIngredients = [];
 var isInner = true;
+var fromMatt = false;
 
+var madeRolls = [];
 var interval = 20;
 var height;
 var width;
@@ -57,12 +59,23 @@ const rollingMatt = {
 
 const CaliforniaRoll = {
     name: 'California Roll',
-    inner: [ingredients.AVOCADO, ingredients.CUCUMBER, ingredients.CRAB],
+    inner: [ingredients.AVOCADO, ingredients.CRAB, ingredients.CUCUMBER],
     outer: [ingredients.RICE],
     nori: true
 }
+const AlaskaRoll = {
+    name: 'Alaska Roll',
+    inner: [ingredients.AVOCADO, ingredients.CUCUMBER],
+    outer: [ingredients.RICE],
+    nori: true
+}
+
+var rollList = [CaliforniaRoll, AlaskaRoll];
+
 context.fillStyle = 'Gray';
 init();
+
+
 
 function getMouse(e) 
 {
@@ -118,10 +131,25 @@ function init()
     
     addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
 
-    addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Green', 'Green');
+    addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
 
+    addBox(shapeType.RECTANGLE, 25, 125, 40, 25, ingredients.CRAB,true, 'white', 'Red',2);
+    
+    addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
     //console.log(boxes.length);
 
+}
+
+function containsIngredients()
+{
+    if(innerIngredients.length > 0 || outerIngredients > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 function doKeyPress(e)
@@ -158,7 +186,7 @@ function myDbkClick(e)
         ingredients.RICE, true, 'Blue', 'Blue');
     Invalidate();
 }
-var fromMatt = false;
+
 function myDown(e)
 {
     var mouse = getMouse(e);
@@ -296,10 +324,20 @@ function myUp()
         }
         else
         {
+            if (fromMatt)
+            {
+                fromMatt = false;
+                mySelect = null;
+                canvas.onmousemove = null;
+    
+                Invalidate();
+                return;
+            }
             outerIngredients.push(mySelect);
             delete boxes[boxes.findIndex(findIngredient)];
             boxes.sort();
             boxes.pop();
+            console.log(outerIngredients);
             
         }
     }
@@ -314,7 +352,7 @@ function myUp()
             innerIngredients.pop();
             //console.log(innerIngredients);
         }
-        else
+        else if (!isInner && fromMatt)
         {
             boxes.push(mySelect);
             delete outerIngredients[outerIngredients.findIndex(findIngredient)];
@@ -334,38 +372,138 @@ function Invalidate()
     validCanvas = false;
 }
 
-function roll()
+function Roll()
 {
     this.nori = true;
     this.name = '';
     this.inner = [];
     this.outer = [];
+    this.box = new Box;
 }
 
-function createRoll(nori, inner, outer)
+function createRoll(nori, inner, outer, box)
 {
-    var roll   = new roll;
+    var roll   = new Roll;
     roll.nori  = nori;
     roll.inner = inner;
     roll.outer = outer;
+    roll.inner.sort();
+    roll.outer.sort();
     roll.name  = getRollName(roll);
+    roll.box = box;
+    return roll;
 }
 
-
-
-function getRollName(roll)
+function assembleRoll()
 {
-
-    for(var i = 0;i < roll.inner.length; i++)
+    //later this will have timer to completion of roll
+    let box = createBox(shapeType.RECTANGLE,rollingMatt.x, rollingMatt.y, rollingMatt.w, rollingMatt.h / 4, 
+        null, true, 'Dark Green', 'Dark Green');
+    
+    var inner = [];
+    var outer = [];
+    for (var i = 0; i < innerIngredients.length;i++)
     {
-
+        inner.push(innerIngredients[i].name);
     }
-
-    for(var i = 0;i < roll.outer.length; i++)
+    for (var i = 0; i < outerIngredients.length;i++)
     {
+        outer.push(outerIngredients[i].name);
+    }  
+    var roll = createRoll(true,inner, outer,box);
+    innerIngredients.splice(0, innerIngredients.length);
+    outerIngredients.splice(0,outerIngredients.length); 
+    madeRolls.push(roll);
+    console.log(madeRolls);
+    Invalidate();
+}
 
+
+
+function getRollName(roll, acceptedRolls = [])
+{
+    var rollsToDel = [];
+    if (acceptedRolls.length == 0)
+    {
+        for (let i = 0; i <rollList.length;i++)
+        {
+            if (((roll.inner.length + roll.outer.length) === (rollList[i].inner.length + rollList[i].outer.length)))
+            {
+                acceptedRolls.push(i);
+                console.log(i);
+            }
+        }
+        if (acceptedRolls.length == 0)
+        {
+            return 'Unknown Roll'
+        }
+        getRollName(roll, acceptedRolls);
+    }
+    else
+    {
+        console.log(acceptedRolls.length);
+        for (let i = 0; i < acceptedRolls.length; i++)
+        {
+            for(let k = 0; k < roll.inner.length; k++)
+            {
+                if (roll.inner[k] != rollList[acceptedRolls[i]].inner[k])
+                {
+                    rollsToDel.push(i);
+                    break;
+                }
+            }
+            
+            if (roll.outer.length > rollList[acceptedRolls[i]].outer.length)
+                {
+                    rollsToDel.push(i);
+                    continue;
+                }
+            for(let k = 0; k < roll.outer.length; k++)
+            {
+                
+                if (roll.outer[k] != rollList[acceptedRolls[i]].outer[k])
+                {
+                    rollsToDel.push(i);
+                    break;
+                }
+            }
+        }
+    }
+    eliminateDuplicates(rollsToDel);
+    for (let i = 0; i < rollsToDel.length; i++)
+    {
+        delete acceptedRolls[rollsToDel[i]];
+    }
+    var cleanArray = acceptedRolls.filter(function() {return true});
+    if (cleanArray.length == 0)
+    {
+        return 'Unknown Roll'
+    }
+    else if (cleanArray.length == 1)
+    {
+        return rollList[cleanArray[0]].name;
+    }
+    else
+    {
+        getRollName(roll, cleanArray);
     }
 }
+
+function eliminateDuplicates(arr) {
+    var i,
+        len = arr.length,
+        out = [],
+        obj = {};
+  
+    for (i = 0; i < len; i++) {
+      obj[arr[i]] = 0;
+    }
+    for (i in obj) {
+      out.push(i);
+    }
+    return out;
+  }
+
 
 function Box() {
     this.type = shapeType.RECTANGLE;
@@ -381,8 +519,27 @@ function Box() {
     this.image;
 }
 
+function createBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth = 4, hasImage = false, image = false)
+{
+    var rect= new Box;
+    rect.type = type;
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
+    rect.name = ingrType;
+    rect.fill = fill;
+    rect.Intcolor = Intcolor;
+    rect.Outcolor = Outcolor;
+    rect.lineWidth = lineWidth;
+    if (hasImage)
+    {
+        rect.image = image;
+    }
+    return rect;
+}
 
-function addBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth = 4, hasImage = false, image = false,) 
+function addBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth = 4, hasImage = false, image = false) 
 {
     var rect= new Box;
     rect.type = type;
@@ -400,7 +557,6 @@ function addBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth 
         rect.image = image;
     }
     boxes.push(rect);
-    
 }
 
 function addCircle()
@@ -419,7 +575,17 @@ function draw()
         clear(context);
 
         //background
-        drawShape(context,rollingMatt);//rolling matt
+        drawShape(context,rollingMatt);
+        context.fillStyle = 'Red';
+        context.font = "30px Arial";
+        if (isInner){
+            context.fillText('Inner',300,300);
+        }
+        else
+        {
+            context.fillText('Outer',300,300);
+        }
+        
 
         //draw all shapes
         
