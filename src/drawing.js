@@ -2,6 +2,11 @@ var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
 var context = canvas.getContext('2d');
 
+var fps = 60;
+var start = Date.now();
+var frameDuration = 1000/fps;
+var lag = 0;
+
 var boxes = [];
 var innerIngredients = [];
 var outerIngredients = [];
@@ -153,6 +158,69 @@ function init()
     //console.log(boxes.length);
 
 }
+
+function gameLoop()
+{
+    requestAnimationFrame(gameLoop, canvas);
+
+    var current = Date.now(), elapsed = current - start;
+    start = current;
+
+    lag += elapsed;
+
+    while (lag >= frameDuration)
+    {
+        update();
+
+        lag -= frameDuration;
+    }
+
+    var lagOffset = lag / frameDuration;
+    render(lagOffset);
+}
+
+function update() //used to update logic of parts of game like getting customers based on tim and randomness
+{
+
+}
+
+function render(lagOffset)
+{
+    clear(context);
+    // sprites.forEach(function(sprite){
+    //     ctx.save();
+    //     //Call the sprite's `render` method and feed it the
+    //     //canvas context and lagOffset
+    //     sprite.render(ctx, lagOffset);
+    //     ctx.restore();
+    // });
+}
+
+//to be edited to enable easy drawing of each object cause its currently messy
+o.render = function(ctx, lagOffset) {
+    //Use the `lagOffset` and previous x/y positions to
+    //calculate the render positions
+    o.x = (o.x - o.oldX) * lagOffset + o.oldX;
+    o.y = (o.y - o.oldY) * lagOffset + o.oldY;
+
+    //Render the sprite
+    ctx.strokeStyle = o.strokeStyle;
+    ctx.lineWidth = o.lineWidth;
+    ctx.fillStyle = o.fillStyle;
+    ctx.translate(
+      o.renderX + (o.width / 2),
+      o.renderY + (o.height / 2)
+     );
+    ctx.beginPath();
+    ctx.rect(-o.width / 2, -o.height / 2, o.width, o.height);
+    ctx.stroke();
+    ctx.fill();
+
+    //Capture the sprite's current positions to use as 
+    //the previous position on the next frame
+    o.oldX = o.x;
+    o.oldY = o.y;
+  };
 
 function containsIngredients()
 {
@@ -358,12 +426,11 @@ function checkCuttingStation()
     {
         if (Contains(cuttingStation,mySelect))
         {
-            console.log("tre");
         
-        cuttingStationItem = getRoll(mySelect);
-        delete madeRolls[madeRolls.findIndex(findRoll)];
-        madeRolls.sort();
-        madeRolls.pop();
+            cuttingStationItem = getRoll(mySelect);
+            delete madeRolls[madeRolls.findIndex(findRoll)];
+            madeRolls.sort();
+            madeRolls.pop();
         }
     }
 }
@@ -729,6 +796,7 @@ function draw()
         drawShape(context,rollingMatt); //rollingMatt
         drawShape(context,cuttingStation);
         context.fillStyle = 'Red';
+        context.textAlign = "left";
         context.font = "30px Arial";
         if (isInner){
             context.fillText('Inner',300,300);
