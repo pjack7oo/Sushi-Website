@@ -356,12 +356,15 @@ function checkCuttingStation()
 {
     if (mySelect.name == null)
     {
-        console.log("tre");
+        if (Contains(cuttingStation,mySelect))
+        {
+            console.log("tre");
         
         cuttingStationItem = getRoll(mySelect);
         delete madeRolls[madeRolls.findIndex(findRoll)];
         madeRolls.sort();
         madeRolls.pop();
+        }
     }
 }
 function getRoll(box)
@@ -672,6 +675,45 @@ function addBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth 
     boxes.push(rect);
 }
 
+function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textColor = 'Black', intColor = '#add8e6' , outColor = 'Gray')
+{
+    drawRoundRect(ctx, x, y, w, h, 5, true, true, intColor, outColor);
+    ctx.font = font;
+    ctx.textAlign = "center";
+    ctx.fillStyle = textColor;
+    ctx.fillText(text,x+ w/2,y+h/2);
+    Invalidate();
+}
+
+function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true,intColor = 'Blue' , outColor = 'Gray')
+{
+    if (typeof stroke == "undefined")
+    {
+        stroke = true;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + w - radius, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+    ctx.lineTo(x + w, y + h - radius);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+    ctx.lineTo(x + radius, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    if (fill) 
+    {
+        ctx.fillStyle = intColor;
+        ctx.fill();
+    }
+    if (stroke) 
+    {
+        ctx.strokeStyle = outColor;
+        ctx.stroke();
+    }
+}
+
 function clear(ctx)
 {
     ctx.fillStyle = 'Gray';
@@ -700,6 +742,7 @@ function draw()
         //draw all shapes
         if (cuttingStationItem != null)
         {
+            drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Ready to cut! Press C key");
             drawShape(context,cuttingStationItem.box);
         }
         if(madeRolls.length > 0)
