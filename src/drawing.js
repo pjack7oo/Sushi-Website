@@ -7,7 +7,8 @@ var start = Date.now();
 var frameDuration = 1000/fps;
 var lag = 0;
 
-var boxes = [];
+
+var activeIngredients = [];
 var innerIngredients = [];
 var outerIngredients = [];
 var isInner = true;
@@ -56,8 +57,8 @@ const rollingMatt = {
     y: 300,
     w: 100,
     h: 100,
-    Intcolor: '#444444',
-    Outcolor: '#444444',
+    intcolor: '#444444',
+    outcolor: '#444444',
     fill: true,
     lineWidth: 1,
     image: null
@@ -69,8 +70,8 @@ const cuttingStation = {
     y: 300,
     w: 150,
     h: 100,
-    Intcolor: '#C19A6B',
-    Outcolor: '#C19A6B',
+    intcolor: '#C19A6B',
+    outcolor: '#C19A6B',
     fill: true,
     lineWidth: 1,
     image: null
@@ -138,7 +139,7 @@ function init()
         styleBorderTop   = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderTopWidth'], 10)  || 0;
     }
 
-    setInterval(draw, interval); //draw every interval milliseconds
+    //setInterval(draw, interval); //draw every interval milliseconds
 
     canvas.onmousedown = myDown;
     canvas.onmouseup   = myUp;
@@ -148,15 +149,16 @@ function init()
     canvas.addEventListener('keydown', doKeyPress,true);
     // add custom init
     
-    addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
-
-    addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
-
-    addBox(shapeType.RECTANGLE, 25, 125, 40, 25, ingredients.CRAB,true, 'white', 'Red',2);
-    
-    addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
+    // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
+    createRice(100,100);
+    // addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
+    createAvocado(100, 200);
+    // addBox(shapeType.RECTANGLE, 25, 125, 40, 25, ingredients.CRAB,true, 'white', 'Red',2);
+    createCrab(100, 220);
+    // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
+    createCucumber(100, 240);
     //console.log(boxes.length);
-
+    gameLoop();
 }
 
 function gameLoop()
@@ -176,7 +178,8 @@ function gameLoop()
     }
 
     var lagOffset = lag / frameDuration;
-    render(lagOffset);
+    //render(lagOffset);
+    draw();
 }
 
 function update() //used to update logic of parts of game like getting customers based on tim and randomness
@@ -220,7 +223,7 @@ o.render = function(ctx, lagOffset) {
     //the previous position on the next frame
     o.oldX = o.x;
     o.oldY = o.y;
-  };
+};
 
 function containsIngredients()
 {
@@ -274,14 +277,15 @@ function myDown(e)
     var mouse = getMouse(e);
     clear(gctx);
 
-    for (var i = 0; i < boxes.length; i++)
+    for (var i = 0; i < activeIngredients.length; i++)
     {
-        drawShape(gctx, boxes[i]);
+        drawShape(gctx, activeIngredients[i]);
 
         // var imageData = gctx.getImageData(mouse.x, mouse.y, 1, 1).data;
         // var index = (mouse.x + mouse.y * imageData.width) * 4;
         fromMatt = false;
-        ret = moveItem(mouse, boxes[i]);
+        ret = moveItem(mouse, activeIngredients[i]);
+        console.log(ret);
         
         if(ret)
         {
@@ -321,10 +325,10 @@ function myDown(e)
     {
         for(let i = 0; i < madeRolls.length; i++)
         {
-            drawShape(gctx,madeRolls[i].box);
+            drawShape(gctx,madeRolls[i]);
             console.log("test");
             
-            ret = moveItem(mouse, madeRolls[i].box);
+            ret = moveItem(mouse, madeRolls[i]);
         
             if(ret)
             {
@@ -342,13 +346,13 @@ function myDown(e)
 
 function moveItem(mouse, item)
 {
-    if (inBounds(mouse, item))
+    if (inBounds(mouse, item.renderType))
     {
         mySelect   = item;
-        offsetX    = mouse.x - mySelect.x;
-        offsetY    = mouse.y - mySelect.y;
-        mySelect.x = mouse.x - offsetX;
-        mySelect.y = mouse.y - offsetY;
+        offsetX    = mouse.x - mySelect.renderType.x;
+        offsetY    = mouse.y - mySelect.renderType.y;
+        mySelect.renderType.x = mouse.x - offsetX;
+        mySelect.renderType.y = mouse.y - offsetY;
         
         isDrag = true;
         canvas.onmousemove = myMove; 
@@ -393,8 +397,8 @@ function myMove(e)
 
         var mouse = getMouse(e);
 
-        mySelect.x = mouse.x - offsetX;
-        mySelect.y = mouse.y - offsetY;
+        mySelect.renderType.x = mouse.x - offsetX;
+        mySelect.renderType.y = mouse.y - offsetY;
 
         Invalidate();
     }
@@ -403,7 +407,7 @@ function myMove(e)
 function findIngredient(ingredient)
 {
     //console.log((mySelect.name === ingredient.name && mySelect.x == ingredient.x && mySelect.y == ingredient.y));
-    return (mySelect.name === ingredient.name && mySelect.x == ingredient.x && mySelect.y == ingredient.y);
+    return (mySelect.name === ingredient.name && mySelect.renderType.x == ingredient.renderType.x && mySelect.renderType.y == ingredient.renderType.y);
 }
 
 function myUp()
@@ -422,16 +426,21 @@ function myUp()
 
 function checkCuttingStation()
 {
-    if (mySelect.name == null)
-    {
-        if (Contains(cuttingStation,mySelect))
+    if (mySelect != null){
+        if (mySelect.canEnterCuttingStation == false)
         {
-        
-            cuttingStationItem = getRoll(mySelect);
+            Invalidate();
+            return;
+        }
+        if (Contains(cuttingStation,mySelect.renderType))
+        {
+            cuttingStationItem = mySelect;
+            console.log(cuttingStationItem);
+            
             delete madeRolls[madeRolls.findIndex(findRoll)];
             madeRolls.sort();
             madeRolls.pop();
-        }
+            }
     }
 }
 function getRoll(box)
@@ -457,7 +466,7 @@ function checkMatt()
         Invalidate();
         return;
     }
-    if(Contains(rollingMatt,mySelect)){
+    if(Contains(rollingMatt,mySelect.renderType)){
         if (isInner)
         {
             if (fromMatt)
@@ -470,9 +479,9 @@ function checkMatt()
                 return;
             }
             innerIngredients.push(mySelect);
-            delete boxes[boxes.findIndex(findIngredient)];
-            boxes.sort();
-            boxes.pop();
+            delete activeIngredients[activeIngredients.findIndex(findIngredient)];
+            activeIngredients.sort();
+            activeIngredients.pop();
             console.log(innerIngredients);
         }
         else
@@ -487,9 +496,9 @@ function checkMatt()
                 return;
             }
             outerIngredients.push(mySelect);
-            delete boxes[boxes.findIndex(findIngredient)];
-            boxes.sort();
-            boxes.pop();
+            delete activeIngredients[activeIngredients.findIndex(findIngredient)];
+            activeIngredients.sort();
+            activeIngredients.pop();
             console.log(outerIngredients);
             
         }
@@ -499,7 +508,7 @@ function checkMatt()
         {
             if (isInner && fromMatt)
             {
-                boxes.push(mySelect);
+                activeIngredients.push(mySelect);
                 delete innerIngredients[innerIngredients.findIndex(findIngredient)];
                 innerIngredients.sort();
                 innerIngredients.pop();
@@ -507,7 +516,7 @@ function checkMatt()
             }
             else if (!isInner && fromMatt)
             {
-                boxes.push(mySelect);
+                activeIngredients.push(mySelect);
                 delete outerIngredients[outerIngredients.findIndex(findIngredient)];
                 outerIngredients.sort();
                 outerIngredients.pop();
@@ -524,7 +533,9 @@ function Invalidate()
 function Plate()
 {
     this.roll = null;
-    this.circle = null;
+    this.renderType = Circle;
+    this.canEnterMatt = false;
+    this.canEnterCuttingStation = false;
 }
 
 function Roll()
@@ -533,7 +544,50 @@ function Roll()
     this.name = '';
     this.inner = [];
     this.outer = [];
-    this.box = new Box;
+    this.renderType = Box;
+    this.canEnterMatt = false;
+    this.canEnterCuttingStation = true;
+}
+
+function Ingredient()
+{
+    this.name = ingredients;
+    this.renderType = null;
+    this.canEnterMatt = true;
+    this.canEnterCuttingStation = false;
+}
+
+function createIngredient(name, renderType)
+{
+    var ingredient = new Ingredient();
+    ingredient.name = name;
+    ingredient.renderType = renderType;
+    return ingredient;
+}
+
+function createRice(x,y)
+{
+    var box = createBox(x, y, 75, 75, true, 'white', 'white');
+    var rice = createIngredient(ingredients.RICE, box);
+    activeIngredients.push(rice);
+}
+function createCucumber(x,y)
+{
+    var box = createBox(x, y, 50, 10, true, 'green', 'green');
+    var cucumber = createIngredient(ingredients.CUCUMBER, box);
+    activeIngredients.push(cucumber);
+}
+function createCrab(x,y)
+{
+    var box = createBox(x, y, 50, 20, true, 'white', 'red');
+    var crab = createIngredient(ingredients.CRAB, box);
+    activeIngredients.push(crab);
+}
+function createAvocado(x,y)
+{
+    var box = createBox(x, y, 50, 20, true, 'yellow', 'green');
+    var avocado = createIngredient(ingredients.AVOCADO, box);
+    activeIngredients.push(avocado);
 }
 
 function createRoll(nori, inner, outer, itemBox)
@@ -545,15 +599,15 @@ function createRoll(nori, inner, outer, itemBox)
     roll.inner.sort();
     roll.outer.sort();
     roll.name  = getRollName(roll);
-    roll.box = itemBox;
+    roll.renderType = itemBox;
     return roll;
 }
 
 function assembleRoll()
 {
     //later this will have timer to completion of roll
-    let box1 = createBox(shapeType.RECTANGLE,rollingMatt.x, rollingMatt.y, rollingMatt.w, rollingMatt.h / 4, 
-        null, true, 'Green', 'Green',3,false,null,false);
+    let box1 = createBox(rollingMatt.x, rollingMatt.y, rollingMatt.w, rollingMatt.h / 4, 
+        true, 'Green', 'Green',3,false,null,false);
     
     var inner = [];
     var outer = [];
@@ -666,13 +720,12 @@ function Box() {
     this.y = 0;
     this.w = 1;
     this.h = 1;
-    this.name = ingredients.RICE;
-    this.Intcolor = '#444444';
-    this.Outcolor = '#444444';
+    //this.name = ingredients.RICE;
+    this.intcolor = '#444444';
+    this.outcolor = '#444444';
     this.fill = true;
     this.lineWidth = 1;
     this.image;
-    this.canEnterMatt = true;
 }
 
 function  Circle()
@@ -681,8 +734,8 @@ function  Circle()
     this.radius = 1;
     this.x = 0;
     this.y = 0;
-    this.Intcolor = '#444444';
-    this.Outcolor = '#444444';
+    this.intcolor = '#444444';
+    this.outcolor = '#444444';
     this.fill = true;
     this.lineWidth = 1;
     this.image;
@@ -694,25 +747,24 @@ function addCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
     circle.radius    = radius;
     circle.x         = x;
     circle.y         = y;
-    circle.Intcolor  = intColor;
+    circle.intcolor  = intColor;
     circle.outColor  = outColor;
     circle.fill      = fill;
     circle.lineWidth = lineWidth;
     return circle;
 }
 
-function createBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth = 4, hasImage = false, image = false, able = true)
+function createBox(x, y, w, h, fill, Intcolor, Outcolor, able = true, lineWidth = 4, hasImage = false, image = false)
 {
     var rect= new Box;
-    rect.type = type;
+    rect.type = shapeType.RECTANGLE;
     rect.x = x;
     rect.y = y;
     rect.w = w;
     rect.h = h;
-    rect.name = ingrType;
     rect.fill = fill;
-    rect.Intcolor = Intcolor;
-    rect.Outcolor = Outcolor;
+    rect.intcolor = Intcolor;
+    rect.outcolor = Outcolor;
     rect.lineWidth = lineWidth;
     rect.canEnterMatt = able;
     if (hasImage)
@@ -721,7 +773,7 @@ function createBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWid
     }
     return rect;
 }
-
+//to be removed
 function addBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth = 4, hasImage = false, image = false) 
 {
     var rect= new Box;
@@ -730,7 +782,6 @@ function addBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth 
     rect.y = y;
     rect.w = w;
     rect.h = h;
-    rect.name = ingrType;
     rect.fill = fill;
     rect.Intcolor = Intcolor;
     rect.Outcolor = Outcolor;
@@ -810,14 +861,16 @@ function draw()
         //draw all shapes
         if (cuttingStationItem != null)
         {
+            
+            
             drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Ready to cut! Press C key");
-            drawShape(context,cuttingStationItem.box);
+            drawShape(context, cuttingStationItem.renderType);
         }
         if(madeRolls.length > 0)
         {
             drawRolls(context, madeRolls);
         }
-        drawShapes(context, boxes);
+        drawShapes(context, activeIngredients);
         if (isInner && innerIngredients.length > 0)
         {
             drawShapes(context, innerIngredients);
@@ -841,11 +894,11 @@ function draw()
     }
 }
 
-function drawShapes(ctx, boxes)
+function drawShapes(ctx, shapes)
 {
-    for (var i = 0; i < boxes.length; i++)
+    for (var i = 0; i < shapes.length; i++)
     {
-        drawShape(ctx, boxes[i]);
+        drawShape(ctx, shapes[i].renderType);
     }
 }
 
@@ -855,11 +908,11 @@ function drawShape(ctx, shape)
     {
         case shapeType.RECTANGLE:
             drawRectangle(ctx, shape.x, shape.y, shape.w, shape.h, 
-                shape.fill, shape.Intcolor, shape.Outcolor, shape.lineWidth);
+                shape.fill, shape.intcolor, shape.outcolor, shape.lineWidth);
             break;
         case shapeType.CIRCLE:
             drawCircle(ctx,shape.x, shape.y, shape.radius, 
-                shape.fill, shape.Intcolor, shape.Outcolor, shape.lineWidth);
+                shape.fill, shape.intcolor, shape.outcolor, shape.lineWidth);
             break;
         default:
             break;
@@ -870,7 +923,7 @@ function drawRolls(ctx, rolls)
 {
     for (var i = 0; i < rolls.length; i++)
     {
-        drawShape(ctx, rolls[i].box);
+        drawShape(ctx, rolls[i].renderType);
     }
 }
 
