@@ -16,6 +16,7 @@ var fromMatt = false;
 
 
 var madeRolls = [];
+var moveablePlates = [];
 var interval = 20;
 var height;
 var width;
@@ -29,6 +30,7 @@ var validCanvas = false;
 var validLogic = true;
 
 var mySelect;
+var mySelect2;
 
 var mySelectColor = 'Red';
 var mySelectWidth = 3;
@@ -82,6 +84,22 @@ const cuttingStation = {
     startTime: 0,
     isActive: false,
     cuttingSpeed: 1 
+}
+
+const plateHolder = {
+    type: shapeType.RECTANGLE,
+    x: 300,
+    y: 150,
+    w: 100,
+    h: 100,
+    intcolor: '#FF0000',
+    outcolor: '#8B0000',
+    fill: true,
+    lineWidth: 1,
+    image: null,
+    plate: Plate,
+    startTime: 0,
+    isActive: false,
 }
 
 const CaliforniaRoll = {
@@ -150,11 +168,15 @@ function init()
 
     canvas.onmousedown = myDown;
     canvas.onmouseup   = myUp;
-    canvas.ondblclick  = myDbkClick; // temp dbl click for making new boxes
+    //canvas.ondblclick  = myDbkClick; // temp dbl click for making new boxes
 
     canvas.setAttribute("tabindex", 0);
     canvas.addEventListener('keydown', doKeyPress,true);
     // add custom init
+    createPlate();
+
+    
+    
     
     // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
     createRice(100,100);
@@ -164,9 +186,9 @@ function init()
     createCrab(100, 220);
     // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
     createCucumber(100, 240);
-    //console.log(boxes.length);
+    //console.log(activeIngredients);
     //gameLoop();
-
+    
 }
 
 function gameLoop()
@@ -253,15 +275,26 @@ function checkCutRoll()
             cuttingStation.isActive = false;
             cuttingStation.startTime = 0;
             cuttingStation.item.isCut = true;
+            cuttingStation.item.canEnterPlate = true;
+            cuttingStation.item.canEnterCuttingStation = false;
+            downSizeRoll(cuttingStation.item);
             madeRolls.push(cuttingStation.item);
             cuttingStation.item = null;
             console.log('Cut roll');
+            console.log(madeRolls);
                 
             Invalidate();
         }
     }
     
         //drawProgressBar(cuttingStation.x, cuttingStation.y, cuttingStation.w, 20, precentComplete); //TODO implement drawProgressBar
+        //todo implement cutAnimation
+}
+
+function downSizeRoll(roll)
+{
+    roll.renderType.w = 30;
+    roll.renderType.h = 30;
 }
 
 function cutRoll()
@@ -275,6 +308,7 @@ function cutRoll()
         cuttingStation.isActive = true;
         cuttingStation.startTime = performance.now();
     }
+    Invalidate();
 }
 
 function doKeyPress(e)
@@ -306,18 +340,10 @@ function doKeyPress(e)
     if (e.keyCode == 67)
     {
         cutRoll();
+        
     }
 
 
-}
-
-function myDbkClick(e)
-{
-    var mouse = getMouse(e);
-    addBox(shapeType.RECTANGLE, mouse.x - 10, mouse.y - 10, 20, 20, 
-        ingredients.RICE, true, 'Blue', 'Blue');
-    Invalidate();
-    
 }
 
 function myDown(e)
@@ -373,10 +399,24 @@ function myDown(e)
         for(let i = 0; i < madeRolls.length; i++)
         {
             drawShape(gctx,madeRolls[i]);
-            console.log("test");
             
             ret = moveItem(mouse, madeRolls[i]);
         
+            if(ret)
+            {
+                return;
+            }
+        }
+    }
+
+    if (moveablePlates.length > 0)
+    {
+        for(let i = 0; i < moveablePlates.length; i++)
+        {
+            drawShape(gctx,moveablePlates[i]);
+            
+            ret = moveCircle(mouse, moveablePlates[i]);
+            
             if(ret)
             {
                 return;
@@ -412,6 +452,27 @@ function moveItem(mouse, item)
     return false;
 }
 
+function moveCircle(mouse, item)
+{
+    if (inCircle(mouse.x, mouse.y, item.renderType))
+    {
+        mySelect   = item;
+        mySelect2  = item.roll; 
+        offsetX    = mouse.x - mySelect.renderType.x;
+        offsetY    = mouse.y - mySelect.renderType.y;
+        mySelect.renderType.x = mouse.x - offsetX;
+        mySelect.renderType.y = mouse.y - offsetY;
+        // mySelect.renderType.oldX = mouse.x - offsetX;
+        // mySelect.renderType.oldY = mouse.y - offsetY;
+        isDrag = true;
+        canvas.onmousemove = myMove; 
+        Invalidate();
+        clear(gctx);
+        return true;
+    }
+    return false;
+}
+
 function inBounds(mouse, shape)
 {
     return ((mouse.x >= shape.x) && (mouse.y >= shape.y) && 
@@ -436,8 +497,22 @@ function Contains(mShape, oShape)
 function inCircle(x, y, circle)
 {
     dx = Math.abs(x-circle.x);
+    if ( dx > circle.radius) return false;
     dy = Math.abs(y-circle.y);
+    if ( dy > circle.radius) return false;
+    if ( dx + dy <= circle.radius) return true;
     return (dx*dx + dy*dy <= circle.radius*circle.radius);
+}
+
+function containsRoll(roll, plate)
+{   
+    let box = roll.renderType;
+    if (!inCircle(box.x, box.y, plate.renderType))                 return false;
+    if (!inCircle(box.x,box.y + box.w, plate.renderType))          return false;
+    if (!inCircle(box.x + box.w, box.y, plate.renderType))         return false;
+    if (!inCircle(box.x + box.w, box.y + box.h, plate.renderType)) return false;
+    
+    return true;
 }
 function myMove(e)
 {
@@ -445,12 +520,21 @@ function myMove(e)
     {
 
         var mouse = getMouse(e);
-
+        if (mySelect2 != null)
+        {
+            correctRollOnPlate(mySelect, mySelect2);
+        }
         mySelect.renderType.x = mouse.x - offsetX;
         mySelect.renderType.y = mouse.y - offsetY;
 
         Invalidate();
     }
+}
+
+function correctRollOnPlate(plate, roll)
+{
+    roll.renderType.x = plate.renderType.x - roll.renderType.w /2;
+    roll.renderType.y = plate.renderType.y - roll.renderType.h / 2;
 }
 
 function findIngredient(ingredient)
@@ -466,6 +550,8 @@ function myUp()
     {
         checkMatt();
         checkCuttingStation();
+        addRollToPlate();
+         
     }
     mySelect = null;
     canvas.onmousemove = null;
@@ -510,7 +596,8 @@ function getRoll(box)
 }
 function findRoll(box)
 {
-    return (mySelect.renderType.x == box.x && mySelect.renderType.y == box.y);
+
+    return (mySelect.renderType.x == box.renderType.x && mySelect.renderType.y == box.renderType.y);
 }
 
 function checkMatt()
@@ -595,6 +682,36 @@ function Plate()
     this.renderType = Circle;
     this.canEnterMatt = false;
     this.canEnterCuttingStation = false;
+    this.canEnterPlate = false;
+}
+
+function createPlate()
+{
+    var plate = new Plate;
+    plate.renderType = createCircle(plateHolder.x + plateHolder.w /2, plateHolder.y + plateHolder.h /2, 40, true, 'white', 'gold', 3);
+    plateHolder.plate = plate; 
+}
+
+function addRollToPlate()
+{
+    if (mySelect != null)
+    {
+        if (mySelect.canEnterPlate == true)
+        {
+            if (containsRoll(mySelect,plateHolder.plate))
+            {
+                correctRollOnPlate(plateHolder.plate, mySelect);
+                plateHolder.plate.roll = madeRolls[madeRolls.findIndex(findRoll)];
+                delete madeRolls[madeRolls.findIndex(findRoll)];
+                madeRolls.sort();
+                madeRolls.pop();
+                
+                moveablePlates.push(plateHolder.plate);
+                console.log(moveablePlates);
+                
+            }
+        }
+    }
 }
 
 function Roll()
@@ -606,6 +723,7 @@ function Roll()
     this.renderType = Box;
     this.canEnterMatt = false;
     this.canEnterCuttingStation = true;
+    this.canEnterPlate = false;
     this.isCut = false;
 }
 
@@ -615,6 +733,7 @@ function Ingredient()
     this.renderType = null;
     this.canEnterMatt = true;
     this.canEnterCuttingStation = false;
+    this.canEnterPlate = false;
 }
 
 function createIngredient(name, renderType)
@@ -798,20 +917,21 @@ function  Circle()
     this.y      = 0;
     this.oldX   = 0;
     this.oldY   = 0;
-    this.intcolor = '#444444';
-    this.outcolor = '#444444';
+    this.intColor = '#444444';
+    this.outColor = '#444444';
     this.fill = true;
     this.lineWidth = 1;
     this.image;
 }
 
-function addCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
+function createCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
 {
     var circle = new Circle;
+    
     circle.radius    = radius;
     circle.x         = x;
     circle.y         = y;
-    circle.intcolor  = intColor;
+    circle.intColor  = intColor;
     circle.outColor  = outColor;
     circle.fill      = fill;
     circle.lineWidth = lineWidth;
@@ -910,8 +1030,9 @@ function draw()
         clear(context);
 
         //background
-        drawShape(context,rollingMatt); //rollingMatt
-        drawShape(context,cuttingStation);
+        drawShape(context, rollingMatt); //rollingMatt
+        drawShape(context, cuttingStation);
+        drawShape(context, plateHolder);
         context.fillStyle = 'Red';
         context.textAlign = "left";
         context.font = "30px Arial";
@@ -925,16 +1046,32 @@ function draw()
         
 
         //draw all shapes
+        if (plateHolder.plate != null)
+        {
+            //console.log(plateHolder.plate.renderType);
+            
+            drawShape(context, plateHolder.plate.renderType);
+        }
         if (cuttingStation.item != null)
         {
-            drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Ready to cut! Press C key");
+            if (cuttingStation.isActive)
+            {
+                drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Cutting!");
+            }
+            else
+            {
+                drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Ready to cut! Press C key");
+            }
             drawShape(context, cuttingStation.item.renderType);
+            Invalidate();
         }
         if(madeRolls.length > 0)
         {
             drawRolls(context, madeRolls);
         }
+
         drawShapes(context, activeIngredients);
+
         if (isInner && innerIngredients.length > 0)
         {
             drawShapes(context, innerIngredients);
@@ -942,6 +1079,12 @@ function draw()
         else if (!isInner && outerIngredients.length > 0)
         {
             drawShapes(context, outerIngredients);
+        }
+
+        if (moveablePlates.length > 0)
+        {
+            drawPlates(context,moveablePlates);
+
         }
         
 
@@ -961,13 +1104,24 @@ function draw()
 function drawShapes(ctx, shapes)
 {
     for (var i = 0; i < shapes.length; i++)
-    {
+    {   
+        
         drawShape(ctx, shapes[i].renderType);
+    }
+}
+
+function drawPlates(ctx, plates)
+{
+    for (var i = 0; i < plates.length; i++)
+    {
+        drawShape(ctx, plates[i].renderType);
+        drawShape(ctx, plates[i].roll.renderType);
     }
 }
 
 function drawShape(ctx, shape)
 {
+    
     switch(shape.type)
     {
         case shapeType.RECTANGLE:
@@ -976,7 +1130,7 @@ function drawShape(ctx, shape)
             break;
         case shapeType.CIRCLE:
             drawCircle(ctx,shape.x, shape.y, shape.radius, 
-                shape.fill, shape.intcolor, shape.outcolor, shape.lineWidth);
+                shape.fill, shape.intColor, shape.outColor, shape.lineWidth);
             break;
         default:
             break;
