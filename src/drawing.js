@@ -14,7 +14,7 @@ var outerIngredients = [];
 var isInner = true;
 var fromMatt = false;
 
-var cuttingStationItem = null;
+
 var madeRolls = [];
 var interval = 20;
 var height;
@@ -26,6 +26,7 @@ var isDrag = false;
 var mx, my; //coordinates
 
 var validCanvas = false;
+var validLogic = true;
 
 var mySelect;
 
@@ -61,7 +62,9 @@ const rollingMatt = {
     outcolor: '#444444',
     fill: true,
     lineWidth: 1,
-    image: null
+    image: null,
+    startTime: 0,
+    isActive: false
 }
 
 const cuttingStation = {
@@ -74,7 +77,11 @@ const cuttingStation = {
     outcolor: '#C19A6B',
     fill: true,
     lineWidth: 1,
-    image: null
+    image: null,
+    item: null,
+    startTime: 0,
+    isActive: false,
+    cuttingSpeed: 1 
 }
 
 const CaliforniaRoll = {
@@ -139,7 +146,7 @@ function init()
         styleBorderTop   = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderTopWidth'], 10)  || 0;
     }
 
-    //setInterval(draw, interval); //draw every interval milliseconds
+    setInterval(update, interval); //draw every interval milliseconds
 
     canvas.onmousedown = myDown;
     canvas.onmouseup   = myUp;
@@ -158,38 +165,50 @@ function init()
     // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
     createCucumber(100, 240);
     //console.log(boxes.length);
-    gameLoop();
+    //gameLoop();
+
 }
 
 function gameLoop()
 {
     requestAnimationFrame(gameLoop, canvas);
 
-    var current = Date.now(), elapsed = current - start;
+    var current = performance.now(), elapsed = current - start;
     start = current;
 
-    lag += elapsed;
+    //lag += elapsed;
 
-    while (lag >= frameDuration)
+    if (validLogic == false)
     {
-        update();
-
-        lag -= frameDuration;
+        validLogic = true;
     }
 
     var lagOffset = lag / frameDuration;
     //render(lagOffset);
-    draw();
+    //draw();
 }
 
 function update() //used to update logic of parts of game like getting customers based on tim and randomness
 {
+    //requestAnimationFrame(update, canvas);
 
+    var current = performance.now();
+
+    
+    
+    checkCutRoll();
+    validLogic = true;
+    
+    draw();
 }
 
-function render(lagOffset)
+function render(lagOffset) //probably will be removed
 {
     clear(context);
+    for (var item in activeIngredients)
+    {
+        itemRender(context, lagOffset, activeIngredients[item].renderType);
+    }
     // sprites.forEach(function(sprite){
     //     ctx.save();
     //     //Call the sprite's `render` method and feed it the
@@ -198,32 +217,17 @@ function render(lagOffset)
     //     ctx.restore();
     // });
 }
+function itemRender(ctx, lagOffset, item)
+{
+    item.x = (item.x - item.oldX) * lagOffset + item.oldX;
+    item.y = (item.y - item.oldY) * lagOffset + item.oldY;
 
-//to be edited to enable easy drawing of each object cause its currently messy
-o.render = function(ctx, lagOffset) {
-    //Use the `lagOffset` and previous x/y positions to
-    //calculate the render positions
-    o.x = (o.x - o.oldX) * lagOffset + o.oldX;
-    o.y = (o.y - o.oldY) * lagOffset + o.oldY;
+    drawShape(ctx, item);
 
-    //Render the sprite
-    ctx.strokeStyle = o.strokeStyle;
-    ctx.lineWidth = o.lineWidth;
-    ctx.fillStyle = o.fillStyle;
-    ctx.translate(
-      o.renderX + (o.width / 2),
-      o.renderY + (o.height / 2)
-     );
-    ctx.beginPath();
-    ctx.rect(-o.width / 2, -o.height / 2, o.width, o.height);
-    ctx.stroke();
-    ctx.fill();
+    item.oldX = item.x;
+    item.oldY = item.y;
+}
 
-    //Capture the sprite's current positions to use as 
-    //the previous position on the next frame
-    o.oldX = o.x;
-    o.oldY = o.y;
-};
 
 function containsIngredients()
 {
@@ -234,6 +238,42 @@ function containsIngredients()
     else
     {
         return false;
+    }
+}
+
+function checkCutRoll()
+{
+    if (cuttingStation.isActive == true){
+        let currentTime     = performance.now(),
+            elapsedTime     = currentTime - cuttingStation.startTime,
+            precentComplete = elapsedTime / (8000 / cuttingStation.cuttingSpeed) * 100;
+            
+        if (precentComplete >= 100)
+        {
+            cuttingStation.isActive = false;
+            cuttingStation.startTime = 0;
+            cuttingStation.item.isCut = true;
+            madeRolls.push(cuttingStation.item);
+            cuttingStation.item = null;
+            console.log('Cut roll');
+                
+            Invalidate();
+        }
+    }
+    
+        //drawProgressBar(cuttingStation.x, cuttingStation.y, cuttingStation.w, 20, precentComplete); //TODO implement drawProgressBar
+}
+
+function cutRoll()
+{
+    if (cuttingStation.item == null )
+    {
+        return;
+    }
+    if (cuttingStation.isActive == false)
+    {
+        cuttingStation.isActive = true;
+        cuttingStation.startTime = performance.now();
     }
 }
 
@@ -262,6 +302,13 @@ function doKeyPress(e)
         }
         Invalidate();
     }
+
+    if (e.keyCode == 67)
+    {
+        cutRoll();
+    }
+
+
 }
 
 function myDbkClick(e)
@@ -270,6 +317,7 @@ function myDbkClick(e)
     addBox(shapeType.RECTANGLE, mouse.x - 10, mouse.y - 10, 20, 20, 
         ingredients.RICE, true, 'Blue', 'Blue');
     Invalidate();
+    
 }
 
 function myDown(e)
@@ -285,7 +333,6 @@ function myDown(e)
         // var index = (mouse.x + mouse.y * imageData.width) * 4;
         fromMatt = false;
         ret = moveItem(mouse, activeIngredients[i]);
-        console.log(ret);
         
         if(ret)
         {
@@ -353,6 +400,8 @@ function moveItem(mouse, item)
         offsetY    = mouse.y - mySelect.renderType.y;
         mySelect.renderType.x = mouse.x - offsetX;
         mySelect.renderType.y = mouse.y - offsetY;
+        mySelect.renderType.oldX = mouse.x - offsetX;
+        mySelect.renderType.oldY = mouse.y - offsetY;
         
         isDrag = true;
         canvas.onmousemove = myMove; 
@@ -432,10 +481,15 @@ function checkCuttingStation()
             Invalidate();
             return;
         }
+        if (mySelect.isCut == true)
+        {
+            Invalidate();
+            return;
+        }
         if (Contains(cuttingStation,mySelect.renderType))
         {
-            cuttingStationItem = mySelect;
-            console.log(cuttingStationItem);
+            cuttingStation.item = mySelect;
+            console.log(cuttingStation.item);
             
             delete madeRolls[madeRolls.findIndex(findRoll)];
             madeRolls.sort();
@@ -456,7 +510,7 @@ function getRoll(box)
 }
 function findRoll(box)
 {
-    return (mySelect.x == box.x && mySelect.y == box.y);
+    return (mySelect.renderType.x == box.x && mySelect.renderType.y == box.y);
 }
 
 function checkMatt()
@@ -530,6 +584,11 @@ function Invalidate()
     validCanvas = false;
 }
 
+function InvalidateLogic()
+{
+    validLogic = false;
+}
+
 function Plate()
 {
     this.roll = null;
@@ -547,6 +606,7 @@ function Roll()
     this.renderType = Box;
     this.canEnterMatt = false;
     this.canEnterCuttingStation = true;
+    this.isCut = false;
 }
 
 function Ingredient()
@@ -720,6 +780,8 @@ function Box() {
     this.y = 0;
     this.w = 1;
     this.h = 1;
+    this.oldX   = 0;
+    this.oldY   = 0;
     //this.name = ingredients.RICE;
     this.intcolor = '#444444';
     this.outcolor = '#444444';
@@ -732,8 +794,10 @@ function  Circle()
 {
     this.type = shapeType.CIRCLE;
     this.radius = 1;
-    this.x = 0;
-    this.y = 0;
+    this.x      = 0;
+    this.y      = 0;
+    this.oldX   = 0;
+    this.oldY   = 0;
     this.intcolor = '#444444';
     this.outcolor = '#444444';
     this.fill = true;
@@ -754,17 +818,19 @@ function addCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
     return circle;
 }
 
-function createBox(x, y, w, h, fill, Intcolor, Outcolor, able = true, lineWidth = 4, hasImage = false, image = false)
+function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lineWidth = 4, hasImage = false, image = false)
 {
     var rect= new Box;
     rect.type = shapeType.RECTANGLE;
     rect.x = x;
     rect.y = y;
+    rect.oldX = x;
+    rect.oldY = y;
     rect.w = w;
     rect.h = h;
     rect.fill = fill;
-    rect.intcolor = Intcolor;
-    rect.outcolor = Outcolor;
+    rect.intcolor = intcolor;
+    rect.outcolor = outcolor;
     rect.lineWidth = lineWidth;
     rect.canEnterMatt = able;
     if (hasImage)
@@ -774,24 +840,24 @@ function createBox(x, y, w, h, fill, Intcolor, Outcolor, able = true, lineWidth 
     return rect;
 }
 //to be removed
-function addBox(type ,x, y, w, h, ingrType, fill, Intcolor, Outcolor, lineWidth = 4, hasImage = false, image = false) 
-{
-    var rect= new Box;
-    rect.type = type;
-    rect.x = x;
-    rect.y = y;
-    rect.w = w;
-    rect.h = h;
-    rect.fill = fill;
-    rect.Intcolor = Intcolor;
-    rect.Outcolor = Outcolor;
-    rect.lineWidth = lineWidth;
-    if (hasImage)
-    {
-        rect.image = image;
-    }
-    boxes.push(rect);
-}
+// function addBox(type ,x, y, w, h, ingrType, fill, intcolor, outcolor, lineWidth = 4, hasImage = false, image = false) 
+// {
+//     var rect= new Box;
+//     rect.type = type;
+//     rect.x = x;
+//     rect.y = y;
+//     rect.w = w;
+//     rect.h = h;
+//     rect.fill = fill;
+//     rect.Intcolor = intcolor;
+//     rect.Outcolor = outcolor;
+//     rect.lineWidth = lineWidth;
+//     if (hasImage)
+//     {
+//         rect.image = image;
+//     }
+//     boxes.push(rect);
+// }
 
 function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textColor = 'Black', intColor = '#add8e6' , outColor = 'Gray')
 {
@@ -859,12 +925,10 @@ function draw()
         
 
         //draw all shapes
-        if (cuttingStationItem != null)
+        if (cuttingStation.item != null)
         {
-            
-            
             drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Ready to cut! Press C key");
-            drawShape(context, cuttingStationItem.renderType);
+            drawShape(context, cuttingStation.item.renderType);
         }
         if(madeRolls.length > 0)
         {
@@ -885,7 +949,7 @@ function draw()
         {
             context.strokeStyle = mySelectColor;
             context.lineWidth = mySelectWidth;
-            context.strokeRect(mySelect.x, mySelect.y, mySelect.w, mySelect.h);
+            context.strokeRect(mySelect.renderType.x, mySelect.renderType.y, mySelect.renderType.w, mySelect.renderType.h);
         }
 
         //draw on top like stats
@@ -927,26 +991,26 @@ function drawRolls(ctx, rolls)
     }
 }
 
-function drawRectangle(ctx, x, y, w, h, fill, Intcolor, Outcolor, lineWidth){
-    ctx.strokeStyle = Outcolor;
+function drawRectangle(ctx, x, y, w, h, fill, intcolor, outcolor, lineWidth){
+    ctx.strokeStyle = outcolor;
     ctx.lineWidth = lineWidth;
     ctx.strokeRect(x,y,w,h);
     if (fill)
     {
-        ctx.fillStyle = Intcolor;
+        ctx.fillStyle = intcolor;
         ctx.fillRect(x,y,w,h);
     }
     
 }
 
-function drawCircle(context ,x, y, radius, fillCircle, Intcolor, Outcolor, lineWidth) {
-    context.strokeStyle = Outcolor;
+function drawCircle(context ,x, y, radius, fillCircle, intcolor, outcolor, lineWidth) {
+    context.strokeStyle = outcolor;
     context.beginPath();
 
     context.arc(x, y, radius, 0, Math.PI * 2, false);
     
     if (fillCircle) {
-        context.fillStyle = Intcolor;
+        context.fillStyle = intcolor;
         context.fill();
     } 
     context.lineWidth = lineWidth;
