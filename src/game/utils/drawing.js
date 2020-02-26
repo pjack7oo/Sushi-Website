@@ -1,3 +1,12 @@
+
+import * as plates      from '../objects/plates.js';
+import * as cutStation  from '../objects/cuttingstation.js';
+import * as rollMatt    from '../objects/rollingmatt.js';
+import * as shapes      from './shapes.js';
+import * as ingredients from '../objects/ingredients.js';
+import * as rollControl from '../objects/rolls.js';
+
+
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
 var context = canvas.getContext('2d');
@@ -8,9 +17,9 @@ var frameDuration = 1000/fps;
 var lag = 0;
 
 
-var activeIngredients = [];
-var innerIngredients = [];
-var outerIngredients = [];
+// var activeIngredients = [];
+// var innerIngredients = [];
+// var outerIngredients = [];
 var isInner = true;
 var fromMatt = false;
 
@@ -35,90 +44,86 @@ var mySelect2;
 var mySelectColor = 'Red';
 var mySelectWidth = 3;
 
-var ghostcanvas;
-/**@type {CanvasRenderingContext2D} */
-var gctx;
+// var ghostcanvas;
+// /**@type {CanvasRenderingContext2D} */
+// var gctx;
 
 var offsetX, offsetY;
 var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
 
-const shapeType = {
-    RECTANGLE: 'Rectangle',
-    CIRCLE: 'Circle'
-}
+// const ingredients = {
+//     AVOCADO: 'Avocado',
+//     CUCUMBER: 'Cucumber',
+//     CRAB: 'Crab',
+//     RICE: 'Rice'
+// }
 
-const ingredients = {
-    AVOCADO: 'Avocado',
-    CUCUMBER: 'Cucumber',
-    CRAB: 'Crab',
-    RICE: 'Rice'
-}
+// export const rollingMatt = {
+//     type: shapeType.RECTANGLE,
+//     x: 300,
+//     y: 300,
+//     w: 100,
+//     h: 100,
+//     intcolor: '#444444',
+//     outcolor: '#444444',
+//     fill: true,
+//     lineWidth: 1,
+//     image: null,
+//     startTime: 0,
+//     isActive: false
+// }
 
-const rollingMatt = {
-    type: shapeType.RECTANGLE,
-    x: 300,
-    y: 300,
-    w: 100,
-    h: 100,
-    intcolor: '#444444',
-    outcolor: '#444444',
-    fill: true,
-    lineWidth: 1,
-    image: null,
-    startTime: 0,
-    isActive: false
-}
+// export const cuttingStation = {
+//     type: shapeType.RECTANGLE,
+//     x: 410,
+//     y: 300,
+//     w: 150,
+//     h: 100,
+//     intcolor: '#C19A6B',
+//     outcolor: '#C19A6B',
+//     fill: true,
+//     lineWidth: 1,
+//     image: null,
+//     item: null,
+//     startTime: 0,
+//     isActive: false,
+//     cuttingSpeed: 1 
+// }
 
-const cuttingStation = {
-    type: shapeType.RECTANGLE,
-    x: 410,
-    y: 300,
-    w: 150,
-    h: 100,
-    intcolor: '#C19A6B',
-    outcolor: '#C19A6B',
-    fill: true,
-    lineWidth: 1,
-    image: null,
-    item: null,
-    startTime: 0,
-    isActive: false,
-    cuttingSpeed: 1 
-}
+// export const plateHolder = {
+//     type: shapeType.RECTANGLE,
+//     x: 300,
+//     y: 150,
+//     w: 100,
+//     h: 100,
+//     intcolor: '#FF0000',
+//     outcolor: '#8B0000',
+//     fill: true,
+//     lineWidth: 1,
+//     image: null,
+//     plate: Plate,
+//     startTime: 0,
+//     isActive: false,
+// }
 
-const plateHolder = {
-    type: shapeType.RECTANGLE,
-    x: 300,
-    y: 150,
-    w: 100,
-    h: 100,
-    intcolor: '#FF0000',
-    outcolor: '#8B0000',
-    fill: true,
-    lineWidth: 1,
-    image: null,
-    plate: Plate,
-    startTime: 0,
-    isActive: false,
-}
+// const CaliforniaRoll = {
+//     name: 'California Roll',
+//     inner: [ingredients.AVOCADO, ingredients.CRAB, ingredients.CUCUMBER],
+//     outer: [ingredients.RICE],
+//     nori: true
+// }
 
-const CaliforniaRoll = {
-    name: 'California Roll',
-    inner: [ingredients.AVOCADO, ingredients.CRAB, ingredients.CUCUMBER],
-    outer: [ingredients.RICE],
-    nori: true
-}
-const AlaskaRoll = {
-    name: 'Alaska Roll',
-    inner: [ingredients.AVOCADO, ingredients.CUCUMBER],
-    outer: [ingredients.RICE],
-    nori: true
-}
+// const AlaskaRoll = {
+//     name: 'Alaska Roll',
+//     inner: [ingredients.AVOCADO, ingredients.CUCUMBER],
+//     outer: [ingredients.RICE],
+//     nori: true
+// }
 
-var rollList = [CaliforniaRoll, AlaskaRoll];
+// var rollList = [CaliforniaRoll, AlaskaRoll];
 
-context.fillStyle = 'Gray';
-init();
+// context.fillStyle = 'Gray';
+//init();
 
 
 
@@ -239,6 +244,7 @@ function render(lagOffset) //probably will be removed
     //     ctx.restore();
     // });
 }
+
 function itemRender(ctx, lagOffset, item)
 {
     item.x = (item.x - item.oldX) * lagOffset + item.oldX;
@@ -250,25 +256,12 @@ function itemRender(ctx, lagOffset, item)
     item.oldY = item.y;
 }
 
-
-function containsIngredients()
-{
-    if(innerIngredients.length > 0 || outerIngredients > 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 function checkCutRoll()
 {
-    if (cuttingStation.isActive == true){
+    if (cuttingStation.cuttingStation.isActive == true){
         let currentTime     = performance.now(),
-            elapsedTime     = currentTime - cuttingStation.startTime,
-            precentComplete = elapsedTime / (8000 / cuttingStation.cuttingSpeed) * 100;
+            elapsedTime     = currentTime - cuttingStation.cuttingStation.startTime,
+            precentComplete = elapsedTime / (8000 / cuttingStation.cuttingStation.cuttingSpeed) * 100;
             
         if (precentComplete >= 100)
         {
@@ -311,40 +304,40 @@ function cutRoll()
     Invalidate();
 }
 
-function doKeyPress(e)
-{
-    // the R key
-    if (e.keyCode == 82)
-    {
-        if (containsIngredients())
-        {
-            assembleRoll();
-        }
-    }
+// function doKeyPress(e)
+// {
+//     // the R key
+//     if (e.keyCode == 82)
+//     {
+//         if (containsIngredients())
+//         {
+//             assembleRoll();
+//         }
+//     }
 
-    // the F key
-    if (e.keyCode == 70)
-    {
-        console.log('flip');
-        if (isInner)
-        {
-            isInner = false;
-        }
-        else
-        {
-            isInner = true;
-        }
-        Invalidate();
-    }
+//     // the F key
+//     if (e.keyCode == 70)
+//     {
+//         console.log('flip');
+//         if (isInner)
+//         {
+//             isInner = false;
+//         }
+//         else
+//         {
+//             isInner = true;
+//         }
+//         Invalidate();
+//     }
 
-    if (e.keyCode == 67)
-    {
-        cutRoll();
+//     if (e.keyCode == 67)
+//     {
+//         cutRoll();
         
-    }
+//     }
 
 
-}
+// }
 
 function myDown(e)
 {
@@ -431,53 +424,49 @@ function myDown(e)
     Invalidate();
 }
 
-function moveItem(mouse, item)
-{
-    if (inBounds(mouse, item.renderType))
-    {
-        mySelect   = item;
-        offsetX    = mouse.x - mySelect.renderType.x;
-        offsetY    = mouse.y - mySelect.renderType.y;
-        mySelect.renderType.x = mouse.x - offsetX;
-        mySelect.renderType.y = mouse.y - offsetY;
-        mySelect.renderType.oldX = mouse.x - offsetX;
-        mySelect.renderType.oldY = mouse.y - offsetY;
+// function moveItem(mouse, item)
+// {
+//     if (inBounds(mouse, item.renderType))
+//     {
+//         mySelect   = item;
+//         offsetX    = mouse.x - mySelect.renderType.x;
+//         offsetY    = mouse.y - mySelect.renderType.y;
+//         mySelect.renderType.x = mouse.x - offsetX;
+//         mySelect.renderType.y = mouse.y - offsetY;
+//         mySelect.renderType.oldX = mouse.x - offsetX;
+//         mySelect.renderType.oldY = mouse.y - offsetY;
         
-        isDrag = true;
-        canvas.onmousemove = myMove; 
-        Invalidate();
-        clear(gctx);
-        return true;
-    }
-    return false;
-}
+//         isDrag = true;
+//         canvas.onmousemove = myMove; 
+//         Invalidate();
+//         clear(gctx);
+//         return true;
+//     }
+//     return false;
+// }
 
-function moveCircle(mouse, item)
-{
-    if (inCircle(mouse.x, mouse.y, item.renderType))
-    {
-        mySelect   = item;
-        mySelect2  = item.roll; 
-        offsetX    = mouse.x - mySelect.renderType.x;
-        offsetY    = mouse.y - mySelect.renderType.y;
-        mySelect.renderType.x = mouse.x - offsetX;
-        mySelect.renderType.y = mouse.y - offsetY;
-        // mySelect.renderType.oldX = mouse.x - offsetX;
-        // mySelect.renderType.oldY = mouse.y - offsetY;
-        isDrag = true;
-        canvas.onmousemove = myMove; 
-        Invalidate();
-        clear(gctx);
-        return true;
-    }
-    return false;
-}
+// function moveCircle(mouse, item)
+// {
+//     if (inCircle(mouse.x, mouse.y, item.renderType))
+//     {
+//         mySelect   = item;
+//         mySelect2  = item.roll; 
+//         offsetX    = mouse.x - mySelect.renderType.x;
+//         offsetY    = mouse.y - mySelect.renderType.y;
+//         mySelect.renderType.x = mouse.x - offsetX;
+//         mySelect.renderType.y = mouse.y - offsetY;
+//         // mySelect.renderType.oldX = mouse.x - offsetX;
+//         // mySelect.renderType.oldY = mouse.y - offsetY;
+//         isDrag = true;
+//         canvas.onmousemove = myMove; 
+//         Invalidate();
+//         clear(gctx);
+//         return true;
+//     }
+//     return false;
+// }
 
-function inBounds(mouse, shape)
-{
-    return ((mouse.x >= shape.x) && (mouse.y >= shape.y) && 
-        (mouse.x < shape.x + shape.w) && (mouse.y < shape.y + shape.h));
-}
+
 
 function Contains(mShape, oShape)
 {
@@ -514,22 +503,22 @@ function containsRoll(roll, plate)
     
     return true;
 }
-function myMove(e)
-{
-    if (isDrag)
-    {
+// function myMove(e)
+// {
+//     if (isDrag)
+//     {
 
-        var mouse = getMouse(e);
-        if (mySelect2 != null)
-        {
-            correctRollOnPlate(mySelect, mySelect2);
-        }
-        mySelect.renderType.x = mouse.x - offsetX;
-        mySelect.renderType.y = mouse.y - offsetY;
+//         var mouse = getMouse(e);
+//         if (mySelect2 != null)
+//         {
+//             correctRollOnPlate(mySelect, mySelect2);
+//         }
+//         mySelect.renderType.x = mouse.x - offsetX;
+//         mySelect.renderType.y = mouse.y - offsetY;
 
-        Invalidate();
-    }
-}
+//         Invalidate();
+//     }
+// }
 
 function correctRollOnPlate(plate, roll)
 {
@@ -543,21 +532,21 @@ function findIngredient(ingredient)
     return (mySelect.name === ingredient.name && mySelect.renderType.x == ingredient.renderType.x && mySelect.renderType.y == ingredient.renderType.y);
 }
 
-function myUp()
-{
-    isDrag = false;
-    if (mySelect != null)
-    {
-        checkMatt();
-        checkCuttingStation();
-        addRollToPlate();
+// function myUp()
+// {
+//     isDrag = false;
+//     if (mySelect != null)
+//     {
+//         checkMatt();
+//         checkCuttingStation();
+//         addRollToPlate();
          
-    }
-    mySelect = null;
-    canvas.onmousemove = null;
+//     }
+//     mySelect = null;
+//     canvas.onmousemove = null;
     
-    Invalidate();
-}
+//     Invalidate();
+// }
 
 function checkCuttingStation()
 {
@@ -666,7 +655,7 @@ function checkMatt()
     }
 }
 
-function Invalidate()
+export function Invalidate()
 {
     validCanvas = false;
 }
@@ -769,18 +758,18 @@ function createAvocado(x,y) //TODO remove
     activeIngredients.push(avocado);
 }
 
-function createRoll(nori, inner, outer, itemBox)
-{
-    var roll   = new Roll;
-    roll.nori  = nori;
-    roll.inner = inner;
-    roll.outer = outer;
-    roll.inner.sort();
-    roll.outer.sort();
-    roll.name  = getRollName(roll);
-    roll.renderType = itemBox;
-    return roll;
-}
+// function createRoll(nori, inner, outer, itemBox)
+// {
+//     var roll   = new Roll;
+//     roll.nori  = nori;
+//     roll.inner = inner;
+//     roll.outer = outer;
+//     roll.inner.sort();
+//     roll.outer.sort();
+//     roll.name  = getRollName(roll);
+//     roll.renderType = itemBox;
+//     return roll;
+// }
 
 function assembleRoll()
 {
@@ -898,72 +887,72 @@ function eliminateDuplicates(arr) {
   }
 
 
-export function Box() {
-    this.type = shapeType.RECTANGLE;
-    this.x = 0;
-    this.y = 0;
-    this.w = 1;
-    this.h = 1;
-    this.oldX   = 0;
-    this.oldY   = 0;
-    //this.name = ingredients.RICE;
-    this.intcolor = '#444444';
-    this.outcolor = '#444444';
-    this.fill = true;
-    this.lineWidth = 1;
-    this.image;
-}
+// export function Box() {
+//     this.type = shapeType.RECTANGLE;
+//     this.x = 0;
+//     this.y = 0;
+//     this.w = 1;
+//     this.h = 1;
+//     this.oldX   = 0;
+//     this.oldY   = 0;
+//     //this.name = ingredients.RICE;
+//     this.intcolor = '#444444';
+//     this.outcolor = '#444444';
+//     this.fill = true;
+//     this.lineWidth = 1;
+//     this.image;
+// }
 
-export function  Circle()
-{
-    this.type = shapeType.CIRCLE;
-    this.radius = 1;
-    this.x      = 0;
-    this.y      = 0;
-    this.oldX   = 0;
-    this.oldY   = 0;
-    this.intColor = '#444444';
-    this.outColor = '#444444';
-    this.fill = true;
-    this.lineWidth = 1;
-    this.image;
-}
+// export function  Circle()
+// {
+//     this.type = shapeType.CIRCLE;
+//     this.radius = 1;
+//     this.x      = 0;
+//     this.y      = 0;
+//     this.oldX   = 0;
+//     this.oldY   = 0;
+//     this.intColor = '#444444';
+//     this.outColor = '#444444';
+//     this.fill = true;
+//     this.lineWidth = 1;
+//     this.image;
+// }
 
-export function createCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
-{
-    var circle = new Circle;
+// export function createCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
+// {
+//     var circle = new Circle;
     
-    circle.radius    = radius;
-    circle.x         = x;
-    circle.y         = y;
-    circle.intColor  = intColor;
-    circle.outColor  = outColor;
-    circle.fill      = fill;
-    circle.lineWidth = lineWidth;
-    return circle;
-}
+//     circle.radius    = radius;
+//     circle.x         = x;
+//     circle.y         = y;
+//     circle.intColor  = intColor;
+//     circle.outColor  = outColor;
+//     circle.fill      = fill;
+//     circle.lineWidth = lineWidth;
+//     return circle;
+// }
 
-export function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lineWidth = 4, hasImage = false, image = false)
-{
-    var rect= new Box;
-    rect.type = shapeType.RECTANGLE;
-    rect.x = x;
-    rect.y = y;
-    rect.oldX = x;
-    rect.oldY = y;
-    rect.w = w;
-    rect.h = h;
-    rect.fill = fill;
-    rect.intcolor = intcolor;
-    rect.outcolor = outcolor;
-    rect.lineWidth = lineWidth;
-    rect.canEnterMatt = able;
-    if (hasImage)
-    {
-        rect.image = image;
-    }
-    return rect;
-}
+// export function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lineWidth = 4, hasImage = false, image = false)
+// {
+//     var rect= new Box;
+//     rect.type = shapeType.RECTANGLE;
+//     rect.x = x;
+//     rect.y = y;
+//     rect.oldX = x;
+//     rect.oldY = y;
+//     rect.w = w;
+//     rect.h = h;
+//     rect.fill = fill;
+//     rect.intcolor = intcolor;
+//     rect.outcolor = outcolor;
+//     rect.lineWidth = lineWidth;
+//     rect.canEnterMatt = able;
+//     if (hasImage)
+//     {
+//         rect.image = image;
+//     }
+//     return rect;
+// }
 
 export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textColor = 'Black', intColor = '#add8e6' , outColor = 'Gray')
 {
@@ -1010,16 +999,16 @@ export function clear(ctx)
     ctx.fillRect(0,0,600,400);
 }
 
-function draw() 
+export function draw() 
 {
     if (validCanvas == false)
     {
         clear(context);
 
         //background
-        drawShape(context, rollingMatt); //rollingMatt
-        drawShape(context, cuttingStation);
-        drawShape(context, plateHolder);
+        drawShape(context, rollMatt.rollingMatt); //rollingMatt
+        drawShape(context, cutStation.cuttingStation);
+        drawShape(context, plates.plateHolder);
         context.fillStyle = 'Red';
         context.textAlign = "left";
         context.font = "30px Arial";
@@ -1033,42 +1022,24 @@ function draw()
         
 
         //draw all shapes
-        if (plateHolder.plate != null)
-        {
-            //console.log(plateHolder.plate.renderType);
-            
-            drawShape(context, plateHolder.plate.renderType);
-        }
+        plates.drawPlateHolder(context);//plateholder
+        
+        cutStation.drawCuttingStation(context);//cuttingStation
 
-        if (cuttingStation.item != null)
-        {
-            if (cuttingStation.isActive)
-            {
-                drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Cutting!");
-            }
-            else
-            {
-                drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Ready to cut! Press C key");
-            }
-            drawShape(context, cuttingStation.item.renderType);
-            Invalidate();
-        }
-
-        if(madeRolls.length > 0)
-        {
-            drawRolls(context, madeRolls);
-        }
-
-        drawShapes(context, activeIngredients);
-
-        if (isInner && innerIngredients.length > 0)
-        {
-            drawShapes(context, innerIngredients);
-        }
-        else if (!isInner && outerIngredients.length > 0)
-        {
-            drawShapes(context, outerIngredients);
-        }
+        rollControl.drawRolls(context, madeRolls);
+        
+        ingredients.drawActiveIngredients(context);
+        rollMatt.drawIngredients(context);
+        //drawShapes(context, ingredients.activeIngredients);
+        
+        // if (isInner && innerIngredients.length > 0)
+        // {
+        //     drawShapes(context, innerIngredients);
+        // }
+        // else if (!isInner && outerIngredients.length > 0)
+        // {
+        //     drawShapes(context, outerIngredients);
+        // }
 
         if (moveablePlates.length > 0)
         {
@@ -1116,11 +1087,11 @@ export function drawShape(ctx, shape)
     
     switch(shape.type)
     {
-        case shapeType.RECTANGLE:
+        case shapes.shapeType.RECTANGLE:
             drawRectangle(ctx, shape.x, shape.y, shape.w, shape.h, 
                 shape.fill, shape.intcolor, shape.outcolor, shape.lineWidth);
             break;
-        case shapeType.CIRCLE:
+        case shapes.shapeType.CIRCLE:
             drawCircle(ctx,shape.x, shape.y, shape.radius, 
                 shape.fill, shape.intColor, shape.outColor, shape.lineWidth);
             break;
