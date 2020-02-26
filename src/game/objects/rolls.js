@@ -3,6 +3,7 @@ import * as drawing from '../utils/drawing.js';
 import * as ingrd from './ingredients.js';
 
 var madeRolls = [];
+var mySelect = null;
 
 export const CaliforniaRoll = {
     name: 'California Roll',
@@ -31,6 +32,11 @@ export function Roll()
     this.canEnterCuttingStation = true;
     this.canEnterPlate = false;
     this.isCut = false;
+}
+
+export function getMadeRolls()
+{
+    return madeRolls;
 }
 
 export function downSizeRoll(roll)
@@ -70,4 +76,19 @@ export function createRoll(nori, inner, outer, itemBox)
 export function pushRoll(roll)
 {
     madeRolls.push(roll);
+}
+
+export function removeRoll(roll)
+{
+    mySelect = roll;
+
+    delete madeRolls[madeRolls.findIndex(findRoll)];
+    madeRolls.sort();
+    madeRolls.pop();
+}
+
+function findRoll(box)
+{
+
+    return (mySelect.renderType.x == box.renderType.x && mySelect.renderType.y == box.renderType.y);
 }

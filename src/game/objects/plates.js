@@ -1,6 +1,7 @@
 import * as shapes from '../utils/shapes.js'
 import * as drawing from '../utils/drawing.js';
 //const drawing = require('../utils/drawing.js');
+var moveablePlates = [];
 
 export const plateHolder = {
     type: shapes.shapeType.RECTANGLE,
@@ -34,6 +35,11 @@ export function createPlate()
     plateHolder.plate = plate; 
 }
 
+export function getMoveablePlates()
+{
+    return moveablePlates;
+}
+
 export function drawPlateHolder(context)
 {
     if (plateHolder.plate != null)
@@ -53,3 +59,30 @@ export function drawPlates(ctx, plates)
         drawShape(ctx, plates[i].roll.renderType);
     }
 }
+
+export function addRollToPlate(mySelect)
+{
+    if (mySelect != null)
+    {
+        if (mySelect.canEnterPlate == true)
+        {
+            if (shapes.containsRoll(mySelect,plateHolder.plate))
+            {
+                correctRollOnPlate(plateHolder.plate, mySelect);
+                plateHolder.plate.roll = mySelect;
+                removeRoll(mySelect);
+                
+                moveablePlates.push(plateHolder.plate);
+                console.log(moveablePlates);
+                
+            }
+        }
+    }
+}
+
+export function correctRollOnPlate(plate, roll)
+{
+    roll.renderType.x = plate.renderType.x - roll.renderType.w /2;
+    roll.renderType.y = plate.renderType.y - roll.renderType.h / 2;
+}
+

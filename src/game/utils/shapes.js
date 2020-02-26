@@ -65,3 +65,39 @@ export function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lin
     }
     return rect;
 }
+
+export function Contains(mShape, oShape)
+{
+    if (oShape != null){
+        if ((oShape.x >= mShape.x) && (oShape.x + oShape.w < mShape.x + mShape.w) &&
+            (oShape.y >= mShape.y) && (oShape.y + oShape.h < mShape.y + mShape.h))
+            {
+                return true;
+            }
+        else 
+        {
+            return false;
+        }
+    }
+}
+
+export function inCircle(x, y, circle)
+{
+    let dx = Math.abs(x-circle.x);
+    if ( dx > circle.radius) return false;
+    let dy = Math.abs(y-circle.y);
+    if ( dy > circle.radius) return false;
+    if ( dx + dy <= circle.radius) return true;
+    return (dx*dx + dy*dy <= circle.radius*circle.radius);
+}
+
+export function containsRoll(roll, plate)
+{   
+    let box = roll.renderType;
+    if (!inCircle(box.x, box.y, plate.renderType))                 return false;
+    if (!inCircle(box.x,box.y + box.w, plate.renderType))          return false;
+    if (!inCircle(box.x + box.w, box.y, plate.renderType))         return false;
+    if (!inCircle(box.x + box.w, box.y + box.h, plate.renderType)) return false;
+    
+    return true;
+}

@@ -4,7 +4,7 @@ import * as shapes  from '../utils/shapes.js';
 
 export var activeIngredients = [];
 
-export var isInner = true;
+var mySelect;
 
 export const ingredients = {
     AVOCADO: 'Avocado',
@@ -64,3 +64,22 @@ export function drawActiveIngredients(context)
     drawing.drawShapes(context, activeIngredients);
 }
 
+export function removeIngredient(ingredient)
+{   
+    mySelect = ingredient;
+    delete activeIngredients[activeIngredients.findIndex(findIngredient)];
+    activeIngredients.sort();
+    activeIngredients.pop();
+    mySelect = null;
+}
+
+export function addIngredient(ingredient)
+{
+    activeIngredients.push(ingredient);
+}
+
+function findIngredient(ingredient)
+{
+    //console.log((mySelect.name === ingredient.name && mySelect.x == ingredient.x && mySelect.y == ingredient.y));
+    return (mySelect.name === ingredient.name && mySelect.renderType.x == ingredient.renderType.x && mySelect.renderType.y == ingredient.renderType.y);
+}

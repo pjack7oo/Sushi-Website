@@ -1,8 +1,13 @@
 import * as drawing from '../utils/drawing.js';
 import * as shapes from '../utils/shapes.js'
 import * as rollControl from './rolls.js'
+import { getFromMatt, changeFromMatt } from '../utils/iocontrol.js';
+import * as ingredients from './ingredients.js'
 
-export var isInner = true;
+var canvas = document.getElementById('canvas');
+
+var mypick;
+var isInner = true;
 export var innerIngredients = [];
 export var outerIngredients = [];
 
@@ -38,10 +43,24 @@ export function containsIngredients()
     return (innerIngredients.length > 0 || outerIngredients.length > 0);
 }
 
+export function getInnerIngredients()
+{
+    return innerIngredients;
+}
+
+export function getOuterIngredients()
+{
+    return outerIngredients;
+}
 
 export function flip()
 {
     isInner = !isInner;
+}
+
+export function isInnerIngredient()
+{
+    return isInner;
 }
 
 export function assembleRoll()
@@ -69,4 +88,99 @@ export function assembleRoll()
     rollControl.pushRoll(roll);
     console.log(madeRolls);
     drawing.Invalidate();
+}
+
+export function checkMatt(mySelect)
+{   
+    if (mySelect == null)
+    {
+        return;
+    }
+    if (mySelect.canEnterMatt == false)
+    {
+        drawing.Invalidate();
+        return;
+    }
+    if(shapes.Contains(rollingMatt,mySelect.renderType)){
+        if (isInner)
+        {
+            
+            
+            if (getFromMatt())
+            {
+                changeFromMatt(false);
+                mySelect = null;
+                canvas.onmousemove = null;
+    
+                drawing.Invalidate();
+                return;
+            }
+            innerIngredients.push(mySelect);
+            ingredients.removeIngredient(mySelect);
+            console.log(innerIngredients);
+        }
+        else
+        {
+            if (getFromMatt())
+            {
+                changeFromMatt(false);
+                mySelect = null;
+                canvas.onmousemove = null;
+    
+                drawing.Invalidate();
+                return;
+            }
+            outerIngredients.push(mySelect);
+            ingredients.removeIngredient(mySelect);
+            
+            
+        }
+    }
+    if (mySelect != null){
+        
+        
+        if (!shapes.Contains(rollingMatt,mySelect))
+        {
+            
+            
+            
+            if (isInner && getFromMatt())
+            {
+                ingredients.addIngredient(mySelect);
+                removeMattIngredient(isInner, mySelect);
+                
+            }
+            else if (!isInner && getFromMatt())
+            {
+                ingredients.addIngredient(mySelect);
+                removeMattIngredient(isInner, mySelect);
+            }
+        }
+    }
+}
+
+function removeMattIngredient(inner, ingredient)
+{
+    mypick = ingredient;
+    if (inner)
+    {
+        console.log(ingredient);
+        
+        delete innerIngredients[innerIngredients.findIndex(findIngredient)];
+        innerIngredients.sort();
+        innerIngredients.pop();
+    }
+    else
+    {
+        delete outerIngredients[outerIngredients.findIndex(findIngredient)];
+        outerIngredients.sort();
+        outerIngredients.pop();
+    }
+    mypick= null;
+}
+
+function findIngredient(ingredient)
+{
+    //console.log((mySelect.name === ingredient.name && mySelect.x == ingredient.x && mySelect.y == ingredient.y));
+    return (mypick.name === ingredient.name && mypick.renderType.x == ingredient.renderType.x && mypick.renderType.y == ingredient.renderType.y);
 }

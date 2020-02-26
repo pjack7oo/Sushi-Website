@@ -20,19 +20,16 @@ var width;
 // var innerIngredients = [];
 // var outerIngredients = [];
 
-var isInner = true;
-var fromMatt = false;
+ 
 
-var madeRolls = [];
-var moveablePlates = [];
 
-//moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 
-var isDrag = false;
 
-var mySelect;
-var mySelectColor = 'Red';
-var mySelectWidth = 3;
+
+
+
+
+
 
 var ghostcanvas;
 /**@type {CanvasRenderingContext2D} */

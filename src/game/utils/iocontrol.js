@@ -1,8 +1,10 @@
 import * as ingredients from '../objects/ingredients.js';
-import * as rollMatt    from '../objects/rollingmatt.js'
+import * as rollMatt    from '../objects/rollingmatt.js';
 import * as drawing     from './drawing.js';
-import * as cutStation  from '../objects/cuttingstation.js'
-
+import * as cutStation  from '../objects/cuttingstation.js';
+import * as rollControl from '../objects/rolls.js';
+import * as plates      from '../objects/plates.js';
+//moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 var ghostcanvas;
 /**@type {CanvasRenderingContext2D} */
 var gctx;
@@ -41,6 +43,17 @@ export function doKeyPress(e)
             break;
     }
 }
+
+export function changeFromMatt(change)
+{
+    fromMatt = change;
+}
+
+export function getFromMatt()
+{
+    return fromMatt;
+}
+
 
 function getMouse(e) 
 {
@@ -98,84 +111,103 @@ export function myDown(e)
     }
 
     
-    if (isInner && il > 0)
+    if (rollMatt.isInnerIngredient() && il > 0)
     {
-        for(var i = 0; i < il; i++)
+        if (checkShapes(rollMatt.getInnerIngredients(), mouse))
         {
-            drawing.drawShape(gctx, innerIngredients[i]);
-            fromMatt = true;           
-            let ret = moveItem(mouse, innerIngredients[i]);
-            if(ret)
-        {
-            return;
-        }
-        }
-    }
-    else if (!isInner && ol > 0)
-    {
-        for(var i = 0; i < ol; i++)
-        {
-            drawing.drawShape(gctx, outerIngredients[i]);
             fromMatt = true;
-            let ret = moveItem(mouse, outerIngredients[i]);
-            if(ret)
-        {
             return;
         }
+    }
+    else if (!rollMatt.isInnerIngredient() && ol > 0)
+    {
+        if (checkShapes(rollMatt.getOuterIngredients(), mouse))
+        {
+            fromMatt = true;
+            return;
         }
     }
-    let mRl = madeRolls.length;
-    if (mRl > 0)
+    if (checkShapes(rollControl.getMadeRolls(), mouse))
     {
-        for(let i = 0; i < mRl; i++)
-        {
-            drawing.drawShape(gctx,madeRolls[i]);
+        return;
+    }
+    if (checkShapes(plates.getMoveablePlates(), mouse))
+    {
+        return;
+    }
+    // let mRl = rollControl.madeRolls.length;
+    // if (mRl > 0)
+    // {
+    //     for(let i = 0; i < mRl; i++)
+    //     {
+    //         drawing.drawShape(gctx,madeRolls[i]);
             
-            let ret = moveItem(mouse, madeRolls[i]);
+    //         let ret = moveItem(mouse, madeRolls[i]);
         
-            if(ret)
-            {
-                return;
-            }
-        }
-    }
-    let mPl = moveablePlates.length;
-    if (mPl > 0)
-    {
-        for(let i = 0; i < mPl; i++)
-        {
-            drawing.drawShape(gctx,moveablePlates[i]);
+    //         if(ret)
+    //         {
+    //             return;
+    //         }
+    //     }
+    // }
+    // let mPl = moveablePlates.length;
+    // if (mPl > 0)
+    // {
+    //     for(let i = 0; i < mPl; i++)
+    //     {
+    //         drawing.drawShape(gctx,moveablePlates[i]);
             
-            let ret = moveCircle(mouse, moveablePlates[i]);
+    //         let ret = moveCircle(mouse, moveablePlates[i]);
             
-            if(ret)
-            {
-                return;
-            }
-        }
-    }
+    //         if(ret)
+    //         {
+    //             return;
+    //         }
+    //     }
+    // }
 
-    mySelect = null;
+    mySelect[0] = null;
 
     drawing.clear(gctx);
 
     drawing.Invalidate();
 }
 
-function myUp()
+function checkShapes(shapes, mouse)
+{
+    let l = shapes.length;
+    if (l > 0)
+    {
+        for (let i = 0; i < l; i++)
+        {
+            drawing.drawShape(gctx, shapes[i]);
+    
+            let ret = moveItem(mouse, shapes[i]);
+    
+            if(ret)
+            {
+                return ret;
+            }
+        }  
+    }
+    
+
+}
+
+export function myUp()
 {
     isDrag = false;
     if (mySelect != null)
     {
-        checkMatt();
-        checkCuttingStation();
-        addRollToPlate();
+        rollMatt.checkMatt(mySelect[0]);
+        cutStation.checkCuttingStation(mySelect[0]);
+        plates.addRollToPlate(mySelect[0]);
          
     }
-    mySelect = null;
+    mySelect[0] = null;
     canvas.onmousemove = null;
     
-    Invalidate();
+    drawing.Invalidate();
 }
 
 function inBounds(mouse, shape)
@@ -188,7 +220,7 @@ export function moveItem(mouse, item)
 {
     if (inBounds(mouse, item.renderType))
     {
-        mySelect[0]   = item;
+        mySelect[0]= item;
         offsetX    = mouse.x - mySelect[0].renderType.x;
         offsetY    = mouse.y - mySelect[0].renderType.y;
         mySelect[0].renderType.x = mouse.x - offsetX;

@@ -520,17 +520,17 @@ function containsRoll(roll, plate)
 //     }
 // }
 
-function correctRollOnPlate(plate, roll)
-{
-    roll.renderType.x = plate.renderType.x - roll.renderType.w /2;
-    roll.renderType.y = plate.renderType.y - roll.renderType.h / 2;
-}
+// function correctRollOnPlate(plate, roll)
+// {
+//     roll.renderType.x = plate.renderType.x - roll.renderType.w /2;
+//     roll.renderType.y = plate.renderType.y - roll.renderType.h / 2;
+// }
 
-function findIngredient(ingredient)
-{
-    //console.log((mySelect.name === ingredient.name && mySelect.x == ingredient.x && mySelect.y == ingredient.y));
-    return (mySelect.name === ingredient.name && mySelect.renderType.x == ingredient.renderType.x && mySelect.renderType.y == ingredient.renderType.y);
-}
+// function findIngredient(ingredient)
+// {
+//     //console.log((mySelect.name === ingredient.name && mySelect.x == ingredient.x && mySelect.y == ingredient.y));
+//     return (mySelect.name === ingredient.name && mySelect.renderType.x == ingredient.renderType.x && mySelect.renderType.y == ingredient.renderType.y);
+// }
 
 // function myUp()
 // {
@@ -583,77 +583,77 @@ function getRoll(box)
     }
     return null;
 }
-function findRoll(box)
-{
+// function findRoll(box)
+// {
 
-    return (mySelect.renderType.x == box.renderType.x && mySelect.renderType.y == box.renderType.y);
-}
+//     return (mySelect.renderType.x == box.renderType.x && mySelect.renderType.y == box.renderType.y);
+// }
 
-function checkMatt()
-{   
-    if (mySelect.canEnterMatt == false)
-    {
-        Invalidate();
-        return;
-    }
-    if(Contains(rollingMatt,mySelect.renderType)){
-        if (isInner)
-        {
-            if (fromMatt)
-            {
-                fromMatt = false;
-                mySelect = null;
-                canvas.onmousemove = null;
+// function checkMatt()
+// {   
+//     if (mySelect.canEnterMatt == false)
+//     {
+//         Invalidate();
+//         return;
+//     }
+//     if(Contains(rollingMatt,mySelect.renderType)){
+//         if (isInner)
+//         {
+//             if (fromMatt)
+//             {
+//                 fromMatt = false;
+//                 mySelect = null;
+//                 canvas.onmousemove = null;
     
-                Invalidate();
-                return;
-            }
-            innerIngredients.push(mySelect);
-            delete activeIngredients[activeIngredients.findIndex(findIngredient)];
-            activeIngredients.sort();
-            activeIngredients.pop();
-            console.log(innerIngredients);
-        }
-        else
-        {
-            if (fromMatt)
-            {
-                fromMatt = false;
-                mySelect = null;
-                canvas.onmousemove = null;
+//                 Invalidate();
+//                 return;
+//             }
+//             innerIngredients.push(mySelect);
+//             delete activeIngredients[activeIngredients.findIndex(findIngredient)];
+//             activeIngredients.sort();
+//             activeIngredients.pop();
+//             console.log(innerIngredients);
+//         }
+//         else
+//         {
+//             if (fromMatt)
+//             {
+//                 fromMatt = false;
+//                 mySelect = null;
+//                 canvas.onmousemove = null;
     
-                Invalidate();
-                return;
-            }
-            outerIngredients.push(mySelect);
-            delete activeIngredients[activeIngredients.findIndex(findIngredient)];
-            activeIngredients.sort();
-            activeIngredients.pop();
-            console.log(outerIngredients);
+//                 Invalidate();
+//                 return;
+//             }
+//             outerIngredients.push(mySelect);
+//             delete activeIngredients[activeIngredients.findIndex(findIngredient)];
+//             activeIngredients.sort();
+//             activeIngredients.pop();
+//             console.log(outerIngredients);
             
-        }
-    }
-    if (mySelect != null){
-        if (!Contains(rollingMatt,mySelect))
-        {
-            if (isInner && fromMatt)
-            {
-                activeIngredients.push(mySelect);
-                delete innerIngredients[innerIngredients.findIndex(findIngredient)];
-                innerIngredients.sort();
-                innerIngredients.pop();
-                //console.log(innerIngredients);
-            }
-            else if (!isInner && fromMatt)
-            {
-                activeIngredients.push(mySelect);
-                delete outerIngredients[outerIngredients.findIndex(findIngredient)];
-                outerIngredients.sort();
-                outerIngredients.pop();
-            }
-        }
-    }
-}
+//         }
+//     }
+//     if (mySelect != null){
+//         if (!Contains(rollingMatt,mySelect))
+//         {
+//             if (isInner && fromMatt)
+//             {
+//                 activeIngredients.push(mySelect);
+//                 delete innerIngredients[innerIngredients.findIndex(findIngredient)];
+//                 innerIngredients.sort();
+//                 innerIngredients.pop();
+//                 //console.log(innerIngredients);
+//             }
+//             else if (!isInner && fromMatt)
+//             {
+//                 activeIngredients.push(mySelect);
+//                 delete outerIngredients[outerIngredients.findIndex(findIngredient)];
+//                 outerIngredients.sort();
+//                 outerIngredients.pop();
+//             }
+//         }
+//     }
+// }
 
 export function Invalidate()
 {
@@ -681,27 +681,27 @@ function createPlate()
     plateHolder.plate = plate; 
 }
 
-function addRollToPlate()
-{
-    if (mySelect != null)
-    {
-        if (mySelect.canEnterPlate == true)
-        {
-            if (containsRoll(mySelect,plateHolder.plate))
-            {
-                correctRollOnPlate(plateHolder.plate, mySelect);
-                plateHolder.plate.roll = madeRolls[madeRolls.findIndex(findRoll)];
-                delete madeRolls[madeRolls.findIndex(findRoll)];
-                madeRolls.sort();
-                madeRolls.pop();
+// function addRollToPlate()
+// {
+//     if (mySelect != null)
+//     {
+//         if (mySelect.canEnterPlate == true)
+//         {
+//             if (containsRoll(mySelect,plateHolder.plate))
+//             {
+//                 correctRollOnPlate(plateHolder.plate, mySelect);
+//                 plateHolder.plate.roll = madeRolls[madeRolls.findIndex(findRoll)];
+//                 delete madeRolls[madeRolls.findIndex(findRoll)];
+//                 madeRolls.sort();
+//                 madeRolls.pop();
                 
-                moveablePlates.push(plateHolder.plate);
-                console.log(moveablePlates);
+//                 moveablePlates.push(plateHolder.plate);
+//                 console.log(moveablePlates);
                 
-            }
-        }
-    }
-}
+//             }
+//         }
+//     }
+// }
 
 function Roll() //TODO remove after transfer to own object file
 {

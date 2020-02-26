@@ -1,5 +1,7 @@
 import * as roll from './rolls.js';
 import * as drawing from '../utils/drawing.js';
+import * as ioControl from '../utils/iocontrol.js';
+import * as shapes from '../utils/shapes.js';
 
 const shapeType = {
     RECTANGLE: 'Rectangle',
@@ -80,4 +82,29 @@ export function cutRoll()
         cuttingStation.startTime = performance.now();
     }
     drawing.Invalidate();
+}
+
+export function checkCuttingStation(mySelect)
+{
+    if (mySelect != null){
+        if (mySelect.canEnterCuttingStation == false)
+        {
+            drawing.Invalidate();
+            return;
+        }
+        if (mySelect.isCut == true)
+        {
+            drawing.Invalidate();
+            return;
+        }
+        if (shapes.Contains(cuttingStation,mySelect.renderType))
+        {
+            cuttingStation.item = mySelect;
+            console.log(cuttingStation.item);
+            
+            delete madeRolls[madeRolls.findIndex(findRoll)];
+            madeRolls.sort();
+            madeRolls.pop();
+            }
+    }
 }
