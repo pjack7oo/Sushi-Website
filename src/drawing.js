@@ -171,7 +171,7 @@ function init()
     //canvas.ondblclick  = myDbkClick; // temp dbl click for making new boxes
 
     canvas.setAttribute("tabindex", 0);
-    canvas.addEventListener('keydown', doKeyPress,true);
+    canvas.addEventListener('keydown', doKeyPress,false);
     // add custom init
     createPlate();
 
@@ -358,7 +358,7 @@ function myDown(e)
         // var imageData = gctx.getImageData(mouse.x, mouse.y, 1, 1).data;
         // var index = (mouse.x + mouse.y * imageData.width) * 4;
         fromMatt = false;
-        ret = moveItem(mouse, activeIngredients[i]);
+        let ret = moveItem(mouse, activeIngredients[i]);
         
         if(ret)
         {
@@ -373,7 +373,7 @@ function myDown(e)
         {
             drawShape(gctx, innerIngredients[i]);
             fromMatt = true;           
-            ret = moveItem(mouse, innerIngredients[i]);
+            let ret = moveItem(mouse, innerIngredients[i]);
             if(ret)
         {
             return;
@@ -386,7 +386,7 @@ function myDown(e)
         {
             drawShape(gctx, outerIngredients[i]);
             fromMatt = true;
-            ret = moveItem(mouse, outerIngredients[i]);
+            let ret = moveItem(mouse, outerIngredients[i]);
             if(ret)
         {
             return;
@@ -400,7 +400,7 @@ function myDown(e)
         {
             drawShape(gctx,madeRolls[i]);
             
-            ret = moveItem(mouse, madeRolls[i]);
+            let ret = moveItem(mouse, madeRolls[i]);
         
             if(ret)
             {
@@ -415,7 +415,7 @@ function myDown(e)
         {
             drawShape(gctx,moveablePlates[i]);
             
-            ret = moveCircle(mouse, moveablePlates[i]);
+            let ret = moveCircle(mouse, moveablePlates[i]);
             
             if(ret)
             {
@@ -496,9 +496,9 @@ function Contains(mShape, oShape)
 
 function inCircle(x, y, circle)
 {
-    dx = Math.abs(x-circle.x);
+    let dx = Math.abs(x-circle.x);
     if ( dx > circle.radius) return false;
-    dy = Math.abs(y-circle.y);
+    let dy = Math.abs(y-circle.y);
     if ( dy > circle.radius) return false;
     if ( dx + dy <= circle.radius) return true;
     return (dx*dx + dy*dy <= circle.radius*circle.radius);
@@ -714,7 +714,7 @@ function addRollToPlate()
     }
 }
 
-function Roll()
+function Roll() //TODO remove after transfer to own object file
 {
     this.nori = true;
     this.name = '';
@@ -727,7 +727,7 @@ function Roll()
     this.isCut = false;
 }
 
-function Ingredient()
+function Ingredient() //TODO remove
 {
     this.name = ingredients;
     this.renderType = null;
@@ -736,7 +736,7 @@ function Ingredient()
     this.canEnterPlate = false;
 }
 
-function createIngredient(name, renderType)
+function createIngredient(name, renderType) //TODO remove
 {
     var ingredient = new Ingredient();
     ingredient.name = name;
@@ -744,25 +744,25 @@ function createIngredient(name, renderType)
     return ingredient;
 }
 
-function createRice(x,y)
+function createRice(x,y) //TODO remove
 {
     var box = createBox(x, y, 75, 75, true, 'white', 'white');
     var rice = createIngredient(ingredients.RICE, box);
     activeIngredients.push(rice);
 }
-function createCucumber(x,y)
+function createCucumber(x,y) //TODO remove
 {
     var box = createBox(x, y, 50, 10, true, 'green', 'green');
     var cucumber = createIngredient(ingredients.CUCUMBER, box);
     activeIngredients.push(cucumber);
 }
-function createCrab(x,y)
+function createCrab(x,y) //TODO remove
 {
     var box = createBox(x, y, 50, 20, true, 'white', 'red');
     var crab = createIngredient(ingredients.CRAB, box);
     activeIngredients.push(crab);
 }
-function createAvocado(x,y)
+function createAvocado(x,y) //TODO remove
 {
     var box = createBox(x, y, 50, 20, true, 'yellow', 'green');
     var avocado = createIngredient(ingredients.AVOCADO, box);
@@ -831,7 +831,12 @@ function getRollName(roll, acceptedRolls = [])
     {
         console.log(acceptedRolls.length);
         for (let i = 0; i < acceptedRolls.length; i++)
-        {
+        {   
+            if (roll.inner.length > rollList[acceptedRolls[i]].inner.length)
+                {
+                    rollsToDel.push(i);
+                    continue;
+                }
             for(let k = 0; k < roll.inner.length; k++)
             {
                 if (roll.inner[k] != rollList[acceptedRolls[i]].inner[k])
@@ -893,7 +898,7 @@ function eliminateDuplicates(arr) {
   }
 
 
-function Box() {
+export function Box() {
     this.type = shapeType.RECTANGLE;
     this.x = 0;
     this.y = 0;
@@ -909,7 +914,7 @@ function Box() {
     this.image;
 }
 
-function  Circle()
+export function  Circle()
 {
     this.type = shapeType.CIRCLE;
     this.radius = 1;
@@ -924,7 +929,7 @@ function  Circle()
     this.image;
 }
 
-function createCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
+export function createCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
 {
     var circle = new Circle;
     
@@ -938,7 +943,7 @@ function createCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
     return circle;
 }
 
-function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lineWidth = 4, hasImage = false, image = false)
+export function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lineWidth = 4, hasImage = false, image = false)
 {
     var rect= new Box;
     rect.type = shapeType.RECTANGLE;
@@ -959,27 +964,8 @@ function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lineWidth 
     }
     return rect;
 }
-//to be removed
-// function addBox(type ,x, y, w, h, ingrType, fill, intcolor, outcolor, lineWidth = 4, hasImage = false, image = false) 
-// {
-//     var rect= new Box;
-//     rect.type = type;
-//     rect.x = x;
-//     rect.y = y;
-//     rect.w = w;
-//     rect.h = h;
-//     rect.fill = fill;
-//     rect.Intcolor = intcolor;
-//     rect.Outcolor = outcolor;
-//     rect.lineWidth = lineWidth;
-//     if (hasImage)
-//     {
-//         rect.image = image;
-//     }
-//     boxes.push(rect);
-// }
 
-function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textColor = 'Black', intColor = '#add8e6' , outColor = 'Gray')
+export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textColor = 'Black', intColor = '#add8e6' , outColor = 'Gray')
 {
     drawRoundRect(ctx, x, y, w, h, 5, true, true, intColor, outColor);
     ctx.font = font;
@@ -989,7 +975,7 @@ function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textColor = 
     Invalidate();
 }
 
-function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true,intColor = 'Blue' , outColor = 'Gray')
+export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true,intColor = 'Blue' , outColor = 'Gray')
 {
     if (typeof stroke == "undefined")
     {
@@ -1018,11 +1004,12 @@ function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true,intColor = '
     }
 }
 
-function clear(ctx)
+export function clear(ctx)
 {
     ctx.fillStyle = 'Gray';
     ctx.fillRect(0,0,600,400);
 }
+
 function draw() 
 {
     if (validCanvas == false)
@@ -1052,6 +1039,7 @@ function draw()
             
             drawShape(context, plateHolder.plate.renderType);
         }
+
         if (cuttingStation.item != null)
         {
             if (cuttingStation.isActive)
@@ -1065,6 +1053,7 @@ function draw()
             drawShape(context, cuttingStation.item.renderType);
             Invalidate();
         }
+
         if(madeRolls.length > 0)
         {
             drawRolls(context, madeRolls);
@@ -1101,7 +1090,7 @@ function draw()
     }
 }
 
-function drawShapes(ctx, shapes)
+export function drawShapes(ctx, shapes)
 {
     for (var i = 0; i < shapes.length; i++)
     {   
@@ -1110,7 +1099,7 @@ function drawShapes(ctx, shapes)
     }
 }
 
-function drawPlates(ctx, plates)
+export function drawPlates(ctx, plates)
 {
     for (var i = 0; i < plates.length; i++)
     {
@@ -1119,7 +1108,10 @@ function drawPlates(ctx, plates)
     }
 }
 
-function drawShape(ctx, shape)
+
+
+
+export function drawShape(ctx, shape)
 {
     
     switch(shape.type)
@@ -1137,7 +1129,7 @@ function drawShape(ctx, shape)
     }
 }
 
-function drawRolls(ctx, rolls)
+export function drawRolls(ctx, rolls)
 {
     for (var i = 0; i < rolls.length; i++)
     {
@@ -1145,7 +1137,7 @@ function drawRolls(ctx, rolls)
     }
 }
 
-function drawRectangle(ctx, x, y, w, h, fill, intcolor, outcolor, lineWidth){
+export function drawRectangle(ctx, x, y, w, h, fill, intcolor, outcolor, lineWidth){
     ctx.strokeStyle = outcolor;
     ctx.lineWidth = lineWidth;
     ctx.strokeRect(x,y,w,h);
@@ -1157,7 +1149,7 @@ function drawRectangle(ctx, x, y, w, h, fill, intcolor, outcolor, lineWidth){
     
 }
 
-function drawCircle(context ,x, y, radius, fillCircle, intcolor, outcolor, lineWidth) {
+export function drawCircle(context, x, y, radius, fillCircle, intcolor, outcolor, lineWidth) {
     context.strokeStyle = outcolor;
     context.beginPath();
 
