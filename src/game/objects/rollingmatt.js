@@ -86,7 +86,7 @@ export function assembleRoll()
     innerIngredients.splice(0, innerIngredients.length);
     outerIngredients.splice(0,outerIngredients.length); 
     rollControl.pushRoll(roll);
-    console.log(madeRolls);
+    console.log(rollControl.getMadeRolls());
     drawing.Invalidate();
 }
 

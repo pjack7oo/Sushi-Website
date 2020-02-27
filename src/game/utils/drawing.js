@@ -5,51 +5,52 @@ import * as rollMatt    from '../objects/rollingmatt.js';
 import * as shapes      from './shapes.js';
 import * as ingredients from '../objects/ingredients.js';
 import * as rollControl from '../objects/rolls.js';
+import * as ioControl   from './iocontrol.js';
 
 
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
 var context = canvas.getContext('2d');
 
-var fps = 60;
-var start = Date.now();
-var frameDuration = 1000/fps;
-var lag = 0;
+// var fps = 60;
+// var start = Date.now();
+// var frameDuration = 1000/fps;
+// var lag = 0;
 
 
-// var activeIngredients = [];
-// var innerIngredients = [];
-// var outerIngredients = [];
-var isInner = true;
-var fromMatt = false;
+// // var activeIngredients = [];
+// // var innerIngredients = [];
+// // var outerIngredients = [];
+
+// var fromMatt = false;
 
 
-var madeRolls = [];
-var moveablePlates = [];
-var interval = 20;
-var height;
-var width;
+
+// var moveablePlates = [];
+// var interval = 20;
+// var height;
+// var width;
 
 //moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 
-var isDrag = false;
-var mx, my; //coordinates
+// var isDrag = false;
+// var mx, my; //coordinates
 
 var validCanvas = false;
-var validLogic = true;
+// var validLogic = true;
 
-var mySelect;
-var mySelect2;
+// var mySelect;
+// var mySelect2;
 
-var mySelectColor = 'Red';
-var mySelectWidth = 3;
+// var mySelectColor = 'Red';
+// var mySelectWidth = 3;
 
 // var ghostcanvas;
 // /**@type {CanvasRenderingContext2D} */
 // var gctx;
 
-var offsetX, offsetY;
-var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
+// var offsetX, offsetY;
+// var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
 
 // const ingredients = {
 //     AVOCADO: 'Avocado',
@@ -127,107 +128,107 @@ var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
 
 
 
-function getMouse(e) 
-{
-    // var element = canvas, offsetX = 0, offsetY = 0, mx, my;
+// function getMouse(e) 
+// {
+//     // var element = canvas, offsetX = 0, offsetY = 0, mx, my;
 
-    // if(element.offsetParent !== undefined)
-    // {
-    //     do {
-    //        offsetX += element.offsetLeft;
-    //        offsetY += element.offsetTop;
-    //     } while ((element = element.offsetParent));
-    // }
+//     // if(element.offsetParent !== undefined)
+//     // {
+//     //     do {
+//     //        offsetX += element.offsetLeft;
+//     //        offsetY += element.offsetTop;
+//     //     } while ((element = element.offsetParent));
+//     // }
 
-    // offsetX += this.stylePaddingLeft + this.styleBorderLeft + this.htmlLeft;
-    // offsetY += this.stylePaddingTop + this.styleBorderTop + this.htmlTop;
+//     // offsetX += this.stylePaddingLeft + this.styleBorderLeft + this.htmlLeft;
+//     // offsetY += this.stylePaddingTop + this.styleBorderTop + this.htmlTop;
 
-    // mx = e.pageX - offsetX;
-    // my = e.pageY - offsetY;
+//     // mx = e.pageX - offsetX;
+//     // my = e.pageY - offsetY;
 
-    var rect = canvas.getBoundingClientRect();
+//     var rect = canvas.getBoundingClientRect();
 
-    return {x: e.clientX - rect.left, y: e.clientY - Math.floor(rect.top)};
-}
+//     return {x: e.clientX - rect.left, y: e.clientY - Math.floor(rect.top)};
+// }
 
-function init()
-{
-    height = canvas.height;
-    width = canvas.width;
-    ghostcanvas = document.createElement('canvas');
-    ghostcanvas.height = height;
-    ghostcanvas.width  = width;
-    gctx = ghostcanvas.getContext('2d');
+// function init()
+// {
+//     height = canvas.height;
+//     width = canvas.width;
+//     ghostcanvas = document.createElement('canvas');
+//     ghostcanvas.height = height;
+//     ghostcanvas.width  = width;
+//     gctx = ghostcanvas.getContext('2d');
 
-    canvas.onselectstart = () => { return false; }
+//     canvas.onselectstart = () => { return false; }
 
-    if (document.defaultView && document.defaultView.getComputedStyle)
-    {
-        stylePaddingLeft = parseInt(document.defaultView.getComputedStyle(canvas, null)['paddingLeft'], 10)     || 0;
-        stylePaddingTop  = parseInt(document.defaultView.getComputedStyle(canvas, null)['paddingTop'], 10)      || 0;
-        styleBorderLeft  = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderLeftWidth'], 10) || 0;
-        styleBorderTop   = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderTopWidth'], 10)  || 0;
-    }
+//     if (document.defaultView && document.defaultView.getComputedStyle)
+//     {
+//         stylePaddingLeft = parseInt(document.defaultView.getComputedStyle(canvas, null)['paddingLeft'], 10)     || 0;
+//         stylePaddingTop  = parseInt(document.defaultView.getComputedStyle(canvas, null)['paddingTop'], 10)      || 0;
+//         styleBorderLeft  = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderLeftWidth'], 10) || 0;
+//         styleBorderTop   = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderTopWidth'], 10)  || 0;
+//     }
 
-    setInterval(update, interval); //draw every interval milliseconds
+//     setInterval(update, interval); //draw every interval milliseconds
 
-    canvas.onmousedown = myDown;
-    canvas.onmouseup   = myUp;
-    //canvas.ondblclick  = myDbkClick; // temp dbl click for making new boxes
+//     canvas.onmousedown = myDown;
+//     canvas.onmouseup   = myUp;
+//     //canvas.ondblclick  = myDbkClick; // temp dbl click for making new boxes
 
-    canvas.setAttribute("tabindex", 0);
-    canvas.addEventListener('keydown', doKeyPress,false);
-    // add custom init
-    createPlate();
-
-    
-    
-    
-    // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
-    createRice(100,100);
-    // addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
-    createAvocado(100, 200);
-    // addBox(shapeType.RECTANGLE, 25, 125, 40, 25, ingredients.CRAB,true, 'white', 'Red',2);
-    createCrab(100, 220);
-    // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
-    createCucumber(100, 240);
-    //console.log(activeIngredients);
-    //gameLoop();
-    
-}
-
-function gameLoop()
-{
-    requestAnimationFrame(gameLoop, canvas);
-
-    var current = performance.now(), elapsed = current - start;
-    start = current;
-
-    //lag += elapsed;
-
-    if (validLogic == false)
-    {
-        validLogic = true;
-    }
-
-    var lagOffset = lag / frameDuration;
-    //render(lagOffset);
-    //draw();
-}
-
-function update() //used to update logic of parts of game like getting customers based on tim and randomness
-{
-    //requestAnimationFrame(update, canvas);
-
-    var current = performance.now();
+//     canvas.setAttribute("tabindex", 0);
+//     canvas.addEventListener('keydown', doKeyPress,false);
+//     // add custom init
+//     createPlate();
 
     
     
-    checkCutRoll();
-    validLogic = true;
     
-    draw();
-}
+//     // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
+//     createRice(100,100);
+//     // addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
+//     createAvocado(100, 200);
+//     // addBox(shapeType.RECTANGLE, 25, 125, 40, 25, ingredients.CRAB,true, 'white', 'Red',2);
+//     createCrab(100, 220);
+//     // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
+//     createCucumber(100, 240);
+//     //console.log(activeIngredients);
+//     //gameLoop();
+    
+// }
+
+// function gameLoop()
+// {
+//     requestAnimationFrame(gameLoop, canvas);
+
+//     var current = performance.now(), elapsed = current - start;
+//     start = current;
+
+//     //lag += elapsed;
+
+//     if (validLogic == false)
+//     {
+//         validLogic = true;
+//     }
+
+//     var lagOffset = lag / frameDuration;
+//     //render(lagOffset);
+//     //draw();
+// }
+
+// function update() //used to update logic of parts of game like getting customers based on tim and randomness
+// {
+//     //requestAnimationFrame(update, canvas);
+
+//     var current = performance.now();
+
+    
+    
+//     checkCutRoll();
+//     validLogic = true;
+    
+//     draw();
+// }
 
 function render(lagOffset) //probably will be removed
 {
@@ -256,53 +257,52 @@ function itemRender(ctx, lagOffset, item)
     item.oldY = item.y;
 }
 
-function checkCutRoll()
-{
-    if (cuttingStation.cuttingStation.isActive == true){
-        let currentTime     = performance.now(),
-            elapsedTime     = currentTime - cuttingStation.cuttingStation.startTime,
-            precentComplete = elapsedTime / (8000 / cuttingStation.cuttingStation.cuttingSpeed) * 100;
+// function checkCutRoll()
+// {
+//     if (cuttingStation.cuttingStation.isActive == true){
+//         let currentTime     = performance.now(),
+//             elapsedTime     = currentTime - cuttingStation.cuttingStation.startTime,
+//             precentComplete = elapsedTime / (8000 / cuttingStation.cuttingStation.cuttingSpeed) * 100;
             
-        if (precentComplete >= 100)
-        {
-            cuttingStation.isActive = false;
-            cuttingStation.startTime = 0;
-            cuttingStation.item.isCut = true;
-            cuttingStation.item.canEnterPlate = true;
-            cuttingStation.item.canEnterCuttingStation = false;
-            downSizeRoll(cuttingStation.item);
-            madeRolls.push(cuttingStation.item);
-            cuttingStation.item = null;
-            console.log('Cut roll');
-            console.log(madeRolls);
+//         if (precentComplete >= 100)
+//         {
+//             cuttingStation.isActive = false;
+//             cuttingStation.startTime = 0;
+//             cuttingStation.item.isCut = true;
+//             cuttingStation.item.canEnterPlate = true;
+//             cuttingStation.item.canEnterCuttingStation = false;
+//             downSizeRoll(cuttingStation.item);
+//             madeRolls.push(cuttingStation.item);
+//             cuttingStation.item = null;
+//             console.log('Cut roll');
+//             console.log(madeRolls);
                 
-            Invalidate();
-        }
-    }
+//             Invalidate();
+//         }
+//     }
     
-        //drawProgressBar(cuttingStation.x, cuttingStation.y, cuttingStation.w, 20, precentComplete); //TODO implement drawProgressBar
-        //todo implement cutAnimation
-}
 
-function downSizeRoll(roll)
-{
-    roll.renderType.w = 30;
-    roll.renderType.h = 30;
-}
+// }
 
-function cutRoll()
-{
-    if (cuttingStation.item == null )
-    {
-        return;
-    }
-    if (cuttingStation.isActive == false)
-    {
-        cuttingStation.isActive = true;
-        cuttingStation.startTime = performance.now();
-    }
-    Invalidate();
-}
+// function downSizeRoll(roll)
+// {
+//     roll.renderType.w = 30;
+//     roll.renderType.h = 30;
+// }
+
+// function cutRoll()
+// {
+//     if (cuttingStation.item == null )
+//     {
+//         return;
+//     }
+//     if (cuttingStation.isActive == false)
+//     {
+//         cuttingStation.isActive = true;
+//         cuttingStation.startTime = performance.now();
+//     }
+//     Invalidate();
+// }
 
 // function doKeyPress(e)
 // {
@@ -339,90 +339,90 @@ function cutRoll()
 
 // }
 
-function myDown(e)
-{
-    var mouse = getMouse(e);
-    clear(gctx);
+// function myDown(e)
+// {
+//     var mouse = getMouse(e);
+//     clear(gctx);
 
-    for (var i = 0; i < activeIngredients.length; i++)
-    {
-        drawShape(gctx, activeIngredients[i]);
+//     for (var i = 0; i < activeIngredients.length; i++)
+//     {
+//         drawShape(gctx, activeIngredients[i]);
 
-        // var imageData = gctx.getImageData(mouse.x, mouse.y, 1, 1).data;
-        // var index = (mouse.x + mouse.y * imageData.width) * 4;
-        fromMatt = false;
-        let ret = moveItem(mouse, activeIngredients[i]);
+//         // var imageData = gctx.getImageData(mouse.x, mouse.y, 1, 1).data;
+//         // var index = (mouse.x + mouse.y * imageData.width) * 4;
+//         fromMatt = false;
+//         let ret = moveItem(mouse, activeIngredients[i]);
         
-        if(ret)
-        {
-            return;
-        } 
-    }
+//         if(ret)
+//         {
+//             return;
+//         } 
+//     }
 
     
-    if (isInner && innerIngredients.length > 0)
-    {
-        for(var i = 0; i < innerIngredients.length; i++)
-        {
-            drawShape(gctx, innerIngredients[i]);
-            fromMatt = true;           
-            let ret = moveItem(mouse, innerIngredients[i]);
-            if(ret)
-        {
-            return;
-        }
-        }
-    }
-    else if (!isInner && outerIngredients.length > 0)
-    {
-        for(var i = 0; i < outerIngredients.length; i++)
-        {
-            drawShape(gctx, outerIngredients[i]);
-            fromMatt = true;
-            let ret = moveItem(mouse, outerIngredients[i]);
-            if(ret)
-        {
-            return;
-        }
-        }
-    }
+//     if (isInner && innerIngredients.length > 0)
+//     {
+//         for(var i = 0; i < innerIngredients.length; i++)
+//         {
+//             drawShape(gctx, innerIngredients[i]);
+//             fromMatt = true;           
+//             let ret = moveItem(mouse, innerIngredients[i]);
+//             if(ret)
+//         {
+//             return;
+//         }
+//         }
+//     }
+//     else if (!isInner && outerIngredients.length > 0)
+//     {
+//         for(var i = 0; i < outerIngredients.length; i++)
+//         {
+//             drawShape(gctx, outerIngredients[i]);
+//             fromMatt = true;
+//             let ret = moveItem(mouse, outerIngredients[i]);
+//             if(ret)
+//         {
+//             return;
+//         }
+//         }
+//     }
 
-    if (madeRolls.length > 0)
-    {
-        for(let i = 0; i < madeRolls.length; i++)
-        {
-            drawShape(gctx,madeRolls[i]);
+//     if (madeRolls.length > 0)
+//     {
+//         for(let i = 0; i < madeRolls.length; i++)
+//         {
+//             drawShape(gctx,madeRolls[i]);
             
-            let ret = moveItem(mouse, madeRolls[i]);
+//             let ret = moveItem(mouse, madeRolls[i]);
         
-            if(ret)
-            {
-                return;
-            }
-        }
-    }
+//             if(ret)
+//             {
+//                 return;
+//             }
+//         }
+//     }
 
-    if (moveablePlates.length > 0)
-    {
-        for(let i = 0; i < moveablePlates.length; i++)
-        {
-            drawShape(gctx,moveablePlates[i]);
+//     if (moveablePlates.length > 0)
+//     {
+//         for(let i = 0; i < moveablePlates.length; i++)
+//         {
+//             drawShape(gctx,moveablePlates[i]);
             
-            let ret = moveCircle(mouse, moveablePlates[i]);
+//             let ret = moveCircle(mouse, moveablePlates[i]);
             
-            if(ret)
-            {
-                return;
-            }
-        }
-    }
+//             if(ret)
+//             {
+//                 return;
+//             }
+//         }
+//     }
 
-    mySelect = null;
+//     mySelect = null;
 
-    clear(gctx);
+//     clear(gctx);
 
-    Invalidate();
-}
+//     Invalidate();
+// }
 
 // function moveItem(mouse, item)
 // {
@@ -468,41 +468,41 @@ function myDown(e)
 
 
 
-function Contains(mShape, oShape)
-{
-    if (oShape != null){
-        if ((oShape.x >= mShape.x) && (oShape.x + oShape.w < mShape.x + mShape.w) &&
-            (oShape.y >= mShape.y) && (oShape.y + oShape.h < mShape.y + mShape.h))
-            {
-                return true;
-            }
-        else 
-        {
-            return false;
-        }
-    }
-}
+// function Contains(mShape, oShape)
+// {
+//     if (oShape != null){
+//         if ((oShape.x >= mShape.x) && (oShape.x + oShape.w < mShape.x + mShape.w) &&
+//             (oShape.y >= mShape.y) && (oShape.y + oShape.h < mShape.y + mShape.h))
+//             {
+//                 return true;
+//             }
+//         else 
+//         {
+//             return false;
+//         }
+//     }
+// }
 
-function inCircle(x, y, circle)
-{
-    let dx = Math.abs(x-circle.x);
-    if ( dx > circle.radius) return false;
-    let dy = Math.abs(y-circle.y);
-    if ( dy > circle.radius) return false;
-    if ( dx + dy <= circle.radius) return true;
-    return (dx*dx + dy*dy <= circle.radius*circle.radius);
-}
+// function inCircle(x, y, circle)
+// {
+//     let dx = Math.abs(x-circle.x);
+//     if ( dx > circle.radius) return false;
+//     let dy = Math.abs(y-circle.y);
+//     if ( dy > circle.radius) return false;
+//     if ( dx + dy <= circle.radius) return true;
+//     return (dx*dx + dy*dy <= circle.radius*circle.radius);
+// }
 
-function containsRoll(roll, plate)
-{   
-    let box = roll.renderType;
-    if (!inCircle(box.x, box.y, plate.renderType))                 return false;
-    if (!inCircle(box.x,box.y + box.w, plate.renderType))          return false;
-    if (!inCircle(box.x + box.w, box.y, plate.renderType))         return false;
-    if (!inCircle(box.x + box.w, box.y + box.h, plate.renderType)) return false;
+// function containsRoll(roll, plate)
+// {   
+//     let box = roll.renderType;
+//     if (!inCircle(box.x, box.y, plate.renderType))                 return false;
+//     if (!inCircle(box.x,box.y + box.w, plate.renderType))          return false;
+//     if (!inCircle(box.x + box.w, box.y, plate.renderType))         return false;
+//     if (!inCircle(box.x + box.w, box.y + box.h, plate.renderType)) return false;
     
-    return true;
-}
+//     return true;
+// }
 // function myMove(e)
 // {
 //     if (isDrag)
@@ -548,41 +548,41 @@ function containsRoll(roll, plate)
 //     Invalidate();
 // }
 
-function checkCuttingStation()
-{
-    if (mySelect != null){
-        if (mySelect.canEnterCuttingStation == false)
-        {
-            Invalidate();
-            return;
-        }
-        if (mySelect.isCut == true)
-        {
-            Invalidate();
-            return;
-        }
-        if (Contains(cuttingStation,mySelect.renderType))
-        {
-            cuttingStation.item = mySelect;
-            console.log(cuttingStation.item);
+// function checkCuttingStation()
+// {
+//     if (mySelect != null){
+//         if (mySelect.canEnterCuttingStation == false)
+//         {
+//             Invalidate();
+//             return;
+//         }
+//         if (mySelect.isCut == true)
+//         {
+//             Invalidate();
+//             return;
+//         }
+//         if (Contains(cuttingStation,mySelect.renderType))
+//         {
+//             cuttingStation.item = mySelect;
+//             console.log(cuttingStation.item);
             
-            delete madeRolls[madeRolls.findIndex(findRoll)];
-            madeRolls.sort();
-            madeRolls.pop();
-            }
-    }
-}
-function getRoll(box)
-{
-    for (let i = 0; i <madeRolls.length;i++)
-    {
-        if (box.x == madeRolls[i].box.x && box.y == madeRolls[i].box.y)
-        {
-            return madeRolls[i];
-        }
-    }
-    return null;
-}
+//             delete madeRolls[madeRolls.findIndex(findRoll)];
+//             madeRolls.sort();
+//             madeRolls.pop();
+//             }
+//     }
+// // }
+// function getRoll(box)
+// {
+//     for (let i = 0; i <madeRolls.length;i++)
+//     {
+//         if (box.x == madeRolls[i].box.x && box.y == madeRolls[i].box.y)
+//         {
+//             return madeRolls[i];
+//         }
+//     }
+//     return null;
+// }
 // function findRoll(box)
 // {
 
@@ -660,26 +660,26 @@ export function Invalidate()
     validCanvas = false;
 }
 
-function InvalidateLogic()
-{
-    validLogic = false;
-}
+// function InvalidateLogic()
+// {
+//     validLogic = false;
+// }
 
-function Plate()
-{
-    this.roll = null;
-    this.renderType = Circle;
-    this.canEnterMatt = false;
-    this.canEnterCuttingStation = false;
-    this.canEnterPlate = false;
-}
+// function Plate()
+// {
+//     this.roll = null;
+//     this.renderType = Circle;
+//     this.canEnterMatt = false;
+//     this.canEnterCuttingStation = false;
+//     this.canEnterPlate = false;
+// }
 
-function createPlate()
-{
-    var plate = new Plate;
-    plate.renderType = createCircle(plateHolder.x + plateHolder.w /2, plateHolder.y + plateHolder.h /2, 40, true, 'white', 'gold', 3);
-    plateHolder.plate = plate; 
-}
+// function createPlate()
+// {
+//     var plate = new Plate;
+//     plate.renderType = createCircle(plateHolder.x + plateHolder.w /2, plateHolder.y + plateHolder.h /2, 40, true, 'white', 'gold', 3);
+//     plateHolder.plate = plate; 
+// }
 
 // function addRollToPlate()
 // {
@@ -703,60 +703,60 @@ function createPlate()
 //     }
 // }
 
-function Roll() //TODO remove after transfer to own object file
-{
-    this.nori = true;
-    this.name = '';
-    this.inner = [];
-    this.outer = [];
-    this.renderType = Box;
-    this.canEnterMatt = false;
-    this.canEnterCuttingStation = true;
-    this.canEnterPlate = false;
-    this.isCut = false;
-}
+// function Roll() 
+// {
+//     this.nori = true;
+//     this.name = '';
+//     this.inner = [];
+//     this.outer = [];
+//     this.renderType = Box;
+//     this.canEnterMatt = false;
+//     this.canEnterCuttingStation = true;
+//     this.canEnterPlate = false;
+//     this.isCut = false;
+// }
 
-function Ingredient() //TODO remove
-{
-    this.name = ingredients;
-    this.renderType = null;
-    this.canEnterMatt = true;
-    this.canEnterCuttingStation = false;
-    this.canEnterPlate = false;
-}
+// function Ingredient() //TODO remove
+// {
+//     this.name = ingredients;
+//     this.renderType = null;
+//     this.canEnterMatt = true;
+//     this.canEnterCuttingStation = false;
+//     this.canEnterPlate = false;
+// }
 
-function createIngredient(name, renderType) //TODO remove
-{
-    var ingredient = new Ingredient();
-    ingredient.name = name;
-    ingredient.renderType = renderType;
-    return ingredient;
-}
+// function createIngredient(name, renderType) //TODO remove
+// {
+//     var ingredient = new Ingredient();
+//     ingredient.name = name;
+//     ingredient.renderType = renderType;
+//     return ingredient;
+// }
 
-function createRice(x,y) //TODO remove
-{
-    var box = createBox(x, y, 75, 75, true, 'white', 'white');
-    var rice = createIngredient(ingredients.RICE, box);
-    activeIngredients.push(rice);
-}
-function createCucumber(x,y) //TODO remove
-{
-    var box = createBox(x, y, 50, 10, true, 'green', 'green');
-    var cucumber = createIngredient(ingredients.CUCUMBER, box);
-    activeIngredients.push(cucumber);
-}
-function createCrab(x,y) //TODO remove
-{
-    var box = createBox(x, y, 50, 20, true, 'white', 'red');
-    var crab = createIngredient(ingredients.CRAB, box);
-    activeIngredients.push(crab);
-}
-function createAvocado(x,y) //TODO remove
-{
-    var box = createBox(x, y, 50, 20, true, 'yellow', 'green');
-    var avocado = createIngredient(ingredients.AVOCADO, box);
-    activeIngredients.push(avocado);
-}
+// function createRice(x,y) //TODO remove
+// {
+//     var box = createBox(x, y, 75, 75, true, 'white', 'white');
+//     var rice = createIngredient(ingredients.RICE, box);
+//     activeIngredients.push(rice);
+// }
+// function createCucumber(x,y) //TODO remove
+// {
+//     var box = createBox(x, y, 50, 10, true, 'green', 'green');
+//     var cucumber = createIngredient(ingredients.CUCUMBER, box);
+//     activeIngredients.push(cucumber);
+// }
+// function createCrab(x,y) //TODO remove
+// {
+//     var box = createBox(x, y, 50, 20, true, 'white', 'red');
+//     var crab = createIngredient(ingredients.CRAB, box);
+//     activeIngredients.push(crab);
+// }
+// function createAvocado(x,y) //TODO remove
+// {
+//     var box = createBox(x, y, 50, 20, true, 'yellow', 'green');
+//     var avocado = createIngredient(ingredients.AVOCADO, box);
+//     activeIngredients.push(avocado);
+// }
 
 // function createRoll(nori, inner, outer, itemBox)
 // {
@@ -771,120 +771,120 @@ function createAvocado(x,y) //TODO remove
 //     return roll;
 // }
 
-function assembleRoll()
-{
-    //later this will have timer to completion of roll
-    let box1 = createBox(rollingMatt.x, rollingMatt.y, rollingMatt.w, rollingMatt.h / 4, 
-        true, 'Green', 'Green',3,false,null,false);
+// function assembleRoll()
+// {
+//     //later this will have timer to completion of roll
+//     let box1 = createBox(rollingMatt.x, rollingMatt.y, rollingMatt.w, rollingMatt.h / 4, 
+//         true, 'Green', 'Green',3,false,null,false);
     
-    var inner = [];
-    var outer = [];
-    for (var i = 0; i < innerIngredients.length;i++)
-    {
-        inner.push(innerIngredients[i].name);
-    }
-    for (var i = 0; i < outerIngredients.length;i++)
-    {
-        outer.push(outerIngredients[i].name);
-    }  
-    var roll = createRoll(true,inner, outer,box1);
-    innerIngredients.splice(0, innerIngredients.length);
-    outerIngredients.splice(0,outerIngredients.length); 
-    madeRolls.push(roll);
-    console.log(madeRolls);
-    Invalidate();
-}
+//     var inner = [];
+//     var outer = [];
+//     for (var i = 0; i < innerIngredients.length;i++)
+//     {
+//         inner.push(innerIngredients[i].name);
+//     }
+//     for (var i = 0; i < outerIngredients.length;i++)
+//     {
+//         outer.push(outerIngredients[i].name);
+//     }  
+//     var roll = createRoll(true,inner, outer,box1);
+//     innerIngredients.splice(0, innerIngredients.length);
+//     outerIngredients.splice(0,outerIngredients.length); 
+//     madeRolls.push(roll);
+//     console.log(madeRolls);
+//     Invalidate();
+// }
 
 
 
-function getRollName(roll, acceptedRolls = [])
-{
-    var rollsToDel = [];
-    if (acceptedRolls.length == 0)
-    {
-        for (let i = 0; i <rollList.length;i++)
-        {
-            if (((roll.inner.length + roll.outer.length) === (rollList[i].inner.length + rollList[i].outer.length)))
-            {
-                acceptedRolls.push(i);
-                console.log(i);
-            }
-        }
-        if (acceptedRolls.length == 0)
-        {
-            return 'Unknown Roll'
-        }
-        getRollName(roll, acceptedRolls);
-    }
-    else
-    {
-        console.log(acceptedRolls.length);
-        for (let i = 0; i < acceptedRolls.length; i++)
-        {   
-            if (roll.inner.length > rollList[acceptedRolls[i]].inner.length)
-                {
-                    rollsToDel.push(i);
-                    continue;
-                }
-            for(let k = 0; k < roll.inner.length; k++)
-            {
-                if (roll.inner[k] != rollList[acceptedRolls[i]].inner[k])
-                {
-                    rollsToDel.push(i);
-                    break;
-                }
-            }
+// function getRollName(roll, acceptedRolls = [])
+// {
+//     var rollsToDel = [];
+//     if (acceptedRolls.length == 0)
+//     {
+//         for (let i = 0; i <rollList.length;i++)
+//         {
+//             if (((roll.inner.length + roll.outer.length) === (rollList[i].inner.length + rollList[i].outer.length)))
+//             {
+//                 acceptedRolls.push(i);
+//                 console.log(i);
+//             }
+//         }
+//         if (acceptedRolls.length == 0)
+//         {
+//             return 'Unknown Roll'
+//         }
+//         getRollName(roll, acceptedRolls);
+//     }
+//     else
+//     {
+//         console.log(acceptedRolls.length);
+//         for (let i = 0; i < acceptedRolls.length; i++)
+//         {   
+//             if (roll.inner.length > rollList[acceptedRolls[i]].inner.length)
+//                 {
+//                     rollsToDel.push(i);
+//                     continue;
+//                 }
+//             for(let k = 0; k < roll.inner.length; k++)
+//             {
+//                 if (roll.inner[k] != rollList[acceptedRolls[i]].inner[k])
+//                 {
+//                     rollsToDel.push(i);
+//                     break;
+//                 }
+//             }
             
-            if (roll.outer.length > rollList[acceptedRolls[i]].outer.length)
-                {
-                    rollsToDel.push(i);
-                    continue;
-                }
-            for(let k = 0; k < roll.outer.length; k++)
-            {
+//             if (roll.outer.length > rollList[acceptedRolls[i]].outer.length)
+//                 {
+//                     rollsToDel.push(i);
+//                     continue;
+//                 }
+//             for(let k = 0; k < roll.outer.length; k++)
+//             {
                 
-                if (roll.outer[k] != rollList[acceptedRolls[i]].outer[k])
-                {
-                    rollsToDel.push(i);
-                    break;
-                }
-            }
-        }
-    }
-    eliminateDuplicates(rollsToDel);
-    for (let i = 0; i < rollsToDel.length; i++)
-    {
-        delete acceptedRolls[rollsToDel[i]];
-    }
-    var cleanArray = acceptedRolls.filter(function() {return true});
-    if (cleanArray.length == 0)
-    {
-        return 'Unknown Roll'
-    }
-    else if (cleanArray.length == 1)
-    {
-        return rollList[cleanArray[0]].name;
-    }
-    else
-    {
-        getRollName(roll, cleanArray);
-    }
-}
+//                 if (roll.outer[k] != rollList[acceptedRolls[i]].outer[k])
+//                 {
+//                     rollsToDel.push(i);
+//                     break;
+//                 }
+//             }
+//         }
+//     }
+//     eliminateDuplicates(rollsToDel);
+//     for (let i = 0; i < rollsToDel.length; i++)
+//     {
+//         delete acceptedRolls[rollsToDel[i]];
+//     }
+//     var cleanArray = acceptedRolls.filter(function() {return true});
+//     if (cleanArray.length == 0)
+//     {
+//         return 'Unknown Roll'
+//     }
+//     else if (cleanArray.length == 1)
+//     {
+//         return rollList[cleanArray[0]].name;
+//     }
+//     else
+//     {
+//         getRollName(roll, cleanArray);
+//     }
+// }
 
-function eliminateDuplicates(arr) {
-    var i,
-        len = arr.length,
-        out = [],
-        obj = {};
+// function eliminateDuplicates(arr) {
+//     var i,
+//         len = arr.length,
+//         out = [],
+//         obj = {};
   
-    for (i = 0; i < len; i++) {
-      obj[arr[i]] = 0;
-    }
-    for (i in obj) {
-      out.push(i);
-    }
-    return out;
-  }
+//     for (i = 0; i < len; i++) {
+//       obj[arr[i]] = 0;
+//     }
+//     for (i in obj) {
+//       out.push(i);
+//     }
+//     return out;
+//   }
 
 
 // export function Box() {
@@ -1012,7 +1012,7 @@ export function draw()
         context.fillStyle = 'Red';
         context.textAlign = "left";
         context.font = "30px Arial";
-        if (isInner){
+        if (rollMatt.isInnerIngredient()){
             context.fillText('Inner',300,300);
         }
         else
@@ -1026,7 +1026,7 @@ export function draw()
         
         cutStation.drawCuttingStation(context);//cuttingStation
 
-        rollControl.drawRolls(context, madeRolls);
+        rollControl.drawRolls(context);
         
         ingredients.drawActiveIngredients(context);
         rollMatt.drawIngredients(context);
@@ -1041,19 +1041,15 @@ export function draw()
         //     drawShapes(context, outerIngredients);
         // }
 
-        if (moveablePlates.length > 0)
-        {
-            drawPlates(context,moveablePlates);
-
-        }
+        plates.drawPlates(context);
         
-
-        if (mySelect != null)
-        {
-            context.strokeStyle = mySelectColor;
-            context.lineWidth = mySelectWidth;
-            context.strokeRect(mySelect.renderType.x, mySelect.renderType.y, mySelect.renderType.w, mySelect.renderType.h);
-        }
+        ioControl.drawMySelect(context);
+        // if (mySelect != null)
+        // {
+        //     context.strokeStyle = mySelectColor;
+        //     context.lineWidth = mySelectWidth;
+        //     context.strokeRect(mySelect.renderType.x, mySelect.renderType.y, mySelect.renderType.w, mySelect.renderType.h);
+        // }
 
         //draw on top like stats
 
@@ -1070,14 +1066,14 @@ export function drawShapes(ctx, shapes)
     }
 }
 
-export function drawPlates(ctx, plates)
-{
-    for (var i = 0; i < plates.length; i++)
-    {
-        drawShape(ctx, plates[i].renderType);
-        drawShape(ctx, plates[i].roll.renderType);
-    }
-}
+// export function drawPlates(ctx, plates)
+// {
+//     for (var i = 0; i < plates.length; i++)
+//     {
+//         drawShape(ctx, plates[i].renderType);
+//         drawShape(ctx, plates[i].roll.renderType);
+//     }
+// }
 
 
 
@@ -1100,13 +1096,13 @@ export function drawShape(ctx, shape)
     }
 }
 
-export function drawRolls(ctx, rolls)
-{
-    for (var i = 0; i < rolls.length; i++)
-    {
-        drawShape(ctx, rolls[i].renderType);
-    }
-}
+// export function drawRolls(ctx, rolls)
+// {
+//     for (var i = 0; i < rolls.length; i++)
+//     {
+//         drawShape(ctx, rolls[i].renderType);
+//     }
+// }
 
 export function drawRectangle(ctx, x, y, w, h, fill, intcolor, outcolor, lineWidth){
     ctx.strokeStyle = outcolor;

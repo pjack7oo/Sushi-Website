@@ -4,6 +4,7 @@ import * as drawing     from './drawing.js';
 import * as cutStation  from '../objects/cuttingstation.js';
 import * as rollControl from '../objects/rolls.js';
 import * as plates      from '../objects/plates.js';
+import { shapeType, inCircle} from './shapes.js';
 //moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 var ghostcanvas;
 /**@type {CanvasRenderingContext2D} */
@@ -16,6 +17,8 @@ var fromMatt = false;
 
 var offsetX, offsetY;
 var mySelect = [];
+var mySelectColor = 'Red';
+var mySelectWidth = 3;
 
 export function doKeyPress(e)
 {
@@ -26,7 +29,7 @@ export function doKeyPress(e)
             break;
         
         case 82: // R key
-            if (ingredients.containsIngredients())
+            if (rollMatt.containsIngredients())
             {
                 rollMatt.assembleRoll();
             }
@@ -133,6 +136,8 @@ export function myDown(e)
     }
     if (checkShapes(plates.getMoveablePlates(), mouse))
     {
+        console.log(true);
+        
         return;
     }
     // let mRl = rollControl.madeRolls.length;
@@ -181,9 +186,19 @@ function checkShapes(shapes, mouse)
         for (let i = 0; i < l; i++)
         {
             drawing.drawShape(gctx, shapes[i]);
-    
-            let ret = moveItem(mouse, shapes[i]);
-    
+            let ret;
+            if (shapes[i].renderType.type == shapeType.CIRCLE)
+            {
+                ret = moveCircle(mouse, shapes[i]);
+            }
+            else
+            {
+                ret = moveItem(mouse, shapes[i]);
+            }
+            
+
+            console.log(ret);
+            
             if(ret)
             {
                 return ret;
@@ -216,6 +231,16 @@ function inBounds(mouse, shape)
             (mouse.x < shape.x + shape.w) && (mouse.y < shape.y + shape.h));
 }
 
+// function inCircle(mouse, circle)
+// {
+//     let dx = Math.abs(x-circle.x);
+//     if ( dx > circle.radius) return false;
+//     let dy = Math.abs(mouse.y-circle.y);
+//     if ( dy > circle.radius) return false;
+//     if ( dx + dy <= circle.radius) return true;
+//     return (dx*dx + dy*dy <= circle.radius*circle.radius);
+// }
+
 export function moveItem(mouse, item)
 {
     if (inBounds(mouse, item.renderType))
@@ -225,8 +250,8 @@ export function moveItem(mouse, item)
         offsetY    = mouse.y - mySelect[0].renderType.y;
         mySelect[0].renderType.x = mouse.x - offsetX;
         mySelect[0].renderType.y = mouse.y - offsetY;
-        mySelect[0].renderType.oldX = mouse.x - offsetX;
-        mySelect[0].renderType.oldY = mouse.y - offsetY;
+        // mySelect[0].renderType.oldX = mouse.x - offsetX;
+        // mySelect[0].renderType.oldY = mouse.y - offsetY;
         
         isDrag = true;
         canvas.onmousemove = myMove; 
@@ -241,12 +266,12 @@ export function moveCircle(mouse, item)
 {
     if (inCircle(mouse.x, mouse.y, item.renderType))
     {
-        mySelect   = item;
-        mySelect2  = item.roll; 
-        offsetX    = mouse.x - mySelect.renderType.x;
-        offsetY    = mouse.y - mySelect.renderType.y;
-        mySelect.renderType.x = mouse.x - offsetX;
-        mySelect.renderType.y = mouse.y - offsetY;
+        mySelect[0]   = item;
+        // mySelect2  = item.roll; 
+        offsetX    = mouse.x - mySelect[0].renderType.x;
+        offsetY    = mouse.y - mySelect[0].renderType.y;
+        mySelect[0].renderType.x = mouse.x - offsetX;
+        mySelect[0].renderType.y = mouse.y - offsetY;
         // mySelect.renderType.oldX = mouse.x - offsetX;
         // mySelect.renderType.oldY = mouse.y - offsetY;
         isDrag = true;
@@ -272,5 +297,16 @@ function myMove(e)
         mySelect[0].renderType.y = mouse.y - offsetY;
 
         drawing.Invalidate();
+    }
+}
+
+
+export function drawMySelect(ctx)
+{
+    if (mySelect[0] != null)
+    {
+        context.strokeStyle = mySelectColor;
+        context.lineWidth = mySelectWidth;
+        context.strokeRect(mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h);
     }
 }

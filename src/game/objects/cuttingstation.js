@@ -40,10 +40,9 @@ export function checkCutRoll()
             cuttingStation.item.canEnterPlate = true;
             cuttingStation.item.canEnterCuttingStation = false;
             roll.downSizeRoll(cuttingStation.item);
-            madeRolls.push(cuttingStation.item);
+            roll.pushRoll(cuttingStation.item);
             cuttingStation.item = null;
             console.log('Cut roll');
-            console.log(madeRolls);
                 
             drawing.Invalidate();
         }
@@ -101,10 +100,8 @@ export function checkCuttingStation(mySelect)
         {
             cuttingStation.item = mySelect;
             console.log(cuttingStation.item);
+            roll.removeRoll(mySelect);
             
-            delete madeRolls[madeRolls.findIndex(findRoll)];
-            madeRolls.sort();
-            madeRolls.pop();
             }
     }
 }

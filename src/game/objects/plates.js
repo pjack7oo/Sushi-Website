@@ -1,5 +1,6 @@
 import * as shapes from '../utils/shapes.js'
 import * as drawing from '../utils/drawing.js';
+import { removeRoll } from './rolls.js';
 //const drawing = require('../utils/drawing.js');
 var moveablePlates = [];
 
@@ -44,27 +45,38 @@ export function drawPlateHolder(context)
 {
     if (plateHolder.plate != null)
     {
-        //console.log(plateHolder.plate.renderType);
+       
             
         drawing.drawShape(context, plateHolder.plate.renderType);
     }
 }
 
-export function drawPlates(ctx, plates)
+export function drawPlates(ctx)
 {
-    let l = plates.length;
-    for (var i = 0; i < l; i++)
+    let l = moveablePlates.length;
+    if (l > 0)
     {
-        drawShape(ctx, plates[i].renderType);
-        drawShape(ctx, plates[i].roll.renderType);
+        for (var i = 0; i < l; i++)
+        {
+            drawing.drawShape(ctx, moveablePlates[i].renderType);
+            //drawing.drawShape(ctx, plates[i].roll.renderType);
+            drawRollOnPlate(ctx, moveablePlates[i], moveablePlates[i].roll);
+        }
     }
+    
+}
+
+function drawRollOnPlate(ctx , plate, roll)
+{
+    correctRollOnPlate(plate, roll);
+    drawing.drawShape(ctx, roll.renderType);
 }
 
 export function addRollToPlate(mySelect)
 {
     if (mySelect != null)
     {
-        if (mySelect.canEnterPlate == true)
+        if (mySelect.canEnterPlate == true && plateHolder.plate.roll == null)
         {
             if (shapes.containsRoll(mySelect,plateHolder.plate))
             {
@@ -73,6 +85,7 @@ export function addRollToPlate(mySelect)
                 removeRoll(mySelect);
                 
                 moveablePlates.push(plateHolder.plate);
+                plateHolder.plate = null;
                 console.log(moveablePlates);
                 
             }
@@ -80,9 +93,9 @@ export function addRollToPlate(mySelect)
     }
 }
 
-export function correctRollOnPlate(plate, roll)
+function correctRollOnPlate(plate, roll)
 {
-    roll.renderType.x = plate.renderType.x - roll.renderType.w /2;
+    roll.renderType.x = plate.renderType.x - roll.renderType.w / 2;
     roll.renderType.y = plate.renderType.y - roll.renderType.h / 2;
 }
 
