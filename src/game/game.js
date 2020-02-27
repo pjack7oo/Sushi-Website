@@ -102,3 +102,22 @@ function update() //used to update logic of parts of game like getting customers
     
     drawing.draw();
 }
+
+function gameLoop()
+{
+    requestAnimationFrame(gameLoop, canvas);
+
+    var current = performance.now(), elapsed = current - start;
+    start = current;
+
+    //lag += elapsed;
+
+    if (validLogic == false)
+    {
+        validLogic = true;
+    }
+
+    var lagOffset = lag / frameDuration;
+    //render(lagOffset);
+    //draw();
+}
