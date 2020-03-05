@@ -1,7 +1,8 @@
 
 export const shapeType = {
     RECTANGLE: 'Rectangle',
-    CIRCLE: 'Circle'
+    CIRCLE   : 'Circle',
+    IMAGE    : 'Image'
 }
 
 export function Box() {

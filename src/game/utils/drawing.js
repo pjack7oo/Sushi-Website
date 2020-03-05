@@ -6,6 +6,7 @@ import * as shapes      from './shapes.js';
 import * as ingredients from '../objects/ingredients.js';
 import * as rollControl from '../objects/rolls.js';
 import * as ioControl   from './iocontrol.js';
+import * as customers   from '../objects/customers.js';
 
 
 var canvas = document.getElementById('canvas');
@@ -102,6 +103,7 @@ export function draw()
         drawShape(context, rollMatt.rollingMatt); //rollingMatt
         drawShape(context, cutStation.cuttingStation);
         drawShape(context, plates.plateHolder);
+        customers.drawCustomers(context);
         context.fillStyle = 'Red';
         context.textAlign = "left";
         context.font = "30px Arial";
@@ -172,12 +174,18 @@ export function drawShape(ctx, shape)
             drawCircle(ctx,shape.x, shape.y, shape.radius, 
                 shape.fill, shape.intColor, shape.outColor, shape.lineWidth);
             break;
+        case shapes.shapeType.IMAGE:
+            drawImage(ctx, shape);
+            break;
         default:
             break;
     }
 }
 
-
+function drawImage(ctx, object)
+{
+    ctx.drawImage(object.image, object.x, object.y, object.w, object.h);
+}
 
 export function drawRectangle(ctx, x, y, w, h, fill, intcolor, outcolor, lineWidth){
     ctx.strokeStyle = outcolor;

@@ -1,10 +1,10 @@
-import * as drawing from './utils/drawing.js';
+import * as drawing     from './utils/drawing.js';
 import * as rollControl from './objects/rolls.js';
-import * as ingrd from '../game/objects/ingredients.js';
-import * as cutSt from './objects/cuttingstation.js';
-import * as plates from './objects/plates.js';
-import * as ioControl from './utils/iocontrol.js';
+import * as cutSt       from './objects/cuttingstation.js';
+import * as plates      from './objects/plates.js';
+import * as ioControl   from './utils/iocontrol.js';
 import * as ingredients from './objects/ingredients.js';
+import * as customers   from './objects/customers.js';
 
 
 var canvas = document.getElementById('canvas');
@@ -85,6 +85,7 @@ function init()
     ingredients.createCrab(100, 220);
     // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
     ingredients.createCucumber(100, 240);
+    customers.getRandomCustomer();
     //console.log(activeIngredients);
     //gameLoop();
 }
@@ -94,7 +95,7 @@ function update() //used to update logic of parts of game like getting customers
     //requestAnimationFrame(update, canvas);
 
     var current = performance.now();
-
+    customers.updateCustomers();
     
     
     cutSt.checkCutRoll();
