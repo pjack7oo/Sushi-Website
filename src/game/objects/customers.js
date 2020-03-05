@@ -1,5 +1,6 @@
 import * as shapes  from '../utils/shapes.js';
 import * as drawing from '../utils/drawing.js';
+import * as rolls   from  './rolls.js';
 
 var customers = [];
 
@@ -29,11 +30,26 @@ export function getRandomCustomer()
 
 }
 
+function getWantedRoll(customer)
+{
+    var roll = rolls.CaliforniaRoll;
+    customer.want.push()
+}
+
 export function drawCustomers(ctx)
 {
     for (var customer in customers)
     {
-        drawing.drawShape(ctx, customers[customer]);
+        drawCustomer(ctx, customers[customer]);
+    }
+}
+
+function drawCustomer(ctx, customer)
+{
+    drawing.drawShape(ctx, customer);
+    if (customer.isThinking)
+    {
+        drawing.drawSpeechBubble(customer.x + 50, customer.y + 20, 50, 50, '...', '10px Arial', 'black');
     }
 }
 
@@ -57,6 +73,7 @@ export function updateCustomers()
             {
                 customers[customer].isThinking = false;
                 startTime(customers[customer]);
+                drawing.Invalidate();
             }
         }
     }

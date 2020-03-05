@@ -5,7 +5,7 @@ import * as shapes from '../utils/shapes.js';
 
 var madeRolls = [];
 var mySelect = null;
-
+//TODO needs renderType for both rolls and future rolls
 export const CaliforniaRoll = {
     name: 'California Roll',
     inner: [ingrd.ingredients.AVOCADO, ingrd.ingredients.CRAB, ingrd.ingredients.CUCUMBER],

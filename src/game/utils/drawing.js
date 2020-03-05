@@ -58,7 +58,7 @@ export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textC
     Invalidate();
 }
 
-export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true,intColor = 'Blue' , outColor = 'Gray')
+export function drawRoundRectWPoint(ctx, x, y, w, h, radius, fill, stroke = true,intColor = 'Blue' , outColor = 'Gray')
 {
     if (typeof stroke == "undefined")
     {
@@ -70,6 +70,39 @@ export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true,intCo
     ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
     ctx.lineTo(x + w, y + h - radius);
     ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+    ctx.lineTo(x - radius + w/2 +20, y + h);
+    ctx.lineTo(x + w/2, y + h + 10);
+    ctx.lineTo(x + radius + w/2 - 20, y + h);
+    ctx.lineTo(x + radius, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    if (fill) 
+    {
+        ctx.fillStyle = intColor;
+        ctx.fill();
+    }
+    if (stroke) 
+    {
+        ctx.strokeStyle = outColor;
+        ctx.stroke();
+    }
+}
+
+function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true,intColor = 'Blue' , outColor = 'Gray')
+{
+    if (typeof stroke == "undefined")
+    {
+        stroke = true;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + w - radius, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+    ctx.lineTo(x + w, y + h - radius);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+    
     ctx.lineTo(x + radius, y + h);
     ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
     ctx.lineTo(x, y + radius);
@@ -211,4 +244,24 @@ export function drawCircle(context, x, y, radius, fillCircle, intcolor, outcolor
     } 
     context.lineWidth = lineWidth;
     context.stroke();
+}
+
+export function drawSpeechBubble(x, y, w, h, text, font = "10px Verdana",  textColor = 'Black', intColor = '#add8e6' , outColor = 'Gray')
+{
+    drawRoundRectWPoint(context, x , y, w, h, 10, true, true, intColor, outColor);
+    context.font = font;
+    context.textAlign = "center";
+    context.fillStyle = textColor;
+    context.fillText(text,x+ w/2,y+h/2);
+    Invalidate();
+
+}
+
+export function drawRollInSpeechBubble(x, y , w, h, roll, intColor, outColor)
+{
+    drawRoundRectWPoint(context, x , y, w, h, 10, true, true, intColor, outColor);
+    roll.renderType.x = x + w/2;
+    roll.renderType.y = y + h/2;
+    drawShape(context, roll.renderType);
+
 }
