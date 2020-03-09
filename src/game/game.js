@@ -62,8 +62,8 @@ function init()
     }
     
     plates.createPlate();
-    console.log(plates.plateHolder);
-    setInterval(update, interval); //draw every interval milliseconds
+    //console.log(plates.plateHolder);
+    //setInterval(update, interval); //draw every interval milliseconds
 
     canvas.onmousedown = ioControl.myDown;
     canvas.onmouseup   = ioControl.myUp;
@@ -86,13 +86,15 @@ function init()
     // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
     ingredients.createCucumber(100, 240);
     customers.getRandomCustomer();
+    drawing.Invalidate();
     //console.log(activeIngredients);
+    update();
     //gameLoop();
 }
 
 function update() //used to update logic of parts of game like getting customers based on tim and randomness
 {
-    //requestAnimationFrame(update, canvas);
+    requestAnimationFrame(update, canvas);
 
     var current = performance.now();
     customers.updateCustomers();
@@ -112,11 +114,6 @@ function gameLoop()
     start = current;
 
     //lag += elapsed;
-
-    if (validLogic == false)
-    {
-        validLogic = true;
-    }
 
     var lagOffset = lag / frameDuration;
     //render(lagOffset);

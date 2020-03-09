@@ -12,6 +12,8 @@ function Customer()
     this.y            = -20;
     this.w            = 150;
     this.h            = 250;
+    this.xOffset      = -30;
+    this.yOffset      = -20;
     this.temperTime   = 6000;
     this.startTime    = 0;
     this.isThinking   = true; 
@@ -27,21 +29,26 @@ export function getRandomCustomer()
     var customer = new Customer();
     startTime(customer);
     customers.push(customer);
+    drawing.Invalidate();
+    
+    
 
 }
 
 function getWantedRoll(customer)
 {
     var roll = rolls.CaliforniaRoll;
-    customer.want.push()
+    customer.want.push(roll);
 }
 
 export function drawCustomers(ctx)
 {
-    for (var customer in customers)
+    for (var customer of customers)
     {
-        drawCustomer(ctx, customers[customer]);
+    
+        drawCustomer(ctx, customer);
     }
+
 }
 
 function drawCustomer(ctx, customer)
@@ -60,19 +67,19 @@ function startTime(customer)
 
 export function updateCustomers()
 {
-    for (var customer in customers)
+    for (var customer of customers)
     {
-        if (customers[customer].isThinking)
+        if (customer.isThinking)
         {
             let currentTime = performance.now(),
-                elapsedTime = currentTime - customers[customer].startTime,
-                precentage  = (elapsedTime / customers[customer].temperTime)*100;
+                elapsedTime = currentTime - customer.startTime,
+                precentage  = (elapsedTime / customer.temperTime)*100;
             
             
             if (precentage >= 100)
             {
-                customers[customer].isThinking = false;
-                startTime(customers[customer]);
+                customer.isThinking = false;
+                startTime(customer);
                 drawing.Invalidate();
             }
         }

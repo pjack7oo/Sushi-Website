@@ -136,7 +136,9 @@ export function draw()
         drawShape(context, rollMatt.rollingMatt); //rollingMatt
         drawShape(context, cutStation.cuttingStation);
         drawShape(context, plates.plateHolder);
-        customers.drawCustomers(context);
+
+        
+        
         context.fillStyle = 'Red';
         context.textAlign = "left";
         context.font = "30px Arial";
@@ -150,6 +152,7 @@ export function draw()
         
 
         //draw all shapes
+        customers.drawCustomers(context);
         plates.drawPlateHolder(context);//plateholder
         
         cutStation.drawCuttingStation(context);//cuttingStation
@@ -218,6 +221,7 @@ export function drawShape(ctx, shape)
 function drawImage(ctx, object)
 {
     ctx.drawImage(object.image, object.x, object.y, object.w, object.h);
+    
 }
 
 export function drawRectangle(ctx, x, y, w, h, fill, intcolor, outcolor, lineWidth){
