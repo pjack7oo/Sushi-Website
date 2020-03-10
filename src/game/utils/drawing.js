@@ -213,6 +213,9 @@ export function drawShape(ctx, shape)
         case shapes.shapeType.IMAGE:
             drawImage(ctx, shape);
             break;
+        case shapes.shapeType.ROLL:
+                
+            break;
         default:
             break;
     }

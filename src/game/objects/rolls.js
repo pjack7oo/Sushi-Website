@@ -67,6 +67,7 @@ export function Roll()
     this.canEnterCuttingStation = true;
     this.canEnterPlate = false;
     this.isCut = false;
+    this.canSell = false;
 }
 
 export function getMadeRolls()
@@ -92,6 +93,11 @@ export function drawRolls(ctx)
         }
     }
     
+}
+
+export function drawRollWithCoords(ctx, x, y){
+    //drawing.drawRectangle(ctx, x, y, w, h, true, "red", "white", 5);
+    drawing.drawCircle(ctx, x, y, 10,  true, 'red', 'white', 15);
 }
 
 

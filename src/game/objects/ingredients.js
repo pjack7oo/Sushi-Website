@@ -21,6 +21,8 @@ export function Ingredient()
     this.canEnterMatt = true;
     this.canEnterCuttingStation = false;
     this.canEnterPlate = false;
+    this.canSell       = false;
+    
 }
 
 function createIngredient(name, renderType)

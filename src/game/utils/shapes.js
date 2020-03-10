@@ -2,7 +2,8 @@
 export const shapeType = {
     RECTANGLE: 'Rectangle',
     CIRCLE   : 'Circle',
-    IMAGE    : 'Image'
+    IMAGE    : 'Image',
+    ROLL     : 'Roll'
 }
 
 export function Box() {
@@ -101,4 +102,17 @@ export function containsRoll(roll, plate)
     if (!inCircle(box.x + box.w, box.y + box.h, plate.renderType)) return false;
     
     return true;
+}
+
+export function inRect(x, y, Rectangle)
+{
+    if ((x >= Rectangle.x) && (y >= Rectangle.y) &&
+        (x <= Rectangle.x + Rectangle.w  && (y <= Rectangle.y + Rectangle.h)))
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
 }

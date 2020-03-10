@@ -27,6 +27,7 @@ export function Plate()
     this.canEnterMatt = false;
     this.canEnterCuttingStation = false;
     this.canEnterPlate = false;
+    this.canSell       = false;
 }
 
 export function createPlate()
@@ -82,6 +83,7 @@ export function addRollToPlate(mySelect)
             {
                 correctRollOnPlate(plateHolder.plate, mySelect);
                 plateHolder.plate.roll = mySelect;
+                plateHolder.plate.canSell = true;
                 removeRoll(mySelect);
                 
                 moveablePlates.push(plateHolder.plate);

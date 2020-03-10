@@ -4,7 +4,9 @@ import * as drawing     from './drawing.js';
 import * as cutStation  from '../objects/cuttingstation.js';
 import * as rollControl from '../objects/rolls.js';
 import * as plates      from '../objects/plates.js';
+import * as customers   from '../objects/customers.js';
 import { shapeType, inCircle} from './shapes.js';
+
 //moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 var ghostcanvas;
 /**@type {CanvasRenderingContext2D} */
@@ -136,7 +138,7 @@ export function myDown(e)
     }
     if (checkShapes(plates.getMoveablePlates(), mouse))
     {
-        console.log(true);
+        
         
         return;
     }
@@ -197,7 +199,7 @@ function checkShapes(shapes, mouse)
             }
             
 
-            console.log(ret);
+            
             
             if(ret)
             {
@@ -217,6 +219,7 @@ export function myUp()
         rollMatt.checkMatt(mySelect[0]);
         cutStation.checkCuttingStation(mySelect[0]);
         plates.addRollToPlate(mySelect[0]);
+        customers.giveCustomerPlate(mySelect[0]);
          
     }
     mySelect[0] = null;
