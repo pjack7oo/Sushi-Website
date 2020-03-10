@@ -61,9 +61,10 @@ function init()
         styleBorderTop   = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderTopWidth'], 10)  || 0;
     }
     
+    rollControl.rollListInit();
     plates.createPlate();
     //console.log(plates.plateHolder);
-    //setInterval(update, interval); //draw every interval milliseconds
+    setInterval(update, interval); //draw every interval milliseconds
 
     canvas.onmousedown = ioControl.myDown;
     canvas.onmouseup   = ioControl.myUp;
@@ -88,13 +89,13 @@ function init()
     customers.getRandomCustomer();
     drawing.Invalidate();
     //console.log(activeIngredients);
-    update();
+    //update();
     //gameLoop();
 }
 
 function update() //used to update logic of parts of game like getting customers based on tim and randomness
 {
-    requestAnimationFrame(update, canvas);
+    //requestAnimationFrame(update, canvas);
 
     var current = performance.now();
     customers.updateCustomers();

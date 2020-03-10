@@ -3,6 +3,8 @@ import * as drawing from '../utils/drawing.js';
 import * as ingrd from './ingredients.js';
 import * as shapes from '../utils/shapes.js';
 
+
+
 var madeRolls = [];
 var mySelect = null;
 //TODO needs renderType for both rolls and future rolls
@@ -20,7 +22,39 @@ export const AlaskaRoll = {
     nori: true
 }
 
-export var rollList = [CaliforniaRoll, AlaskaRoll];
+// var request = new XMLHttpRequest();
+// request.open('GET', './actualRolls.json', false);
+// request.send(null);
+// export var rollList = JSON.parse(request.responseText);
+// console.log(rollList);
+export var rollList; // = require(""); 
+export function rollListInit()
+{
+    // $.getJSON("./actualRolls.json", function(json){
+    //     rollList = json;
+    // });
+    LoadJSON(function(response){
+        rollList = JSON.parse(response);
+        console.log(rollList);
+        
+    })
+}
+
+function LoadJSON(callback)
+{
+    var xobj = new XMLHttpRequest();
+
+    xobj.overrideMimeType("application/json");
+    xobj.open("GET", './game/objects/actualRolls.json', true);
+    xobj.onreadystatechange = function() {
+        if (xobj.readyState == 4 && xobj.status == "200") {
+            callback(xobj.responseText);
+        }
+    };
+    xobj.send(null);
+
+}
+
 
 export function Roll()
 {

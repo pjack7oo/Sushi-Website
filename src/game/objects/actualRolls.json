@@ -1,0 +1,17 @@
+{"rolls":[
+    {"name"          :"California Roll",
+        "inner"      : ["Avocado", "Crab", "Cucumber"],
+        "outer"      : ["Rice"],
+        "nori"       : true,
+        "description": "Standard roll follow basic instructions"},
+    {"name":"Alaska Roll",
+        "inner": ["Avocado", "Cucumber"],
+        "outer": ["Rice"],
+        "nori" : true,
+        "description": "Standard roll follow basic instructions"},
+    {"name":"",
+        "inner": [],
+        "outer": [],
+        "nori" : true,
+        "description":""}    
+]}
