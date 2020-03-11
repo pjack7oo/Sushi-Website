@@ -54,8 +54,37 @@ export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textC
     ctx.font = font;
     ctx.textAlign = "center";
     ctx.fillStyle = textColor;
-    ctx.fillText(text,x+ w/2,y+h/2);
+    //ctx.fillText(text,x+ w/2,y+h/1.75);
+    printAtWordWrap(ctx, text, x+ w/2, y+h/2, 30, 174);
     Invalidate();
+}
+
+function printAtWordWrap( context , text, x, y, lineHeight, maxWidth)
+{
+    var lines = text.split("\n");
+
+    for (var i = 0; i < lines.length; i++) {
+
+        var words = lines[i].split(' ');
+        var line = '';
+
+        for (var n = 0; n < words.length; n++) {
+            var testLine = line + words[n] + ' ';
+            var metrics = context.measureText(testLine);
+            var testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                context.fillText(line, x, y);
+                line = words[n] + ' ';
+                y += lineHeight;
+            }
+            else {
+                line = testLine;
+            }
+        }
+
+        context.fillText(line, x, y);
+        y += lineHeight;
+    }
 }
 
 export function drawRoundRectWPoint(ctx, x, y, w, h, radius, fill, stroke = true,intColor = 'Blue' , outColor = 'Gray')
@@ -122,8 +151,14 @@ function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true,intColor = '
 
 export function clear(ctx)
 {
-    ctx.fillStyle = 'Gray';
+    ctx.fillStyle = 'White';
     ctx.fillRect(0,0,600,400);
+}
+
+export function clearArea(ctx, x, y, w, h, color = "white")
+{
+    ctx.fillStyle = color;
+    ctx.fillRect(x,y,w,h);
 }
 
 export function draw() 
@@ -204,7 +239,7 @@ export function drawShape(ctx, shape)
     {
         case shapes.shapeType.RECTANGLE:
             drawRectangle(ctx, shape.x, shape.y, shape.w, shape.h, 
-                shape.fill, shape.intcolor, shape.outcolor, shape.lineWidth);
+                shape.fill, shape.intColor, shape.outColor, shape.lineWidth);
             break;
         case shapes.shapeType.CIRCLE:
             drawCircle(ctx,shape.x, shape.y, shape.radius, 
@@ -221,10 +256,24 @@ export function drawShape(ctx, shape)
     }
 }
 
+export function drawButtons(ctx, buttons)
+{
+    for (let button of buttons)
+    {
+        drawShape(ctx, button);
+        ctx.font = button.font;
+        ctx.textAlign = "center";
+        ctx.fillStyle = button.textColor;
+        
+        printAtWordWrap(ctx,button.text, button.x + button.w/2, button.y + button.h/1.75, button.h, button.w);
+        
+    }
+    
+}
+
 function drawImage(ctx, object)
 {
     ctx.drawImage(object.image, object.x, object.y, object.w, object.h);
-    
 }
 
 export function drawRectangle(ctx, x, y, w, h, fill, intcolor, outcolor, lineWidth){

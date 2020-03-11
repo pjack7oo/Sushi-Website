@@ -7,7 +7,7 @@ import * as shapes from '../utils/shapes.js';
 
 var madeRolls = [];
 var mySelect = null;
-//TODO needs renderType for both rolls and future rolls
+
 export const CaliforniaRoll = {
     name: 'California Roll',
     inner: [ingrd.ingredients.AVOCADO, ingrd.ingredients.CRAB, ingrd.ingredients.CUCUMBER],
@@ -27,7 +27,7 @@ export const AlaskaRoll = {
 // request.send(null);
 // export var rollList = JSON.parse(request.responseText);
 // console.log(rollList);
-export var rollList; // = require(""); 
+var rollList; // = require(""); 
 export function rollListInit()
 {
     // $.getJSON("./actualRolls.json", function(json){
@@ -150,10 +150,13 @@ function getRollName(roll, acceptedRolls = [])
     var rollsToDel = [];
     if (acceptedRolls.length == 0)
     {
-        let rl = rollList.length;
+        let rl = rollList.rolls.length;
+        
         for (let i = 0; i < rl;i++)
         {
-            if (((roll.inner.length + roll.outer.length) === (rollList[i].inner.length + rollList[i].outer.length)))
+            //console.log(rollList[i].inner.length + rollList[i].outer.length);//
+            
+            if (((roll.inner.length + roll.outer.length) === (rollList.rolls[i].inner.length + rollList.rolls[i].outer.length)))
             {
                 acceptedRolls.push(i);
                 console.log(i);
@@ -161,6 +164,7 @@ function getRollName(roll, acceptedRolls = [])
         }
         if (acceptedRolls.length == 0)
         {
+            console.log("fail");
             return 'Unknown Roll'
         }
         getRollName(roll, acceptedRolls);
@@ -171,7 +175,7 @@ function getRollName(roll, acceptedRolls = [])
         let aRl = acceptedRolls.length;
         for (let i = 0; i < aRl; i++)
         {   
-            if (roll.inner.length > rollList[acceptedRolls[i]].inner.length)
+            if (roll.inner.length > rollList.rolls[acceptedRolls[i]].inner.length)
             {
                 rollsToDel.push(i);
                 continue;
@@ -179,14 +183,14 @@ function getRollName(roll, acceptedRolls = [])
             let rIl = roll.inner.length;
             for(let k = 0; k < rIl; k++)
             {
-                if (roll.inner[k] != rollList[acceptedRolls[i]].inner[k])
+                if (roll.inner[k] != rollList.rolls[acceptedRolls[i]].inner[k])
                 {
                     rollsToDel.push(i);
                     break;
                 }
             }
             
-            if (roll.outer.length > rollList[acceptedRolls[i]].outer.length)
+            if (roll.outer.length > rollList.rolls[acceptedRolls[i]].outer.length)
             {
                 rollsToDel.push(i);
                 continue;
@@ -195,7 +199,7 @@ function getRollName(roll, acceptedRolls = [])
             for(let k = 0; k < rOl; k++)
             {
                 
-                if (roll.outer[k] != rollList[acceptedRolls[i]].outer[k])
+                if (roll.outer[k] != rollList.rolls[acceptedRolls[i]].outer[k])
                 {
                     rollsToDel.push(i);
                     break;
@@ -205,8 +209,8 @@ function getRollName(roll, acceptedRolls = [])
     }
     rollsToDel = eliminateDuplicates(rollsToDel);
     let unique = [...new Set(rollsToDel)];
-    console.log(unique);
-    console.log(rollsToDel);
+    // console.log(unique);
+    // console.log(rollsToDel);
     
     let rTDl = rollsToDel.length;
     for (let i = 0; i < rTDl; i++)
@@ -216,11 +220,12 @@ function getRollName(roll, acceptedRolls = [])
     var cleanArray = acceptedRolls.filter(function() {return true});
     if (cleanArray.length == 0)
     {
+        
         return 'Unknown Roll'
     }
     else if (cleanArray.length == 1)
     {
-        return rollList[cleanArray[0]].name;
+        return rollList.rolls[cleanArray[0]].name;
     }
     else
     {

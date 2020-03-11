@@ -60,7 +60,7 @@ export function getFromMatt()
 }
 
 
-function getMouse(e) 
+export function getMouse(e) 
 {
     // var element = canvas, offsetX = 0, offsetY = 0, mx, my;
 
@@ -226,6 +226,17 @@ export function myUp()
     canvas.onmousemove = null;
     
     drawing.Invalidate();
+}
+
+export function checkButtons(mouse, buttons)
+{
+    for (let button of buttons)
+    {
+        if (inBounds(mouse,button)) {
+            button.callBack();
+        }
+    }
+    
 }
 
 function inBounds(mouse, shape)

@@ -22,6 +22,7 @@ function Customer()
     this.image        = new Image();
     this.image.src    = './game/images/Cat.png';
     this.reviewer     = false;
+    this.money        = 10;
 }
 
 export function getRandomCustomer()
@@ -77,24 +78,35 @@ function startTime(customer)
     customer.startTime = performance.now();
 }
 
-export function giveCustomerPlate(Plate)
+export function giveCustomerPlate(plate)
 {
-    if (Plate != null)
+    if (plate != null)
     {
-        if (Plate.canSell)
+        if (plate.canSell)
         {
             for (let customer of customers)
             {
-                if (checkCustomerBounding(customer, Plate.renderType)){
-                    console.log(true);
+                if (checkCustomerBounding(customer, plate.renderType)){
+                    checkCustomerOrder(customer, plate);
                 
                 }
             } 
         }
     }
-    
 }
 
+function checkCustomerOrder(customer, plate)
+{
+    for (let wantedRoll of customer.want ){
+        console.log(wantedRoll);
+        console.log(plate.roll.name);
+        
+        if (plate.roll.name == wantedRoll.name){
+            console.log(true);
+        
+        }
+    }
+}
 function checkCustomerBounding(customer, circle)
 {
     if (!shapes.inRect(circle.x - circle.radius, circle.y, customer)) return false;
@@ -120,6 +132,7 @@ export function updateCustomers()
                 customer.isThinking = false;
                 startTime(customer);
                 drawing.Invalidate();
+                getWantedRoll(customer);
             }
         }
     }

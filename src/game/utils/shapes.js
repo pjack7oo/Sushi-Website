@@ -12,8 +12,8 @@ export function Box() {
     this.y = 0;
     this.w = 1;
     this.h = 1;
-    this.intcolor = '#444444';
-    this.outcolor = '#444444';
+    this.intColor = '#444444';
+    this.outColor = '#444444';
     this.fill = true;
     this.lineWidth = 1;
     this.image;
@@ -32,6 +32,44 @@ export function  Circle()
     this.image;
 }
 
+function Button()
+{
+    this.type      = shapeType.RECTANGLE;
+    this.x         = 0;
+    this.y         = 0;
+    this.w         = 100;
+    this.h         = 50;
+    this.text      = '';
+    this.textColor = 'Black';
+    this.font      = '25px Arial';
+    this.intColor  = 'Red';
+    this.outColor  = 'Gray';
+    this.active      = false;
+    this.activeColor = "Green";
+    this.fill      = true;
+    this.lineWidth = 1;
+    this.callBack  = null;
+}
+
+export function createButton(x, y, w, h, text, fill, lineWidth, callBack, intColor = 'Red', outColor = 'Gray')
+{
+    var button = new Button;
+
+    button.x         = x;
+    button.y         = y;
+    button.w         = w;
+    button.h         = h;
+    button.text      = text;
+    button.intColor  = intColor;
+    button.outColor  = outColor;
+    button.fill      = fill;
+    button.lineWidth = lineWidth;
+    button.callBack  = callBack;
+    
+    return button;
+}
+
+
 export function createCircle(x, y, radius, fill, intColor, outColor, lineWidth = 1)
 {
     var circle = new Circle;
@@ -46,7 +84,7 @@ export function createCircle(x, y, radius, fill, intColor, outColor, lineWidth =
     return circle;
 }
 
-export function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lineWidth = 4, hasImage = false, image = false)
+export function createBox(x, y, w, h, fill, intColor, outColor, able = true, lineWidth = 4, hasImage = false, image = false)
 {
     var rect= new Box;
     rect.type = shapeType.RECTANGLE;
@@ -57,8 +95,8 @@ export function createBox(x, y, w, h, fill, intcolor, outcolor, able = true, lin
     rect.w = w;
     rect.h = h;
     rect.fill = fill;
-    rect.intcolor = intcolor;
-    rect.outcolor = outcolor;
+    rect.intColor = intColor;
+    rect.outColor = outColor;
     rect.lineWidth = lineWidth;
     rect.canEnterMatt = able;
     if (hasImage)
