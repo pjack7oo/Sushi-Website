@@ -7,6 +7,7 @@ import * as ingredients from '../objects/ingredients.js';
 import * as rollControl from '../objects/rolls.js';
 import * as ioControl   from './iocontrol.js';
 import * as customers   from '../objects/customers.js';
+import * as riceCooker  from '../objects/riceCooker.js';
 
 
 var canvas = document.getElementById('canvas');
@@ -195,6 +196,7 @@ export function draw()
         plates.drawPlateHolder(context);//plateholder
         
         cutStation.drawCuttingStation(context);//cuttingStation
+        riceCooker.drawRiceCooker(context); //ricecooker
 
         rollControl.drawRolls(context);
         

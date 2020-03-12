@@ -50,8 +50,7 @@ export function getIngredientColor(ingredient)
             color.outColor = "#67AB05";
             break;
     }
-    
-    
+
     return color
 }
 
