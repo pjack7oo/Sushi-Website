@@ -24,7 +24,7 @@ export function drawTable(context) {
 
     drawing.drawTriangleImage(leftTriangle, 90);  
     //context.drawImage(counterImage, 0,120, 600,30);
-    drawing.drawRectImage(0,120, 600, 30, counterImage);
+    drawing.drawRectImage(0,120, 600, 30, counterImage, true, 600, 600);
     
     //drawing.drawTriangle(context, p1, p2, p3, true, true, 'Blue', 'Blue', 2);
     //context.drawImage(image,)

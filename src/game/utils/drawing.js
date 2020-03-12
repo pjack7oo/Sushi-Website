@@ -235,7 +235,7 @@ export function drawTriangleImage(triangle, degrees)
     context.restore();
 }
 
-export function drawRectImage(x, y, w, h, image) {
+export function drawRectImage(x, y, w, h, image, scale = false, sx = 0, sy = 0) {
     context.save();
     context.beginPath();
     cutRect(x, y, w, h);
@@ -245,7 +245,13 @@ export function drawRectImage(x, y, w, h, image) {
     
     // context.translate(triangle.p1.x + 100, triangle.p1.y + 100);
     // context.rotate(degrees*Math.PI/180);
-    context.drawImage(image, x ,y, 600, 600);
+    if (scale) {
+        context.drawImage(image, x ,y, sx, sy);
+    }
+    else {
+        context.drawImage(image, x ,y);
+    }
+    
 
     context.beginPath();
     cutRect(x, y, w, h);
