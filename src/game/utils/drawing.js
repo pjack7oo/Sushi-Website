@@ -16,6 +16,20 @@ var context = canvas.getContext('2d');
 
 var validCanvas = false;
 
+class Table
+{
+    constructor() {
+        this.x = 0;
+        this.y = 140;
+        this.w = 600;
+        this.h = 260;
+        this.image = new Image();
+        this.image.src = './game/images/wood-grain-texture.jpg';
+    }
+}
+
+var table = new Table();
+
 function render(lagOffset) //probably will be removed
 {
     clear(context);
@@ -173,6 +187,9 @@ export function draw()
         clear(context);
 
         //background
+        customers.drawCustomers(context);
+
+        drawImage(context, table);
         drawShape(context, rollMatt.rollingMatt); //rollingMatt
         drawShape(context, cutStation.cuttingStation);
         drawShape(context, plates.plateHolder);
@@ -192,7 +209,7 @@ export function draw()
         
 
         //draw all shapes
-        customers.drawCustomers(context);
+        
         plates.drawPlateHolder(context);//plateholder
         
         cutStation.drawCuttingStation(context);//cuttingStation
@@ -318,7 +335,8 @@ export function drawRollPieCuts(context, x, y, radius, roll)
             break;
         case 1:
             let color = ingredients.getIngredientColor(roll.inner[0]);
-            drawCircle(context, x, y, radius*0.95, true, color.intColor, color.outColor, 1);
+            drawCircle(context, x, y, radius*0.98, true, color.intColor, color.outColor, 1);
+            break;
         case 0:
             console.log("Cant have zero slices");
             break;

@@ -21,14 +21,15 @@ export const plateHolder = {
     isActive: false,
 }
 
-export function Plate()
-{
-    this.roll = null;
-    this.renderType = shapes.Circle;
-    this.canEnterMatt = false;
-    this.canEnterCuttingStation = false;
-    this.canEnterPlate = false;
-    this.canSell       = false;
+export class Plate {
+    constructor() {
+        this.roll = null;
+        this.renderType = shapes.Circle;
+        this.canEnterMatt = false;
+        this.canEnterCuttingStation = false;
+        this.canEnterPlate = false;
+        this.canSell = false;
+    }
 }
 
 export function createPlate()

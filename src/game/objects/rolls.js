@@ -120,6 +120,10 @@ export function drawRoll(ctx, x, y, radius, roll)
     {
         drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'white', 4.25);
     }
+    else
+    {
+        drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'black', .1);
+    }
     
     drawing.drawRollPieCuts(ctx, x, y, radius -3, roll);
 }
