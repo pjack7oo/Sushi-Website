@@ -44,7 +44,7 @@ a:link {
     text-decoration: none;
 }
 a:hover {
-    color: green;
+    color: rgb(0, 255, 0);
 }
 .active {
     background-color: green;
