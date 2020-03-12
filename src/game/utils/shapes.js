@@ -6,49 +6,74 @@ export const shapeType = {
     ROLL     : 'Roll'
 }
 
-export function Box() {
-    this.type = shapeType.RECTANGLE;
-    this.x = 0;
-    this.y = 0;
-    this.w = 1;
-    this.h = 1;
-    this.intColor = '#444444';
-    this.outColor = '#444444';
-    this.fill = true;
-    this.lineWidth = 1;
-    this.image;
+export class Box {
+    constructor() {
+        this.type = shapeType.RECTANGLE;
+        this.x = 0;
+        this.y = 0;
+        this.w = 1;
+        this.h = 1;
+        this.intColor = '#444444';
+        this.outColor = '#444444';
+        this.fill = true;
+        this.lineWidth = 1;
+        this.image;
+    }
 }
 
-export function  Circle()
-{
-    this.type = shapeType.CIRCLE;
-    this.radius = 1;
-    this.x      = 0;
-    this.y      = 0;
-    this.intColor = '#444444';
-    this.outColor = '#444444';
-    this.fill = true;
-    this.lineWidth = 1;
-    this.image;
+export class Circle {
+    constructor() {
+        this.type = shapeType.CIRCLE;
+        this.radius = 1;
+        this.x = 0;
+        this.y = 0;
+        this.intColor = '#444444';
+        this.outColor = '#444444';
+        this.fill = true;
+        this.lineWidth = 1;
+        this.image;
+    }
 }
 
-function Button()
-{
-    this.type      = shapeType.RECTANGLE;
-    this.x         = 0;
-    this.y         = 0;
-    this.w         = 100;
-    this.h         = 50;
-    this.text      = '';
-    this.textColor = 'Black';
-    this.font      = '25px Arial';
-    this.intColor  = 'Red';
-    this.outColor  = 'Gray';
-    this.active      = false;
-    this.activeColor = "Green";
-    this.fill      = true;
-    this.lineWidth = 1;
-    this.callBack  = null;
+export class Triangle {
+    constructor(p1, p2, p3, image = null) {
+        this.type = shapeType.TRIANGLE;
+        this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = p3;
+        this.intColor = '#444444';
+        this.outColor = '#444444';
+        this.fill = true;
+        this.lineWidth = 1;
+        this.image = image;
+    }
+}
+
+export class Point {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Button {
+    constructor() {
+        this.type = shapeType.RECTANGLE;
+        this.x = 0;
+        this.y = 0;
+        this.w = 100;
+        this.h = 50;
+        this.text = '';
+        this.textColor = 'Black';
+        this.font = '25px Arial';
+        this.intColor = 'Red';
+        this.outColor = 'Gray';
+        this.active = false;
+        this.activeColor = "Green";
+        this.fill = true;
+        this.lineWidth = 1;
+        this.callBack = null;
+    }
 }
 
 export function createButton(x, y, w, h, text, fill, lineWidth, callBack, intColor = 'Red', outColor = 'Gray')
