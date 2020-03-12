@@ -39,9 +39,14 @@ export function checkCutRoll()
             cuttingStation.item.isCut = true;
             cuttingStation.item.canEnterPlate = true;
             cuttingStation.item.canEnterCuttingStation = false;
-            roll.downSizeRoll(cuttingStation.item);
+            cuttingStation.item.renderType.w = cuttingStation.item.radius*4;
+            cuttingStation.item.renderType.h = cuttingStation.item.radius*4;
+            // cuttingStation.item.renderType.x -= cuttingStation.item.radius*2;
+            // cuttingStation.item.renderType.y -= cuttingStation.item.radius*2;
+            //roll.downSizeRoll(cuttingStation.item);
             roll.pushRoll(cuttingStation.item);
             cuttingStation.item = null;
+
             console.log('Cut roll');
                 
             drawing.Invalidate();

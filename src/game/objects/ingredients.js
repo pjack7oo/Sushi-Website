@@ -25,6 +25,36 @@ export function Ingredient()
     
 }
 
+export function getIngredientColor(ingredient)
+{
+    var color = new Object();
+    color.intColor = '';
+    color.outColor = '';
+    
+    switch(ingredient)
+    {
+        default:
+            color.intColor = "White";
+            color.outColor = "White";
+            break;
+        case ingredients.AVOCADO:
+            color.intColor = "#F2E880";
+            color.outColor = "#356211";
+            break;
+        case ingredients.CRAB:
+            color.intColor = "White";
+            color.outColor = "Red";
+            break;
+        case ingredients.CUCUMBER:
+            color.intColor = "#E9FF96";
+            color.outColor = "#67AB05";
+            break;
+    }
+    
+    
+    return color
+}
+
 function createIngredient(name, renderType)
 {
     var ingredient = new Ingredient();
@@ -42,7 +72,7 @@ export function createRice(x,y)
 
 export function createCucumber(x,y)
 {
-    var box = shapes.createBox(x, y, 50, 10, true, 'green', 'green');
+    var box = shapes.createBox(x, y, 50, 10, true, "#E9FF96", "#67AB05");
     var cucumber = createIngredient(ingredients.CUCUMBER, box);
     activeIngredients.push(cucumber);
 }
@@ -56,7 +86,7 @@ export function createCrab(x,y)
 
 export function createAvocado(x,y)
 {
-    var box = shapes.createBox(x, y, 50, 20, true, 'yellow', 'green');
+    var box = shapes.createBox(x, y, 50, 20, true, "#F2E880", "#356211");
     var avocado = createIngredient(ingredients.AVOCADO, box);
     activeIngredients.push(avocado);
 }

@@ -1,6 +1,7 @@
 import * as shapes from '../utils/shapes.js'
 import * as drawing from '../utils/drawing.js';
-import { removeRoll } from './rolls.js';
+
+import * as rollControl from './rolls.js';
 //const drawing = require('../utils/drawing.js');
 var moveablePlates = [];
 
@@ -33,7 +34,7 @@ export function Plate()
 export function createPlate()
 {
     var plate = new Plate;
-    plate.renderType = shapes.createCircle(plateHolder.x + plateHolder.w /2, plateHolder.y + plateHolder.h /2, 40, true, 'white', 'gold', 3);
+    plate.renderType = shapes.createCircle(plateHolder.x + plateHolder.w /2, plateHolder.y + plateHolder.h /2, 40, true, '#DCE0DC', 'gold', 3);
     plateHolder.plate = plate; 
 }
 
@@ -69,8 +70,9 @@ export function drawPlates(ctx)
 
 function drawRollOnPlate(ctx , plate, roll)
 {
-    correctRollOnPlate(plate, roll);
-    drawing.drawShape(ctx, roll.renderType);
+    //correctRollOnPlate(plate, roll);
+    // drawing.drawShape(ctx, roll.renderType);
+    rollControl.drawRollWithCoords(ctx, plate.renderType.x, plate.renderType.y, roll.radius, roll);
 }
 
 export function addRollToPlate(mySelect)
@@ -84,7 +86,7 @@ export function addRollToPlate(mySelect)
                 correctRollOnPlate(plateHolder.plate, mySelect);
                 plateHolder.plate.roll = mySelect;
                 plateHolder.plate.canSell = true;
-                removeRoll(mySelect);
+                rollControl.removeRoll(mySelect);
                 
                 moveablePlates.push(plateHolder.plate);
                 plateHolder.plate = null;

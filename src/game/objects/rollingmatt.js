@@ -63,11 +63,31 @@ export function isInnerIngredient()
     return isInner;
 }
 
+function checkForRice()
+{
+    let length = outerIngredients.length;
+    for(let i = 0;i<length;i++)
+    {
+        if (outerIngredients[i].name == ingredients.ingredients.RICE){
+            return true;
+        }
+    }
+    return false;
+}
+
 export function assembleRoll()
 {
     //later this will have timer to completion of roll
-    let box1 = shapes.createBox(rollingMatt.x, rollingMatt.y, rollingMatt.w, rollingMatt.h / 4, 
-        true, 'Green', 'Green',3,false,null,false);
+    let box1;
+    if (checkForRice){
+        box1 = shapes.createBox(rollingMatt.x, rollingMatt.y, rollingMatt.w, rollingMatt.h / 4, 
+            true, 'White', 'White',3,false,null,false);
+    } 
+    else {
+        box1 = shapes.createBox(rollingMatt.x, rollingMatt.y, rollingMatt.w, rollingMatt.h / 4, 
+            true, 'Green', 'Green',3,false,null,false);
+    }
+    
     
     let inner = [];
     let outer = [];

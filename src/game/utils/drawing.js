@@ -55,12 +55,16 @@ export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana",  textC
     ctx.textAlign = "center";
     ctx.fillStyle = textColor;
     //ctx.fillText(text,x+ w/2,y+h/1.75);
-    printAtWordWrap(ctx, text, x+ w/2, y+h/2, 30, 174);
+    printAtWordWrap(ctx, text, x+ w/2, y+h/2, 30, 174, textColor, font);
     Invalidate();
 }
 
-function printAtWordWrap( context , text, x, y, lineHeight, maxWidth)
+export function printAtWordWrap( context , text, x, y, lineHeight, maxWidth, textColor, font)
 {
+    context.font = font;
+    context.textAlign = "center";
+    context.fillStyle = textColor;
+
     var lines = text.split("\n");
 
     for (var i = 0; i < lines.length; i++) {
@@ -301,6 +305,85 @@ export function drawCircle(context, x, y, radius, fillCircle, intcolor, outcolor
     context.lineWidth = lineWidth;
     context.stroke();
 }
+
+export function drawRollPieCuts(context, x, y, radius, roll)
+{
+    
+    switch (roll.inner.length)
+    {
+        default:
+            drawPieCuts(context, x, y, radius*.94, roll);
+            break;
+        case 1:
+            let color = ingredients.getIngredientColor(roll.inner[0]);
+            drawCircle(context, x, y, radius*0.95, true, color.intColor, color.outColor, 1);
+        case 0:
+            console.log("Cant have zero slices");
+            break;
+    }
+}
+
+function drawPieCuts(ctx, x, y, radius, roll)
+{
+    var angles = getIngredientAngles(roll.inner.length),
+        anglesLength = angles.length,
+        beginAngle = 0,
+        endAngle   = 0;
+
+    for(let i = 0; i < anglesLength; i++)
+    {
+        let color = ingredients.getIngredientColor(roll.inner[i]);
+        beginAngle = endAngle;
+
+        endAngle   = endAngle + angles[i];
+
+
+        ctx.beginPath();
+
+        ctx.fillStyle   = color.intColor;
+        ctx.strokeStyle = color.outColor;
+        ctx.lineWidth   = 1;
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, radius, beginAngle, endAngle);
+        ctx.lineTo(x,y);
+        ctx.stroke();
+
+        ctx.fill();
+    }
+}
+
+//TODO make every ingredient take different size of pie cut
+function getIngredientAngles(count)
+{
+    var angles = [];
+    let angle = 0;
+    switch(count)
+    {
+        default:
+            console.log("Cant have zero inner ingredients");
+            break;
+        case 2:
+            angles.push(Math.PI * 1);
+            angles.push(Math.PI * 1);
+            break;
+        case 3:
+            angle = 2/3;
+            for (let i = 0; i <3;i++)
+            {
+                angles.push(Math.PI * angle);
+            }
+            break;
+        case 4:
+            angle = 2/4;
+            for (let i = 0; i <4;i++)
+            {
+                angles.push(Math.PI * angle);
+            }
+            break;
+    }
+    return angles;
+}
+
 
 export function drawSpeechBubble(x, y, w, h, text, font = "10px Verdana",  textColor = 'Black', intColor = '#add8e6' , outColor = 'Gray')
 {

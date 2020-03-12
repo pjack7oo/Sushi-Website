@@ -60,16 +60,19 @@ function drawCustomer(ctx, customer)
              '...', '10px Arial', 'black');
     }
     else{
-        drawWantedRolls(ctx, customer.x, customer.y - 50 , customer.w, 50)
+        drawWantedRolls(ctx, customer.x, customer.y - 50 , customer.w, 50, customer)
 
     }
 }
 
-function drawWantedRolls(ctx, x, y, w, h)
+function drawWantedRolls(ctx, x, y, w, h, customer)
 {
-    drawing.drawRoundRectWPoint(ctx, x, y, w, h, 
+    drawing.drawRoundRectWPoint(ctx, x, y, w, h+15, 
         10,true, true, '#add8e6', 'grey');
-    rolls.drawRollWithCoords(ctx, x + w/2, y + h/2);
+    
+    drawing.printAtWordWrap(ctx, customer.want[0].name, x + w/2, y + h+13, 15, w, 'Black', '15px Arial');
+    customer.want[0].isCut = true;
+    rolls.drawRollWithCoords(ctx, x + w/2, y + h/2, 10, customer.want[0]);
     
 }
 

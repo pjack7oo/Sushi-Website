@@ -62,6 +62,7 @@ export function Roll()
     this.name = '';
     this.inner = [];
     this.outer = [];
+    this.radius = 10;
     this.renderType = shapes.Box;
     this.canEnterMatt = false;
     this.canEnterCuttingStation = true;
@@ -87,17 +88,40 @@ export function drawRolls(ctx)
     if(l > 0)
     {
        
-        for (var i = 0; i < l; i++)
+        for (let roll of madeRolls)
         {
-            drawing.drawShape(ctx, madeRolls[i].renderType);
+            if (roll.isCut){
+                drawRollWithCoords(ctx,roll.renderType.x + roll.radius*2 , roll.renderType.y + roll.radius*2, roll.radius, roll);
+            }
+            else{
+                drawing.drawShape(ctx, roll.renderType);
+            }
+            
         }
     }
     
 }
 
-export function drawRollWithCoords(ctx, x, y){
+export function drawRollWithCoords(ctx, x, y, radius, roll){
     //drawing.drawRectangle(ctx, x, y, w, h, true, "red", "white", 5);
-    drawing.drawCircle(ctx, x, y, 10,  true, 'red', 'white', 15);
+    if (roll.isCut)
+    {
+        drawRoll(ctx, x + radius, y - radius, radius, roll);
+        drawRoll(ctx, x + radius, y + radius, radius, roll);
+        drawRoll(ctx, x - radius, y + radius, radius, roll);
+        drawRoll(ctx, x - radius, y - radius, radius, roll);
+    }
+    
+}
+
+export function drawRoll(ctx, x, y, radius, roll)
+{
+    if (roll.outer.length == 1)
+    {
+        drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'white', 4.25);
+    }
+    
+    drawing.drawRollPieCuts(ctx, x, y, radius -3, roll);
 }
 
 
