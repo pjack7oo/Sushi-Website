@@ -32,74 +32,59 @@ export class Plate {
     }
 }
 
-export function createPlate()
-{
+export function createPlate() {
     var plate = new Plate;
-    plate.renderType = shapes.createCircle(plateHolder.x + plateHolder.w /2, plateHolder.y + plateHolder.h /2, 40, true, '#DCE0DC', 'gold', 3);
-    plateHolder.plate = plate; 
+    plate.renderType = shapes.createCircle(plateHolder.x + plateHolder.w / 2, plateHolder.y + plateHolder.h / 2, 40, true, '#DCE0DC', 'gold', 3);
+    plateHolder.plate = plate;
 }
 
-export function getMoveablePlates()
-{
+export function getMoveablePlates() {
     return moveablePlates;
 }
 
-export function drawPlateHolder(context)
-{
-    if (plateHolder.plate != null)
-    {
-       
-            
+export function drawPlateHolder(context) {
+    if (plateHolder.plate != null) {
         drawing.drawShape(context, plateHolder.plate.renderType);
     }
 }
 
-export function drawPlates(ctx)
-{
+export function drawPlates(ctx) {
     let l = moveablePlates.length;
-    if (l > 0)
-    {
-        for (var i = 0; i < l; i++)
-        {
+    if (l > 0) {
+        for (var i = 0; i < l; i++) {
             drawing.drawShape(ctx, moveablePlates[i].renderType);
             //drawing.drawShape(ctx, plates[i].roll.renderType);
             drawRollOnPlate(ctx, moveablePlates[i], moveablePlates[i].roll);
         }
     }
-    
+
 }
 
-function drawRollOnPlate(ctx , plate, roll)
-{
+function drawRollOnPlate(ctx, plate, roll) {
     //correctRollOnPlate(plate, roll);
     // drawing.drawShape(ctx, roll.renderType);
     rollControl.drawRollWithCoords(ctx, plate.renderType.x, plate.renderType.y, roll.radius, roll);
 }
 
-export function addRollToPlate(mySelect)
-{
-    if (mySelect != null)
-    {
-        if (mySelect.canEnterPlate == true && plateHolder.plate.roll == null)
-        {
-            if (shapes.containsRoll(mySelect,plateHolder.plate))
-            {
+export function addRollToPlate(mySelect) {
+    if (mySelect != null) {
+        if (mySelect.canEnterPlate == true && plateHolder.plate.roll == null) {
+            if (shapes.containsRoll(mySelect, plateHolder.plate)) {
                 correctRollOnPlate(plateHolder.plate, mySelect);
                 plateHolder.plate.roll = mySelect;
                 plateHolder.plate.canSell = true;
                 rollControl.removeRoll(mySelect);
-                
+
                 moveablePlates.push(plateHolder.plate);
                 plateHolder.plate = null;
                 console.log(moveablePlates);
-                
+
             }
         }
     }
 }
 
-function correctRollOnPlate(plate, roll)
-{
+function correctRollOnPlate(plate, roll) {
     roll.renderType.x = plate.renderType.x - roll.renderType.w / 2;
     roll.renderType.y = plate.renderType.y - roll.renderType.h / 2;
 }

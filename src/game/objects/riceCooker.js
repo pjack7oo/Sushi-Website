@@ -4,7 +4,7 @@ import * as ingredients from '../objects/ingredients.js';
 
 export const riceCooker = {
     type: shapes.shapeType.RECTANGLE,
-    x: 10,
+    x: 30,
     y: 150,
     w: 100,
     h: 100,
@@ -34,5 +34,5 @@ export function drawRiceCooker(ctx)
 
 export function createRice()
 {
-    
+
 }

@@ -56,19 +56,22 @@ function LoadJSON(callback)
 }
 
 
-export function Roll()
+export class Roll
 {
-    this.nori = true;
-    this.name = '';
-    this.inner = [];
-    this.outer = [];
-    this.radius = 10;
-    this.renderType = shapes.Box;
-    this.canEnterMatt = false;
-    this.canEnterCuttingStation = true;
-    this.canEnterPlate = false;
-    this.isCut = false;
-    this.canSell = false;
+    constructor() {
+        this.nori = true;
+        this.name = '';
+        this.inner = [];
+        this.outer = [];
+        this.radius = 10;
+        this.renderType = shapes.Box;
+        this.canEnterMatt = false;
+        this.canEnterCuttingStation = true;
+        this.canEnterPlate = false;
+        this.isCut = false;
+        this.canSell = false;
+    }
+    
 }
 
 export function getMadeRolls()
@@ -76,10 +79,10 @@ export function getMadeRolls()
     return madeRolls;
 }
 
-export function downSizeRoll(roll)
+Roll.downSizeRoll = function()
 {
-    roll.renderType.w = 30;
-    roll.renderType.h = 30;
+    this.renderType.w = 30;
+    this.renderType.h = 30;
 }
 
 export function drawRolls(ctx)
