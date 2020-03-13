@@ -54,13 +54,13 @@ export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana", textCo
     ctx.textAlign = "center";
     ctx.fillStyle = textColor;
     //ctx.fillText(text,x+ w/2,y+h/1.75);
-    printAtWordWrap(ctx, text, x + w / 2, y + h / 2, 30, 174, textColor, font);
+    printAtWordWrap(ctx, text, x + w / 2, y + h / 2, 30, 174, textColor, font, "center");
     Invalidate();
 }
 
-export function printAtWordWrap(context, text, x, y, lineHeight, maxWidth, textColor, font) {
+export function printAtWordWrap(context, text, x, y, lineHeight, maxWidth, textColor, font, alignment = "center") {
     context.font = font;
-    context.textAlign = "center";
+    context.textAlign = alignment;
     context.fillStyle = textColor;
 
     var lines = text.split("\n");
@@ -117,7 +117,7 @@ export function drawRoundRectWPoint(ctx, x, y, w, h, radius, fill, stroke = true
     }
 }
 
-function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intColor = 'Blue', outColor = 'Gray') {
+export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intColor = 'Blue', outColor = 'Gray') {
     if (typeof stroke == "undefined") {
         stroke = true;
     }
@@ -145,7 +145,7 @@ function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intColor = 
 
 export function clear(ctx) {
     ctx.fillStyle = 'White';
-    ctx.fillRect(0, 0, 600, 400);
+    ctx.fillRect(0, 0, 600, 500);
 }
 
 export function clearArea(ctx, x, y, w, h, color = "white") {
@@ -161,21 +161,21 @@ export function draw() {
         customers.drawCustomers(context);
 
         drawTable(context);
-        drawShape(context, rollMatt.rollingMatt); //rollingMatt
-        drawShape(context, cutStation.cuttingStation);
+        rollMatt.drawRollingMatt(context);
+        
         drawShape(context, plates.plateHolder);
 
 
 
-        context.fillStyle = 'Red';
-        context.textAlign = "left";
-        context.font = "30px Arial";
-        if (rollMatt.isInnerIngredient()) {
-            context.fillText('Inner', 300, 300);
-        }
-        else {
-            context.fillText('Outer', 300, 300);
-        }
+        // context.fillStyle = 'Red';
+        // context.textAlign = "left";
+        // context.font = "30px Arial";
+        // if (rollMatt.isInnerIngredient()) {
+        //     context.fillText('Inner', 300, 300);
+        // }
+        // else {
+        //     context.fillText('Outer', 300, 300);
+        // }
 
 
         //draw all shapes
@@ -188,7 +188,7 @@ export function draw() {
         rollControl.drawRolls(context);
 
         ingredients.drawActiveIngredients(context);
-        rollMatt.drawIngredients(context);
+        // rollMatt.drawIngredients(context);
         //drawShapes(context, ingredients.activeIngredients);
 
         // if (isInner && innerIngredients.length > 0)
@@ -260,6 +260,31 @@ export function drawRectImage(x, y, w, h, image, scale = false, sx = 0, sy = 0) 
     context.restore();
 }
 
+export function drawRoundRectImage(x, y, w, h, image, scale = false, sx = 0, sy = 0) {
+    context.save();
+    context.beginPath();
+    drawRoundRect(context, x, y, w, h,10, false, false, 'Brown', 'Brown');
+    context.closePath();
+    context.clip();
+
+    
+    // context.translate(triangle.p1.x + 100, triangle.p1.y + 100);
+    // context.rotate(degrees*Math.PI/180);
+    if (scale) {
+        context.drawImage(image, x ,y, sx, sy);
+    }
+    else {
+        context.drawImage(image, x ,y);
+    }
+    
+
+    context.beginPath();
+    drawRoundRect(context, x, y, w, h, 10, false, false, 'Brown', 'Brown');
+    context.clip();
+    context.closePath();
+    context.restore();
+}
+
 function cutRect(x, y, w, h) {
     context.beginPath();
     context.moveTo(x, y);
@@ -292,19 +317,24 @@ export function drawShape(ctx, shape) {
         case shapes.shapeType.IMAGE:
             drawImage(ctx, shape);
             break;
+        case shapes.shapeType.ROUNDRECT:
+            drawRoundRect(ctx, shape.x, shape.y, shape.w, shape.h, shape.radius, 
+                        shape.fill, shape.stroke, shape.intColor, shape.outColor);
+            break;
         default:
             break;
     }
 }
 
-export function drawButtons(ctx, buttons) {
+export function drawButtons(ctx) {
+    let buttons = ioControl.getButtons();
     for (let button of buttons) {
         drawShape(ctx, button);
         ctx.font = button.font;
         ctx.textAlign = "center";
         ctx.fillStyle = button.textColor;
 
-        printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.75, button.h, button.w);
+        printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.75, button.h, button.w, "black", "20px Arial", "center");
 
     }
 
@@ -346,7 +376,7 @@ export function drawTriangle(context, p1, p2, p3, fill, stroke, intColor = '', o
     context.moveTo(p1.x,p1.y);
     context.lineTo(p2.x, p2.y);
     context.lineTo(p3.x, p3.y);
-    context.lineTo(p1.x, p2.y);
+    context.lineTo(p1.x, p1.y);
     context.strokeStyle = outColor;
     context.fillStyle   = intColor;
     context.lineWidth   = lineWidth;
@@ -430,6 +460,57 @@ function getIngredientAngles(count) {
     }
     return angles;
 }
+
+export function drawProgressBar(x, y, w, h, progress, barColor, backColor) {
+    // context.strokeStyle = backColor;
+    // context.strokeRect(x, y, w, h);
+    // context.fillStyle = backColor;
+    drawRectangle(context, x, y, w, h, true, backColor, backColor, 1);
+
+    if (progress >  1) {
+        progress = progress/100;
+        drawRectangle(context, x, y, w*progress, h, true, barColor, backColor, 1);
+    
+    }
+}
+
+export function drawInverseBar(x, y, w, h, progress, barColor, backColor) {
+    drawRectangle(context, x, y, w, h, true, backColor, backColor, 1);
+    context.fillStyle = 'hsla(' + this.hue + ', 100%, 50%, 1)';
+    var grad = context.createLinearGradient(0, 0, 0, 180);
+    grad.addColorStop(0, "transparent");
+    grad.addColorStop(1, "rgba(0,0,0,0.8)");
+    context.fillStyle = grad;
+    if (progress >  1) {
+        progress = progress/100;
+        progress = 1-progress;
+        
+        drawRectangle(context, x, y, w*progress, h, true, grad, backColor, 1);
+    
+    }
+}
+
+export function drawAnyQuad(p1, p2, p3, p4, stroke, fill, intColor, outColor, lineWidth = 1) {
+    context.beginPath();
+    context.moveTo(p1.x,p1.y);
+    context.lineTo(p2.x, p2.y);
+    context.lineTo(p3.x, p3.y);
+    context.lineTo(p4.x, p4.y);
+    context.lineTo(p1.x, p1.y);
+    context.strokeStyle = outColor;
+    context.fillStyle   = intColor;
+    context.lineWidth   = lineWidth;
+    if (stroke) {
+        context.stroke();
+    }
+    if (fill) {
+        context.fill();
+    }
+    context.closePath();
+}
+
+ 
+
 
 
 export function drawSpeechBubble(x, y, w, h, text, font = "10px Verdana", textColor = 'Black', intColor = '#add8e6', outColor = 'Gray') {
