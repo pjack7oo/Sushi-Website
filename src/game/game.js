@@ -6,6 +6,7 @@ import * as ioControl   from './utils/iocontrol.js';
 import * as ingredients from './objects/ingredients.js';
 import * as customers   from './objects/customers.js';
 import * as shapes      from './utils/shapes.js';
+import * as levelControl from './objects/level.js';
 
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
@@ -111,32 +112,61 @@ function game()
     ingredients.createCrab(100, 220);
     // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
     ingredients.createCucumber(100, 240);
-    customers.getRandomCustomer();
+    //customers.getRandomCustomer();
     drawing.Invalidate();
 }
 
 function startGame()
 {
-    canvas.removeEventListener('click', buttonClick, false);
-
-    clearInterval(activeInterval);
-
-    game();
-}
-
-function buttonClick(e)
-{
-    var mousePos = ioControl.getMouse(e);
+    // canvas.removeEventListener('click', ioControl.buttonClick, false);
+    // ioControl.clearButtons();
+    // console.log("start");
     
-    ioControl.checkButtons(mousePos, buttons);
+    // clearInterval(activeInterval);
+    // rollControl.rollListInit();
+    // plates.createPlate();
+    // //console.log(plates.plateHolder);
+    // //setInterval(update, interval); //draw every interval milliseconds
+
+    // canvas.onmousedown = ioControl.myDown;
+    // canvas.onmouseup   = ioControl.myUp;
+    // //canvas.ondblclick  = myDbkClick; // temp dbl click for making new boxes
+
+    // canvas.setAttribute("tabindex", 0);
+    // canvas.addEventListener('keydown', ioControl.doKeyPress, false);
+    // // add custom init
+    // plates.createPlate();
+
+    
+    
+    
+    // // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
+    // ingredients.createRice(100,100);
+    // // addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
+    // ingredients.createAvocado(100, 200);
+    // // addBox(shapeType.RECTANGLE, 25, 125, 40, 25, ingredients.CRAB,true, 'white', 'Red',2);
+    // ingredients.createCrab(100, 220);
+    // // addBox(shapeType.RECTANGLE, 25, 150, 40, 25, ingredients.CUCUMBER,true, 'Green', 'Green');
+    // ingredients.createCucumber(100, 240);
+    // //customers.getRandomCustomer();
+    // drawing.Invalidate();
+
+    levelControl.startLevel(0);
 }
+
+// function buttonClick(e)
+// {
+//     var mousePos = ioControl.getMouse(e);
+    
+//     ioControl.checkButtons(mousePos);
+// }
 
 function startScreen()
 {
 
-    buttons.push(shapes.createButton(300,350, 100, 50, "Start", true, 1, startGame));
+    ioControl.addButton(shapes.createButton(300,350, 100, 50, "Start", true, 1, startGame));
     
-    canvas.addEventListener('click', buttonClick, false);
+    canvas.addEventListener('click', ioControl.buttonClick, false);
 
     activeInterval = setInterval(startUpdate, interval);
 }
@@ -152,7 +182,7 @@ function startDraw()
     drawing.drawTextBox(context, 225, 175, 150, 100, "Sushi Cat\nBy Piotr", "30px Arial", "Red", "white", "Red");
     
     
-    drawing.drawButtons(context, buttons);
+    drawing.drawButtons(context);
 }
 
 function update() //used to update logic of parts of game like getting customers based on tim and randomness
@@ -168,7 +198,7 @@ function update() //used to update logic of parts of game like getting customers
     
     drawing.draw();
 }
-
+var lag = 0;
 function gameLoop()
 {
     requestAnimationFrame(gameLoop, canvas);
@@ -176,7 +206,7 @@ function gameLoop()
     var current = performance.now(), elapsed = current - start;
     start = current;
 
-    //lag += elapsed;
+    lag += elapsed;
 
     var lagOffset = lag / frameDuration;
     //render(lagOffset);
