@@ -54,6 +54,10 @@ export function getIngredientColor(ingredient)
     return color
 }
 
+export function clearActiveIngredients() {
+    activeIngredients = [];
+}
+
 function createIngredient(name, renderType)
 {
     var ingredient = new Ingredient();
@@ -64,7 +68,8 @@ function createIngredient(name, renderType)
 
 export function createRice(x,y)
 {
-    var box = shapes.createBox(x, y, 75, 75, true, 'white', 'white');
+    var box =  new shapes.RoundRect(x, y, 60, 60, 10, 'White', 'White', true, true);
+    
     var rice = createIngredient(ingredients.RICE, box);
     activeIngredients.push(rice);
 }
