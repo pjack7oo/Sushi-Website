@@ -10,11 +10,12 @@ var mypick;
 var isInner = true;
 export var innerIngredients = [];
 export var outerIngredients = [];
-
+var noriImage = new Image();
+noriImage.src = './game/images/nori.jpg'
 export const rollingMatt = {
     type: shapes.shapeType.RECTANGLE,
     x: 300,
-    y: 300,
+    y: 400,
     w: 100,
     h: 100,
     intColor: '#444444',
@@ -26,7 +27,7 @@ export const rollingMatt = {
     isActive: false
 }
 
-export function drawIngredients(context)
+function drawIngredients(context)
 {
     if (isInner && innerIngredients.length > 0)
     {
@@ -73,6 +74,11 @@ function checkForRice()
         }
     }
     return false;
+}
+
+export function clearMatt() {
+    innerIngredients = [];
+    outerIngredients = [];
 }
 
 export function assembleRoll()
@@ -203,4 +209,24 @@ function findIngredient(ingredient)
 {
     //console.log((mySelect.name === ingredient.name && mySelect.x == ingredient.x && mySelect.y == ingredient.y));
     return (mypick.name === ingredient.name && mypick.renderType.x == ingredient.renderType.x && mypick.renderType.y == ingredient.renderType.y);
+}
+
+export function drawRollingMatt(context) {
+    drawing.drawShape(context, rollingMatt);
+    drawing.drawRoundRect(context, rollingMatt.x, rollingMatt.y - 25, rollingMatt.w, 25, 10, true, true, "Gray", "black");
+    context.fillStyle = 'Red';
+    context.textAlign = "center";
+    context.font = "30px Arial";
+    if (!rollingMatt.isActive)
+    {
+        drawing.drawRectImage(rollingMatt.x + 10, rollingMatt.y + 10, rollingMatt.w- 20, rollingMatt.h - 20, noriImage);
+    }
+    
+    if (isInnerIngredient()) {
+        context.fillText('Inner', 350, 399);
+    }
+    else {
+        context.fillText('Outer', 350, 399);
+    }
+    drawIngredients(context);
 }
