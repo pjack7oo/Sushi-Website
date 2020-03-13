@@ -3,6 +3,7 @@ export const shapeType = {
     RECTANGLE: 'Rectangle',
     CIRCLE   : 'Circle',
     IMAGE    : 'Image',
+    ROUNDRECT: 'RoundRect',
     ROLL     : 'Roll'
 }
 
@@ -16,6 +17,23 @@ export class Box {
         this.intColor = '#444444';
         this.outColor = '#444444';
         this.fill = true;
+        this.lineWidth = 1;
+        this.image;
+    }
+}
+
+export class RoundRect {
+    constructor(x, y, w, h, radius, intColor, outColor, fill, stroke) {
+        this.type = shapeType.ROUNDRECT;
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.radius = radius;
+        this.intColor = intColor;
+        this.outColor = outColor;
+        this.fill = fill;
+        this.stroke = stroke
         this.lineWidth = 1;
         this.image;
     }
@@ -43,6 +61,21 @@ export class Triangle {
         this.p3 = p3;
         this.intColor = '#444444';
         this.outColor = '#444444';
+        this.fill = true;
+        this.lineWidth = 1;
+        this.image = image;
+    }
+}
+
+export class Quad {
+    constructor(p1, p2, p3, p4, image = null) {
+        this.type = shapeType.TRIANGLE;
+        this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = p3;
+        this.p4 = p4;
+        this.intColor = intColor;
+        this.outColor = outColor;
         this.fill = true;
         this.lineWidth = 1;
         this.image = image;
