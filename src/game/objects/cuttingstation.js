@@ -2,36 +2,43 @@ import * as roll from './rolls.js';
 import * as drawing from '../utils/drawing.js';
 import * as ioControl from '../utils/iocontrol.js';
 import * as shapes from '../utils/shapes.js';
+import * as progBar from '../utils/progressBar.js';
 
 const shapeType = {
     RECTANGLE: 'Rectangle',
     CIRCLE: 'Circle'
 }
+var boardImage = new Image();
+boardImage.src = './game/images/TexturesCom_CloseupBambooCuttingBoard_M.png'
 
 export const cuttingStation = {
     type: shapeType.RECTANGLE,
     x: 410,
-    y: 300,
+    y: 400,
     w: 150,
     h: 100,
     intColor: '#C19A6B',
     outColor: '#C19A6B',
     fill: true,
     lineWidth: 1,
-    image: null,
+    image: boardImage,
     item: null,
     startTime: 0,
     isActive: false,
-    cuttingSpeed: 1 
+    cuttingSpeed: 1 ,
+    progress: 0,
 }
-
+var bar = new progBar.progressbar(cuttingStation.x, cuttingStation.y -60, cuttingStation.w, 20);
 export function checkCutRoll()
 {
     if (cuttingStation.isActive == true){
         let currentTime     = performance.now(),
             elapsedTime     = currentTime - cuttingStation.startTime,
             percentComplete = elapsedTime / (8000 / cuttingStation.cuttingSpeed) * 100;
+            cuttingStation.progress = percentComplete;
+            drawing.Invalidate();
             
+
         if (percentComplete >= 100)
         {
             cuttingStation.isActive = false;
@@ -59,16 +66,20 @@ export function checkCutRoll()
 
 export function drawCuttingStation(context)
 {
+    drawing.drawRoundRectImage(cuttingStation.x, cuttingStation.y, cuttingStation.w, cuttingStation.h, cuttingStation.image);
+    
     if (cuttingStation.item != null)
     {
         if (cuttingStation.isActive)
         {
             drawing.drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Cutting!");
+            progBar.drawColorProgressbar(cuttingStation.progress, bar, false);
         }
         else
         {
             drawing.drawTextBox(context, cuttingStation.x, cuttingStation.y - 40, cuttingStation.w, 40, "Ready to cut! Press C key");
         }
+        //drawing.drawRoundRectImage(cuttingStation.x, cuttingStation.y, cuttingStation.w, cuttingStation.h, cuttingStation.image);
         drawing.drawShape(context, cuttingStation.item.renderType);
         drawing.Invalidate();
     }
