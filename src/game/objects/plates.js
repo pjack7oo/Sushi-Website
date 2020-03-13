@@ -8,7 +8,7 @@ var moveablePlates = [];
 export const plateHolder = {
     type: shapes.shapeType.RECTANGLE,
     x: 300,
-    y: 150,
+    y: 260,
     w: 100,
     h: 100,
     intColor: '#FF0000',
@@ -30,6 +30,10 @@ export class Plate {
         this.canEnterPlate = false;
         this.canSell = false;
     }
+}
+
+export function clearMoveablePlates() {
+    moveablePlates = [];
 }
 
 export function createPlate() {
