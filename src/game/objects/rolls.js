@@ -79,6 +79,10 @@ export function getMadeRolls()
     return madeRolls;
 }
 
+export function clearMadeRolls() {
+    madeRolls = [];
+}
+
 Roll.downSizeRoll = function()
 {
     this.renderType.w = 30;
@@ -251,7 +255,6 @@ function getRollName(roll, acceptedRolls = [])
     var cleanArray = acceptedRolls.filter(function() {return true});
     if (cleanArray.length == 0)
     {
-        
         return 'Unknown Roll'
     }
     else if (cleanArray.length == 1)
