@@ -96,9 +96,11 @@ class Button {
         this.y = 0;
         this.w = 100;
         this.h = 50;
+        this.radius = 10;
         this.text = '';
         this.textColor = 'Black';
         this.font = '25px Arial';
+        this.fontLoc = 'Center';
         this.intColor = 'Red';
         this.outColor = 'Gray';
         this.active = false;
@@ -106,23 +108,32 @@ class Button {
         this.fill = true;
         this.lineWidth = 1;
         this.callBack = null;
+        this.name = '';
     }
 }
 
-export function createButton(x, y, w, h, text, fill, lineWidth, callBack, intColor = 'Red', outColor = 'Gray')
+export function createButton(x, y, w, h, text, fill, lineWidth, callBack, name, type  = undefined, fontLoc = undefined, font = "25px Arial", intColor = 'Red', outColor = 'Gray')
 {
-    var button = new Button;
 
+    var button = new Button;
+    if (type != undefined) {
+        button.type = type;
+    }
+    if (fontLoc != undefined) {
+        button.fontLoc = fontLoc;
+    }
     button.x         = x;
     button.y         = y;
     button.w         = w;
     button.h         = h;
     button.text      = text;
+    button.font      = font;
     button.intColor  = intColor;
     button.outColor  = outColor;
     button.fill      = fill;
     button.lineWidth = lineWidth;
     button.callBack  = callBack;
+    button.name      = name;
     
     return button;
 }
