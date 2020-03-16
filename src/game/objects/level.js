@@ -9,6 +9,7 @@ import * as ingredients from './ingredients.js';
 import * as riceCooker  from './riceCooker.js';
 import * as rollingMatt from './rollingmatt.js';
 import * as player      from './player.js';
+import * as ingredientMenu from './ingredientmenu.js';
 
 
 
@@ -55,7 +56,7 @@ export function startLevel() {
     // add custom init
     //plates.createPlate();
 
-    
+    ingredientMenu.ingredientsMenuInit(context);
     rollingMatt.clearMatt();
     ingredients.clearActiveIngredients();
     // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
@@ -81,6 +82,7 @@ function levelUpdate() {
     activeInterval = requestAnimationFrame(levelUpdate);
     
     customers.updateCustomers();
+    ingredientMenu.updateMenu();
     checkLevelTime();
     if (checkLevelEnd()) {
         nextLevel(context);
@@ -103,6 +105,7 @@ function levelDraw() {
     drawing.printAtWordWrap(context,currentLevel.toString(),330, 20, 10, 30, "Blue", "20px Arial");
     drawing.printAtWordWrap(context,"Money: ",0, 20, 10, 100, "Green", "20px Arial", "left");
     drawing.printAtWordWrap(context,player.getCurrentMoney().toString(),70, 20, 10, 100, "Green", "20px Arial", "left");
+    
 }
 function checkCustomerAvailable() {
     return(customers.getCustomerLength() < availableCustomerCount);
@@ -143,12 +146,13 @@ function nextLevel(context) {
     cancelAnimationFrame(activeInterval);
     activeInterval = undefined;
     currentLevel += 1;
-    ioControl.addButton(shapes.createButton(350,200,100,50,"Next", true, 1, startLevel));
+    ioControl.clearButtons();
+    ioControl.addButton(shapes.createButton(350,200,100,50,"Next", true, 1, startLevel, "StartLevel-Next"));
     canvas.addEventListener('click', ioControl.buttonClick, false);
     nextLevelScreen();
 }
 //display money made and button to continue to next level
-function nextLevelScreen(context) {
+function nextLevelScreen() {
     
     activeInterval = requestAnimationFrame(nextLevelScreen);
     // ioControl.addButton(shapes.createButton(350,200,100,50,"Next", true, 1, startLevel));
@@ -159,5 +163,5 @@ function nextLevelScreen(context) {
 
 function nextLevelScreenUpdate() {
     drawing.clear(context);
-    drawing.drawButtons(context);
+    ioControl.drawIoButtons();
 }

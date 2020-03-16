@@ -164,7 +164,7 @@ function startGame()
 function startScreen()
 {
 
-    ioControl.addButton(shapes.createButton(300,350, 100, 50, "Start", true, 1, startGame));
+    ioControl.addButton(shapes.createButton(300,350, 100, 50, "Start", true, 1, startGame, "StartGame-Start"));
     
     canvas.addEventListener('click', ioControl.buttonClick, false);
 
@@ -182,7 +182,7 @@ function startDraw()
     drawing.drawTextBox(context, 225, 175, 150, 100, "Sushi Cat\nBy Piotr", "30px Arial", "Red", "white", "Red");
     
     
-    drawing.drawButtons(context);
+    ioControl.drawIoButtons();
 }
 
 function update() //used to update logic of parts of game like getting customers based on tim and randomness
