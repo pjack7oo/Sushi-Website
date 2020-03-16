@@ -32,6 +32,24 @@ export function clearButtons() {
   buttons = [];
 }
 
+export function drawIoButtons() {
+  drawing.drawButtons(context, buttons);
+}
+
+export function delButton(name) {
+  let buttonsLength = buttons.length;
+  var buttonToRemove = undefined;
+  for (let i = 0; i < buttonsLength; i++) {
+    
+    if (buttons[i].name == name) {
+      buttonToRemove = i;
+    }
+  }
+  if (buttonToRemove != undefined) {
+    buttons.splice(buttonToRemove, 1);
+  }
+}
+
 export function doKeyPress(e) {
   // the R key
   switch (e.keyCode) {
@@ -216,6 +234,17 @@ function checkButtons(mouse) {
   }
 }
 
+
+export function checkButtonsGiven(e, buttons) {
+  var mouse = getMouse(e);
+  for (let button of buttons) {
+    if (inBounds(mouse, button)) {
+      console.log(true);
+
+      button.callBack();
+    }
+  }
+}
 export function buttonClick(e) {
   var mousePos = getMouse(e);
 
