@@ -8,6 +8,7 @@ import * as rollControl from '../objects/rolls.js';
 import * as ioControl from './iocontrol.js';
 import * as customers from '../objects/customers.js';
 import * as riceCooker from '../objects/riceCooker.js';
+import * as ingredientMenu from '../objects/ingredientmenu.js';
 import { drawTable } from '../objects/table.js'
 
 
@@ -17,6 +18,7 @@ var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 
 var validCanvas = false;
+var gridActive  = true;// for faster drawing during building
 
 function render(lagOffset) //probably will be removed
 {
@@ -203,6 +205,9 @@ export function draw() {
         plates.drawPlates(context);
 
         ioControl.drawMySelect(context);
+        ingredientMenu.drawMenu();
+        ioControl.drawIoButtons();
+        
         // if (mySelect != null)
         // {
         //     context.strokeStyle = mySelectColor;
@@ -211,7 +216,7 @@ export function draw() {
         // }
 
         //draw on top like stats
-
+        drawGrid();
         validCanvas = true;
     }
 }
@@ -326,16 +331,15 @@ export function drawShape(ctx, shape) {
     }
 }
 
-export function drawButtons(ctx) {
-    let buttons = ioControl.getButtons();
+export function drawButtons(ctx, buttons) {
+    //let buttons = ioControl.getButtons();
     for (let button of buttons) {
         drawShape(ctx, button);
         ctx.font = button.font;
-        ctx.textAlign = "center";
+        ctx.textAlign = button.fontLoc;
         ctx.fillStyle = button.textColor;
 
-        printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.75, button.h, button.w, "black", "20px Arial", "center");
-
+        printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
     }
 
 }
@@ -529,4 +533,68 @@ export function drawRollInSpeechBubble(x, y, w, h, roll, intColor, outColor) {
     roll.renderType.y = y + h / 2;
     drawShape(context, roll.renderType);
 
+}
+
+function drawGrid() {
+    if (gridActive) {
+        context.lineWidth = 1;
+        for (let i = 0; i < 24; i++) {
+            if (i % 2 == 0) {
+                drawVerticalBar(i*25);
+            }
+            else {
+                drawVerticalTick(i*25);
+            }
+        }
+        for (let i = 0; i < 24; i++) {
+            if (i % 2 == 0) {
+                drawHorizontalBar(i*25);
+            }
+            else {
+                drawHorizontalTick(i*25);
+            }
+        }
+    }
+}
+
+function drawVerticalBar(x) {
+    context.beginPath();
+    context.moveTo(x,0);
+    context.lineTo(x, canvas.height);
+    context.strokeStyle = "Black";
+    context.stroke();
+    context.closePath();
+}
+
+function drawVerticalTick(x) {
+    let length = canvas.height / 50;
+    for (let i = 0; i < length; i++) {
+        context.beginPath();
+        context.moveTo(x, i*50 - 10);
+        context.lineTo(x, i*50 + 10);
+        context.strokeStyle = "Black";
+        context.stroke();
+        context.closePath();
+    }
+}
+
+function drawHorizontalBar(y) {
+    context.beginPath();
+    context.moveTo(0, y);
+    context.lineTo(canvas.width, y);
+    context.strokeStyle = "Black";
+    context.stroke();
+    context.closePath();
+}
+
+function drawHorizontalTick(y) {
+    let length = canvas.width/ 50;
+    for (let i = 0; i < length; i++) {
+        context.beginPath();
+        context.moveTo(i*50 - 10, y);
+        context.lineTo(i*50 + 10, y);
+        context.strokeStyle = "Black";
+        context.stroke();
+        context.closePath();
+    }
 }
