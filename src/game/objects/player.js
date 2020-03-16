@@ -1,3 +1,5 @@
+
+
 var money = 1000;
 var currentLevel = 0;
 
@@ -13,3 +15,6 @@ export function addMoney(amount) {
     money += amount;
 }
 
+export function getCrab() {
+    ingredients.
+}

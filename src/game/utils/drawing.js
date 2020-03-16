@@ -18,7 +18,7 @@ var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 
 var validCanvas = false;
-var gridActive  = true;// for faster drawing during building
+var gridActive  = false;// for faster drawing during building
 
 function render(lagOffset) //probably will be removed
 {
@@ -119,10 +119,11 @@ export function drawRoundRectWPoint(ctx, x, y, w, h, radius, fill, stroke = true
     }
 }
 
-export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intColor = 'Blue', outColor = 'Gray') {
+export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intColor = 'Blue', outColor = 'Gray', lineWidth = 1) {
     if (typeof stroke == "undefined") {
         stroke = true;
     }
+    ctx.lineWidth = lineWidth;
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + w - radius, y);
@@ -324,7 +325,7 @@ export function drawShape(ctx, shape) {
             break;
         case shapes.shapeType.ROUNDRECT:
             drawRoundRect(ctx, shape.x, shape.y, shape.w, shape.h, shape.radius, 
-                        shape.fill, shape.stroke, shape.intColor, shape.outColor);
+                        shape.fill, shape.stroke, shape.intColor, shape.outColor, shape.lineWidth);
             break;
         default:
             break;
