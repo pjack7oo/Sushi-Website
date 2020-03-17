@@ -36,7 +36,7 @@ export function drawTable(context) {
     p3 = new shapes.Point(600 ,310);
     p4 = new shapes.Point(570, 260);
     drawing.drawAnyQuad(p1, p2, p3, p4, true, true, "black", "black");
-    ingredientBox.drawIngredientBoxes(context);
+    
     drawing.drawRectangle(context, 0, 250, 600,10,true,"black", "black");
     drawing.drawTriangleImage(leftTriangle, 90);  
     drawing.drawTriangleImage(rightTriangle, 90);  
