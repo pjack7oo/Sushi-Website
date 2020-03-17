@@ -5,7 +5,9 @@ import * as cutStation from "../objects/cuttingstation.js";
 import * as rollControl from "../objects/rolls.js";
 import * as plates from "../objects/plates.js";
 import * as customers from "../objects/customers.js";
+import * as ingredientBox from '../objects/ingredientbox.js';
 import { shapeType, inCircle } from "./shapes.js";
+import * as riceCooker  from "../objects/riceCooker.js";
 
 //moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 var ghostcanvas;
@@ -119,22 +121,21 @@ export function myDown(e) {
   var mouse = getMouse(e);
   drawing.clear(gctx);
 
-  let al = ingredients.activeIngredients.length,
-    il = rollMatt.innerIngredients.length,
+  let il = rollMatt.innerIngredients.length,
     ol = rollMatt.outerIngredients.length;
 
-  for (var i = 0; i < al; i++) {
-    drawing.drawShape(gctx, ingredients.activeIngredients[i]);
+  // for (var i = 0; i < al; i++) {
+  //   drawing.drawShape(gctx, ingredients.activeIngredients[i]);
 
-    // var imageData = gctx.getImageData(mouse.x, mouse.y, 1, 1).data;
-    // var index = (mouse.x + mouse.y * imageData.width) * 4;
-    fromMatt = false;
-    let ret = moveItem(mouse, ingredients.activeIngredients[i]);
+  //   // var imageData = gctx.getImageData(mouse.x, mouse.y, 1, 1).data;
+  //   // var index = (mouse.x + mouse.y * imageData.width) * 4;
+  //   fromMatt = false;
+  //   let ret = moveItem(mouse, ingredients.activeIngredients[i]);
 
-    if (ret) {
-      return;
-    }
-  }
+  //   if (ret) {
+  //     return;
+  //   }
+  // }
 
   if (rollMatt.isInnerIngredient() && il > 0) {
     if (checkShapes(rollMatt.getInnerIngredients(), mouse)) {
@@ -151,6 +152,15 @@ export function myDown(e) {
     return;
   }
   if (checkShapes(plates.getMoveablePlates(), mouse)) {
+    return;
+  }
+
+  if (ingredientBox.checkClickOnShapes(e, gctx)) {
+    
+    
+    return;
+  }
+  if (riceCooker.checkRiceShape(mouse, gctx)) {
     return;
   }
   // let mRl = rollControl.madeRolls.length;
