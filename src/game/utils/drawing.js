@@ -190,8 +190,8 @@ export function draw() {
         riceCooker.drawRiceCooker(context); //ricecooker
 
         rollControl.drawRolls(context);
-
-        ingredients.drawActiveIngredients(context);
+        ingredientBox.drawIngredientBoxes(context);
+        //ingredients.drawActiveIngredients(context);
         // rollMatt.drawIngredients(context);
         //drawShapes(context, ingredients.activeIngredients);
 
@@ -205,11 +205,11 @@ export function draw() {
         // }
 
         plates.drawPlates(context);
-
+        
         ioControl.drawMySelect(context);
         ingredientMenu.drawMenu();
         ioControl.drawIoButtons();
-        
+        riceCooker.drawRice(context);
         // if (mySelect != null)
         // {
         //     context.strokeStyle = mySelectColor;
