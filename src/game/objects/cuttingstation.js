@@ -121,3 +121,9 @@ export function checkCuttingStation(mySelect)
             }
     }
 }
+
+export function resetCuttingStation() {
+    cuttingStation.item = null;
+    cuttingStation.isActive = false;
+    cuttingStation.startTime = 0;
+}
