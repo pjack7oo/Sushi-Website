@@ -66,12 +66,21 @@ function setFishButtons() {
     state = stateTypes.FISH;
     ingredientButtons.push(shapes.createButton(x, y,50,25,"Crab", true , 1, player.getCrab, "Create-Crab",
                             shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red")); //TODO need to make object for storing ingredients
+    
     drawing.Invalidate();
 }
 
 function setVegButtons() {
     clearButtons();
+    var x = 410,
+        y = 280;
     state = stateTypes.INGREDIENTS;
+    ingredientButtons.push(shapes.createButton(x, y,50,25,"Avocado", true , 1, player.getAvocado, "Create-Avocado",
+                            shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
+    x += 60;
+    
+    ingredientButtons.push(shapes.createButton(x, y,50,25,"Cucumber", true , 1, player.getCucumber, "Create-Cucumber",
+                            shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
 }
 
 function removeMenuButton() {
