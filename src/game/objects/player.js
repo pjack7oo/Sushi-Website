@@ -16,5 +16,5 @@ export function addMoney(amount) {
 }
 
 export function getCrab() {
-    ingredients.
+    // ingredients.
 }

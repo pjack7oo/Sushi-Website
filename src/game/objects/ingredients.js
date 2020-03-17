@@ -10,7 +10,10 @@ export const ingredients = {
     AVOCADO: 'Avocado',
     CUCUMBER: 'Cucumber',
     CRAB: 'Crab',
-    RICE: 'Rice'
+    RICE: 'Rice',
+    TUNA: 'Tuna',
+    SALMON: 'Salmon',
+    EEL: 'Eel'
 }
 
 
@@ -48,6 +51,18 @@ export function getIngredientColor(ingredient)
         case ingredients.CUCUMBER:
             color.intColor = "#E9FF96";
             color.outColor = "#67AB05";
+            break;
+        case ingredients.EEL:
+            color.intColor = "#F29F3A";
+            color.outColor = "#CC5206";
+            break;
+        case ingredients.SALMON:
+            color.intColor = "#FF8E8E";
+            color.outColor = "#FF7878";
+            break;
+        case ingredients.TUNA:
+            color.intColor = "#D90D36";
+            color.outColor = "#D90D36";
             break;
     }
 

@@ -10,6 +10,7 @@ import * as riceCooker  from './riceCooker.js';
 import * as rollingMatt from './rollingmatt.js';
 import * as player      from './player.js';
 import * as ingredientMenu from './ingredientmenu.js';
+import * as ingredientBox  from './ingredientbox.js';
 
 
 
@@ -55,7 +56,7 @@ export function startLevel() {
     canvas.addEventListener('keydown', ioControl.doKeyPress, false);
     // add custom init
     //plates.createPlate();
-
+    ingredientBox.initIngredientBoxes();
     ingredientMenu.ingredientsMenuInit(context);
     rollingMatt.clearMatt();
     ingredients.clearActiveIngredients();

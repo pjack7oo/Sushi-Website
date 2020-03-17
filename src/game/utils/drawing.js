@@ -9,6 +9,7 @@ import * as ioControl from './iocontrol.js';
 import * as customers from '../objects/customers.js';
 import * as riceCooker from '../objects/riceCooker.js';
 import * as ingredientMenu from '../objects/ingredientmenu.js';
+import * as ingredientBox  from '../objects/ingredientbox.js';
 import { drawTable } from '../objects/table.js'
 
 
