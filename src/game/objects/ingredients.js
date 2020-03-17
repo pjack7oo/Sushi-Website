@@ -2,11 +2,11 @@
 import * as drawing from '../utils/drawing.js';
 import * as shapes  from '../utils/shapes.js';
 
-export var activeIngredients = [];
+//export var activeIngredients = [];
 
 var mySelect;
 
-export const ingredients = {
+export const ingredients = Object.freeze({
     AVOCADO: 'Avocado',
     CUCUMBER: 'Cucumber',
     CRAB: 'Crab',
@@ -14,17 +14,19 @@ export const ingredients = {
     TUNA: 'Tuna',
     SALMON: 'Salmon',
     EEL: 'Eel'
-}
+});
 
 
-export function Ingredient()
-{
-    this.name = ingredients;
-    this.renderType = null;
-    this.canEnterMatt = true;
-    this.canEnterCuttingStation = false;
-    this.canEnterPlate = false;
-    this.canSell       = false;
+export class Ingredient {
+    constructor() {
+        this.name = ingredients;
+        this.renderType = null;
+        this.canEnterMatt = true;
+        this.canEnterCuttingStation = false;
+        this.canEnterPlate = false;
+        this.canSell = false;
+    }
+
     
 }
 
@@ -69,8 +71,50 @@ export function getIngredientColor(ingredient)
     return color
 }
 
+export function getIngredientRenderType(ingredient, x, y)
+{
+    var color = getIngredientColor(ingredient);
+    var shape;
+    switch(ingredient)
+    {
+        default:
+            console.log("no shape");
+            
+            break;
+        case ingredients.AVOCADO:
+            shape = shapes.createBox(x, y, 50, 20, true, color.intColor, color.outColor);
+            break;
+        case ingredients.CRAB:
+            shape = shapes.createBox(x, y, 50, 10, true, color.intColor, color.outColor);
+            break;
+        case ingredients.CUCUMBER:
+            shape = shapes.createBox(x, y, 50, 10, true, color.intColor, color.outColor);
+            break;
+        case ingredients.EEL:
+            shape = shapes.createBox(x, y, 50, 20, true, color.intColor, color.outColor);
+            break;
+        case ingredients.SALMON:
+            shape = shapes.createBox(x, y, 50, 20, true, color.intColor, color.outColor);
+            break;
+        case ingredients.TUNA:
+            shape = shapes.createBox(x, y, 50, 20, true, color.intColor, color.outColor);
+            break;
+    }
+
+    return shape;
+}
+
+
 export function clearActiveIngredients() {
     activeIngredients = [];
+}
+
+export function createIngredientWithXY(name, x, y)
+{
+    var ingredient = new Ingredient();
+    ingredient.name = name;
+    ingredient.renderType = getIngredientRenderType(name, x, y);
+    return ingredient;
 }
 
 function createIngredient(name, renderType)
@@ -86,34 +130,37 @@ export function createRice(x,y)
     var box =  new shapes.RoundRect(x, y, 60, 60, 10, 'White', 'White', true, true);
     
     var rice = createIngredient(ingredients.RICE, box);
-    activeIngredients.push(rice);
+    return rice;
+    //activeIngredients.push(rice);
 }
 
 export function createCucumber(x,y)
 {
     var box = shapes.createBox(x, y, 50, 10, true, "#E9FF96", "#67AB05");
-    var cucumber = createIngredient(ingredients.CUCUMBER, box);
+    var cucumber = createIngredientWithXY(ingredients.CUCUMBER, x, y);
+    //return cucumber;
     activeIngredients.push(cucumber);
 }
 
 export function createCrab(x,y)
 {
     var box = shapes.createBox(x, y, 50, 20, true, 'white', 'red');
-    var crab = createIngredient(ingredients.CRAB, box);
+    var crab = createIngredientWithXY(ingredients.CRAB, x, y);
+    //return crab;
     activeIngredients.push(crab);
 }
 
 export function createAvocado(x,y)
 {
     var box = shapes.createBox(x, y, 50, 20, true, "#F2E880", "#356211");
-    var avocado = createIngredient(ingredients.AVOCADO, box);
+    var avocado = createIngredientWithXY(ingredients.AVOCADO, x, y);
     activeIngredients.push(avocado);
 }
 
-export function drawActiveIngredients(context)
-{
-    drawing.drawShapes(context, activeIngredients);
-}
+// export function drawActiveIngredients(context)
+// {
+//     drawing.drawShapes(context, activeIngredients);
+// }
 
 export function removeIngredient(ingredient)
 {   
