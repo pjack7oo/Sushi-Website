@@ -3,6 +3,8 @@ import * as shapes from '../utils/shapes.js'
 import * as rollControl from './rolls.js'
 import { getFromMatt, changeFromMatt } from '../utils/iocontrol.js';
 import * as ingredients from './ingredients.js'
+import * as ingredientBox from './ingredientbox.js';
+import * as  riceCooker  from './riceCooker.js';
 
 var canvas = document.getElementById('canvas');
 
@@ -131,6 +133,7 @@ export function checkMatt(mySelect)
         if (isInner)
         {
             
+            console.log(getFromMatt());
             
             if (getFromMatt())
             {
@@ -142,7 +145,13 @@ export function checkMatt(mySelect)
                 return;
             }
             innerIngredients.push(mySelect);
-            ingredients.removeIngredient(mySelect);
+            //ingredients.removeIngredient(mySelect);
+            if (mySelect.name == ingredients.ingredients.RICE) {
+                riceCooker.removeRice(mySelect);
+            }
+            else {
+                ingredientBox.removeIngredient(mySelect);
+            }
             console.log(innerIngredients);
         }
         else
@@ -157,10 +166,18 @@ export function checkMatt(mySelect)
                 return;
             }
             outerIngredients.push(mySelect);
-            ingredients.removeIngredient(mySelect);
+            if (mySelect.name == ingredients.ingredients.RICE) {
+                riceCooker.removeRice(mySelect);
+            }
+            else {
+                ingredientBox.removeIngredient(mySelect);
+            }
             
             
         }
+    }
+    else {
+        mySelect.renderType.resetCord();
     }
     if (mySelect != null){
         
@@ -169,16 +186,29 @@ export function checkMatt(mySelect)
         {
             
             
-            
             if (isInner && getFromMatt())
             {
-                ingredients.addIngredient(mySelect);
+                changeFromMatt(false);
+                //ingredients.addIngredient(mySelect);
+                if (mySelect.name == ingredients.ingredients.RICE) {
+                    riceCooker.addRice(mySelect);
+                }
+                else {
+                    ingredientBox.addIngredient(mySelect);
+                }
                 removeMattIngredient(isInner, mySelect);
                 
             }
             else if (!isInner && getFromMatt())
             {
-                ingredients.addIngredient(mySelect);
+                changeFromMatt(false);
+                //ingredients.addIngredient(mySelect);
+                if (mySelect.name == ingredients.ingredients.RICE) {
+                    riceCooker.addRice(mySelect);
+                }
+                else {
+                    ingredientBox.addIngredient(mySelect);
+                }
                 removeMattIngredient(isInner, mySelect);
             }
         }
