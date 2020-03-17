@@ -1,4 +1,5 @@
-
+import * as ingredientBox from './ingredientbox.js';
+import * as ingredients   from './ingredients.js';
 
 var money = 1000;
 var currentLevel = 0;
@@ -16,5 +17,17 @@ export function addMoney(amount) {
 }
 
 export function getCrab() {
-    // ingredients.
+    ingredientBox.fillBoxes(ingredients.ingredients.CRAB);
+}
+
+export function getAvocado() {
+    ingredientBox.fillBoxes(ingredients.ingredients.AVOCADO);
+}
+
+export function getCucumber() {
+    ingredientBox.fillBoxes(ingredients.ingredients.CUCUMBER);
+}
+
+export function getRice() {
+    //ingredientBox.fillBoxes(ingredients.ingredients.CRAB);
 }
