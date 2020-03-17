@@ -29,6 +29,7 @@ export class Plate {
         this.canEnterCuttingStation = false;
         this.canEnterPlate = false;
         this.canSell = false;
+        this.id = 0;
     }
 }
 
@@ -78,14 +79,19 @@ export function addRollToPlate(mySelect) {
                 plateHolder.plate.roll = mySelect;
                 plateHolder.plate.canSell = true;
                 rollControl.removeRoll(mySelect);
-
+                plateHolder.plate.id = moveablePlates.length;
                 moveablePlates.push(plateHolder.plate);
                 plateHolder.plate = null;
+                createPlate();
                 console.log(moveablePlates);
 
             }
         }
     }
+}
+
+export function removePlate(plate) {
+    moveablePlates.splice(plate.id,1);
 }
 
 function correctRollOnPlate(plate, roll) {
