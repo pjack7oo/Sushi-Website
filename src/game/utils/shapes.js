@@ -12,6 +12,8 @@ export class Box {
         this.type = shapeType.RECTANGLE;
         this.x = 0;
         this.y = 0;
+        this.oldX = this.x;
+        this.oldY = this.y;
         this.w = 1;
         this.h = 1;
         this.intColor = '#444444';
@@ -20,6 +22,11 @@ export class Box {
         this.lineWidth = 1;
         this.image;
     }
+
+    resetCord() {
+        this.x = this.oldX;
+        this.y = this.oldY;
+    }
 }
 
 export class RoundRect {
@@ -27,6 +34,8 @@ export class RoundRect {
         this.type = shapeType.ROUNDRECT;
         this.x = x;
         this.y = y;
+        this.oldX = x;
+        this.oldY = y;
         this.w = w;
         this.h = h;
         this.radius = radius;
@@ -36,6 +45,11 @@ export class RoundRect {
         this.stroke = stroke
         this.lineWidth = 1;
         this.image;
+    }
+
+    resetCord() {
+        this.x = this.oldX;
+        this.y = this.oldY;
     }
 }
 
