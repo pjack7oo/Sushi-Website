@@ -2,6 +2,7 @@ import * as shapes  from '../utils/shapes.js';
 import * as drawing from '../utils/drawing.js';
 import * as rolls   from  './rolls.js';
 import * as progBar from '../utils/progressBar.js';
+import * as plateControl from './plates.js';
 
 var customers = [];
 var startWaitTime = 0;
@@ -155,6 +156,7 @@ function checkCustomerOrder(customer, plate)
         if (plate.roll.name == wantedRoll.name){
             rollToRemove = wantedRoll;
             customer.want.splice(find(isWantedRoll),1);
+            plateControl.removePlate(plate);
             if (customer.want.length == 0) {
                 let money = customer.money;
                 customerLeave(customer);
@@ -163,7 +165,10 @@ function checkCustomerOrder(customer, plate)
                 drawing.Invalidate()
                 return money;
             }
-            
+        }
+        else {
+            plateControl.removePlate(plate);
+            customer.startTime -= 5000;
         }
     }
 }
