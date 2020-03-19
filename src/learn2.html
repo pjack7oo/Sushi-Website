@@ -1,0 +1,127 @@
+<html>
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/gif" href="../animated_favicon1.gif" >
+  <style>
+      #page-container {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        grid-template-areas:
+            "header header"
+            "main   main "
+            "footer footer";
+        gap: 10px;
+        
+      }
+      header {
+        grid-area: header;
+        padding:  20px 0;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        list-style:  none;
+        grid-template-columns: 1fr 1fr;
+        background: deepskyblue;
+      }
+      header a {
+        font-size: large;
+        
+        display: block;
+        color: white;
+        text-align: center;
+        
+        padding:  20px 40px;
+        text-decoration: none;
+      }
+      header a:hover {
+        background: #1565C0;
+      }
+      a:link {
+          text-decoration: none;
+      }
+      header li:last-child {
+          float: right;
+          border-right: none;
+      }
+      @media all and (max-width: 1000px) {
+          header {
+              justify-content: space-around;
+          }
+      }
+      @media all and (max-width: 600px) {
+          header {
+              flex-flow: column wrap;
+              padding: 0;
+          }
+          header a {
+              text-align: center;
+              padding: 10px;
+              border-top: 1px solid rgba(255, 255, 255,0.3); 
+              border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          }
+          header li:last-of-type a {
+              border-bottom: none;
+          }
+      }
+
+  </style>
+   <title>Sushi</title>
+  <meta name="description" content="This website shows how to make sushi">
+  <meta name="Author" content="Piotr Jackowski">
+
+  <!-- <link href="styles.css" rel="stylesheet"> -->
+  <script src="learnscript.js"></script>
+</head>
+<body>
+    <header>
+        <li><a href="main.html">Home</a></li>
+        <li><a href="game.html">Game</a></li>
+        <li><a class="active" >Learn</a></li>
+        <li style="float:right"><a href="about.html">About</a></li>
+    </header>
+    <div class="page-container">
+        
+            
+            <h1>How to make sushi</h1>
+            <p>Below are basic instructions on making sushi.</p>
+            <p>After that there are specific instructions and ingredients for specific rolls.</p>
+            <button type="button" class="collapsible">Making the rice</button>
+            <div class="content">
+                <p>To make the rice............</p>
+            </div>
+            <button type="button" class="collapsible">Necesarry tools</button>
+            <div class="content">
+                <p>You will you need a rice cooker:<img src= "../Images/RiceCooker.jpg" alt="RiceCooker" align="middle" width="300" height="300"></p>
+            </div>
+            <p> Specific roll ingredients</p>
+            <button type="button" class="collapsible">Callifornia roll</button>
+            <div class="content">
+                <p></p>
+            </div>
+            <!--This script opens the collapsible items -->
+            <script>
+                var collapsible = document.getElementsByClassName("collapsible");
+                var i;
+                
+                for (i = 0; i < collapsible.length; i++) {
+                    collapsible[i].addEventListener("click", function() {
+                        this.classList.toggle("open");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight){
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        } 
+                    });
+                }
+            </script>
+    </div>    
+        <footer id="footer">
+            <!--external link-->
+            <a href="http://www.youtube.com/">Youtube</a>
+        </footer>
+    
+</body>
+
+</html>
