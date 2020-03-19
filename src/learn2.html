@@ -5,26 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/gif" href="../animated_favicon1.gif">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
     <style>
+        
+        body {
+            background-color: aqua;
+        }
         #page-container {
             display: grid;
-            grid-template-columns: 1fr 3fr;
-            grid-template-areas:
-                "header header"
-                "main   main "
-                "footer footer";
+            grid-template-columns: 40px 50px auto 50px 40px;
+            grid-template-rows: 25% auto 10px auto 10%;
+            
             gap: 10px;
-
         }
 
         header {
-            grid-area: header;
+            
+            grid-column:2 /5;
+            
+            grid-row-start:row1-start;
+            grid-row-end: 2 ;
             padding: 20px 0;
             display: flex;
             flex-flow: row wrap;
             justify-content: space-around;
             list-style: none;
-            grid-template-columns: 1fr 1fr;
+            
             background: deepskyblue;
         }
 
@@ -45,6 +51,9 @@
 
         a:link {
             text-decoration: none;
+        }
+        h1 {
+            font-family: 'Ubuntu', sans-serif;
         }
 
         header li:last-child {
@@ -77,6 +86,8 @@
 
         .learn {
             grid-area: main;
+            grid-column-start:column3;
+
             padding: 10px;
             margin: 0;
             display: inline-flexbox;
@@ -88,7 +99,7 @@
         }
 
         .learn-item {
-            background-color: gray;
+            background-color: lightcoral;
             width: 2fr;
             height: 2fr;
             
@@ -98,12 +109,16 @@
             font-size: 30px;
             display: inline-block;
         }
+        .learn-item:hover {
+            background-color: orange;
+        }
 
 
         .learn-item> .content {
           display: none;
           overflow: hidden;
         }
+
         .learnActive {
             width: auto;
             height: auto;
@@ -119,7 +134,7 @@
 
         footer {
             grid-area: footer;
-            
+            position: relative;
             bottom: 0;
             width: 100%;
             height: 2.5rem;
@@ -142,9 +157,12 @@
             <li><a class="active">Learn</a></li>
             <li><a href="about.html">About</a></li>
         </header>
+        <h1 align="center">How to make sushi</h1>
+        <p align="center">Below are basic instructions on making sushi.</p>
+        <p align="center">After that there are specific instructions and ingredients for specific rolls.</p>
         <div class="learn">
             <div class="learn-item">
-                <p>How to make sushi</p>
+                
                 
                 <!-- <button type="button" class="collapsible">Making the rice</button> -->
                 <div class="content">
