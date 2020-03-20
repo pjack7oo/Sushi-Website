@@ -56,6 +56,9 @@
         h1 {
             font-family: 'Ubuntu', sans-serif;
         }
+        h2 {
+            font-family: 'Ubuntu', sans-serif;
+        }
 
         header li:last-child {
             float: right;
@@ -172,6 +175,11 @@
 
         }
         }
+        #roll {
+            height: 200px;
+            width: 200px;
+        }
+    
 
         .nestedIngrd>p {
 
@@ -217,7 +225,7 @@
         <div class="learn">
             <div class="learn-item">
                 <p>
-                    Perfect Rice
+                    Perfect Rice for 3 rolls
                 </p>
 
                 <!-- <button type="button" class="collapsible">Making the rice</button> -->
@@ -262,10 +270,24 @@
                             align="middle" width="300" height="300"></p>
                 </div>
             </div>
+        </div>
+        <h2 align = "center">Specific Rolls</h2>
+        <div class="learn">
             <div class="learn-item">
-                <p> Specific roll ingredients</p>
+                <p> California Roll</p>
+                
+                    <img id="roll" src="../Images/Roll-Single-1-Original.jpg" alt="California Roll">
+                
+                
                 <div class="content">
-                    <p></p>
+                    <div class="Box1">
+                        <div class="Roll Ingredients">
+
+                        </div>
+                        <div class= "Image">
+                            <img src="../Images/Roll-Single-1-Original.jpg" alt="California Roll">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -275,6 +297,7 @@
                     console.log(true);
 
                     $(this).toggleClass('learnActive');
+                    $('roll').toggle();
                     //$(".learn-item > .content").toggle();
                 });
             </script>
