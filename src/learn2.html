@@ -7,30 +7,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
     <style>
-        
         body {
             background-color: aqua;
         }
+
         #page-container {
             display: grid;
             grid-template-columns: 40px 50px auto 50px 40px;
             grid-template-rows: 25% auto 10px auto 10%;
-            
+
             gap: 10px;
         }
 
         header {
-            
-            grid-column:2 /5;
-            
-            grid-row-start:row1-start;
-            grid-row-end: 2 ;
+
+            grid-column: 2 /5;
+
+            grid-row-start: row1-start;
+            grid-row-end: 2;
             padding: 20px 0;
             display: flex;
             flex-flow: row wrap;
             justify-content: space-around;
             list-style: none;
-            
+
             background: deepskyblue;
         }
 
@@ -52,6 +52,7 @@
         a:link {
             text-decoration: none;
         }
+
         h1 {
             font-family: 'Ubuntu', sans-serif;
         }
@@ -86,12 +87,12 @@
 
         .learn {
             grid-area: main;
-            grid-column-start:column3;
+            grid-column-start: column3;
 
             padding: 10px;
             margin: 0;
             display: inline-flexbox;
-            align-items:initial;
+            align-items: initial;
             flex-direction: row;
             list-style: none;
             flex-wrap: wrap;
@@ -102,21 +103,22 @@
             background-color: lightcoral;
             width: 2fr;
             height: 2fr;
-            
+
             margin: 10px;
             text-align: center;
             line-height: 75px;
             font-size: 30px;
             display: inline-block;
         }
+
         .learn-item:hover {
             background-color: orange;
         }
 
 
-        .learn-item> .content {
-          display: none;
-          overflow: hidden;
+        .learn-item>.content {
+            display: none;
+            overflow: hidden;
         }
 
         .learnActive {
@@ -125,11 +127,15 @@
             margin: auto;
             display: block;
             flex: 1 1;
-            margin-right:0;
+            margin-right: 0;
         }
+
         .learnActive>.content {
             width: auto;
             display: block;
+            align-content: center;
+            justify-content: center;
+            grid-template-columns: 40px auto 40px;
         }
 
         footer {
@@ -138,6 +144,54 @@
             bottom: 0;
             width: 100%;
             height: 2.5rem;
+        }
+
+        .nestedIngrd {
+            display: grid;
+            grid-template-columns: repeat(2, 250px);
+            align-self: auto;
+            justify-content: space-between;
+            border: yellow;
+            border-bottom: 1px;
+
+        }
+        .box1 {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .Image.resize {
+            max-width:50%;
+            max-height:50%;
+        }
+        @media all and (max-width: 600px) {
+            .box1 {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+        }
+        }
+
+        .nestedIngrd>p {
+
+
+            border-bottom: 5px dashed blue;
+        }
+
+        .Ingredients {
+            grid-column: 2/ 3;
+            display: grid;
+            grid-template-rows: auto;
+
+            justify-content: space-between;
+            align-items: center;
+            border-style: dashed;
+            border: 2px;
+            width: 200px;
+
+
+
         }
     </style>
     <title>Sushi</title>
@@ -162,16 +216,44 @@
         <p align="center">After that there are specific instructions and ingredients for specific rolls.</p>
         <div class="learn">
             <div class="learn-item">
-                
-                
+                <p>
+                    Perfect Rice
+                </p>
+
                 <!-- <button type="button" class="collapsible">Making the rice</button> -->
                 <div class="content">
-                    <p>Below are basic instructions on making sushi.</p>
-                    <p>After that there are specific instructions and ingredients for specific rolls.</p>
-                    <p>To make the rice............</p>
+                    <div class="Box1">
+                    <div class="Ingredients">
+                        
+                            <div class="nestedIngrd">
+                                <p>1 Cup</p>
+                                <p>Rice</p>
+                            </div>
+                            <div class="nestedIngrd">
+                                <p>1.2 Cups</p>
+                                <p>Water</p>
+                            </div>
+                            <div class="nestedIngrd">
+                                <p>2.5 Tablespoons</p>
+                                <p>Vinegar</p>
+                            </div>
+                            <div class="nestedIngrd">
+                                <p>0.5 Tablespoons</p>
+                                <p>Sugar</p>
+                            </div>
+                            <div class="nestedIngrd">
+                                <p>0.5 Tablespoon</p>
+                                <p>Salt</p>
+                            </div>
+                        </div>
+                        <div class= "Image">
+                            <img src="../Images/RiceCooker.jpg" alt="RiceCooker">
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <div class= "learn-item">
+            <div class="learn-item">
                 <P>
                     Necessary Tools
                 </P>
@@ -180,7 +262,7 @@
                             align="middle" width="300" height="300"></p>
                 </div>
             </div>
-            <div class= "learn-item">
+            <div class="learn-item">
                 <p> Specific roll ingredients</p>
                 <div class="content">
                     <p></p>
