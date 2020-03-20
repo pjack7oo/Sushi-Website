@@ -186,6 +186,16 @@
 
             border-bottom: 5px dashed blue;
         }
+        .nestedRollIngrd {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            margin: top;
+        }
+        .nestedRollIngrd>p {
+            border-bottom: 5px dashed blue;
+
+        }
 
         .Ingredients {
             grid-column: 2/ 3;
@@ -200,6 +210,12 @@
 
 
 
+        }
+        .rollIngredients {
+            display: grid;
+            grid-template-columns: repeat(2,300px);
+            justify-content: top;
+            
         }
     </style>
     <title>Sushi</title>
@@ -276,13 +292,24 @@
             <div class="learn-item">
                 <p> California Roll</p>
                 
-                    <img id="roll" src="../Images/Roll-Single-1-Original.jpg" alt="California Roll">
+                    
                 
                 
                 <div class="content">
                     <div class="Box1">
-                        <div class="Roll Ingredients">
-
+                        <div class="rollIngredients">
+                            <div class="nestedRollIngrd">
+                                <p>inner</p>
+                                <p>Avocado</p>
+                                <p>Cucumber</p>
+                                <p>Crab</p>
+                            </div>
+                            
+                            <div class="nestedRollIngrd">
+                                <p>Outer</p>
+                                <p>Rice</p>
+                                
+                            </div>
                         </div>
                         <div class= "Image">
                             <img src="../Images/Roll-Single-1-Original.jpg" alt="California Roll">
