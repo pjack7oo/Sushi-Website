@@ -11,6 +11,7 @@ import * as rollingMatt from './rollingmatt.js';
 import * as player      from './player.js';
 import * as ingredientMenu from './ingredientmenu.js';
 import * as ingredientBox  from './ingredientbox.js';
+import * as clock         from './clock.js';
 
 
 
@@ -56,6 +57,7 @@ export function startLevel() {
     canvas.addEventListener('keydown', ioControl.doKeyPress, false);
     // add custom init
     //plates.createPlate();
+    clock.resetClock();
     ingredientBox.initIngredientBoxes();
     ingredientMenu.ingredientsMenuInit(context);
     rollingMatt.clearMatt();
@@ -76,6 +78,7 @@ export function startLevel() {
     //         levelUpdate(context);
     //         break
     // }
+    
     levelUpdate(context);
 }
 
@@ -133,7 +136,7 @@ function checkLevelTime() {
         elapsedTime = currentTime - startTime,
         precentage  = (elapsedTime / maxTime)*100;
         //console.log(precentage);
-          
+        clock.updateClockProgress(precentage);
             
         if (precentage >= 100)
         {

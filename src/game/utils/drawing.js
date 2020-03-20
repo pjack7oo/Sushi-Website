@@ -10,6 +10,7 @@ import * as customers from '../objects/customers.js';
 import * as riceCooker from '../objects/riceCooker.js';
 import * as ingredientMenu from '../objects/ingredientmenu.js';
 import * as ingredientBox  from '../objects/ingredientbox.js';
+import * as clock       from   '../objects/clock.js';
 import { drawTable } from '../objects/table.js'
 
 
@@ -216,7 +217,7 @@ export function draw() {
         //     context.lineWidth = mySelectWidth;
         //     context.strokeRect(mySelect.renderType.x, mySelect.renderType.y, mySelect.renderType.w, mySelect.renderType.h);
         // }
-
+        clock.drawClock(context);
         //draw on top like stats
         drawGrid();
         validCanvas = true;
