@@ -109,7 +109,7 @@ function drawWantedRolls(ctx, x, y, w, h, customer)
     drawing.drawRoundRectWPoint(ctx, x, y, w, h+15, 
         10,true, true, '#add8e6', 'grey');
     
-    drawing.printAtWordWrap(ctx, customer.want[0].name, x + w/2, y + h+13, 15, w, 'Black', '15px Arial', "center");
+    drawing.printAtWordWrap(ctx, customer.want[0].name, x + w/2, y + h+5, 15, w, 'Black', '15px Arial', "center");
     customer.want[0].isCut = true;
     rolls.drawRollWithCoords(ctx, x + w/2, y + h/2, 10, customer.want[0]);
     

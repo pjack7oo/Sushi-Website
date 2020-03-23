@@ -253,10 +253,10 @@ export function drawRollingMatt(context) {
     }
     
     if (isInnerIngredient()) {
-        context.fillText('Inner', 350, 399);
+        context.fillText('Inner', rollingMatt.x + rollingMatt.w/2, rollingMatt.y - 10);
     }
     else {
-        context.fillText('Outer', 350, 399);
+        context.fillText('Outer', rollingMatt.x + rollingMatt.w/2, rollingMatt.y - 10);
     }
     drawIngredients(context);
 }
