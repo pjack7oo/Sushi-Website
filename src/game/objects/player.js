@@ -17,15 +17,27 @@ export function addMoney(amount) {
 }
 
 export function getCrab() {
-    ingredientBox.fillBoxes(ingredients.ingredients.CRAB);
+    if (hasEnoughMoney(20)) {
+        ingredientBox.fillBoxes(ingredients.ingredients.CRAB);
+        money -=20;
+    }
+    
 }
 
 export function getAvocado() {
-    ingredientBox.fillBoxes(ingredients.ingredients.AVOCADO);
+    if (hasEnoughMoney(30)) {
+        ingredientBox.fillBoxes(ingredients.ingredients.AVOCADO);
+        money -=30;
+    }
+    
 }
 
 export function getCucumber() {
-    ingredientBox.fillBoxes(ingredients.ingredients.CUCUMBER);
+    if (hasEnoughMoney(20)) {
+        ingredientBox.fillBoxes(ingredients.ingredients.CUCUMBER);
+        money -=20;
+    }
+    
 }
 
 export function getRice() {

@@ -3,6 +3,7 @@ import * as drawing from '../utils/drawing.js';
 import * as rolls   from  './rolls.js';
 import * as progBar from '../utils/progressBar.js';
 import * as plateControl from './plates.js';
+import * as player   from './player.js';
 
 var customers = [];
 var startWaitTime = 0;
@@ -72,6 +73,13 @@ function getWantedRoll(customer, level = 0)
 {
     switch(level) {
         default:
+            var i = Math.floor(Math.random()*1) + 1;
+            console.log(i);
+            
+            var roll = rolls.getRoll(i);
+            customer.want.push(roll);
+            break;
+        case 0:
             var roll = rolls.CaliforniaRoll;
             customer.want.push(roll);
             break;
@@ -162,7 +170,8 @@ function checkCustomerOrder(customer, plate)
                 customerLeave(customer);
                 wait = true;
                 startWaitTime = performance.now();
-                drawing.Invalidate()
+                drawing.Invalidate();
+                player.addMoney(customer.money);
                 return money;
             }
         }
