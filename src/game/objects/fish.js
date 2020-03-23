@@ -1,10 +1,11 @@
 import * as ioControl from '../utils/iocontrol.js';
-import * as 
 
-const fishTypes = {
+
+const fishTypes = Object.freeze({
     SALMON: "Salmon",
-    TUNA  : "Tuna"
-}
+    TUNA  : "Tuna",
+    EEL   : 'Eel'
+});
 
 class Fish {
     constructor(fishType,) {
