@@ -66,7 +66,16 @@ function setFishButtons() {
     state = stateTypes.FISH;
     ingredientButtons.push(shapes.createButton(x, y,50,25,"Crab", true , 1, player.getCrab, "Create-Crab",
                             shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red")); //TODO need to make object for storing ingredients
-    
+    x += 60;
+    ingredientButtons.push(shapes.createButton(x, y,50,25,"Tuna", true , 1, player.getTuna, "Create-Tuna",
+                            shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
+    x += 60;
+    ingredientButtons.push(shapes.createButton(x, y,50,25,"Salmon", true , 1, player.getSalmon, "Create-Salmon",
+                            shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
+    x = 410;
+    y += 30;
+    ingredientButtons.push(shapes.createButton(x, y,50,25,"Eel", true , 1, player.getEel, "Create-Eel",
+                            shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
     drawing.Invalidate();
 }
 

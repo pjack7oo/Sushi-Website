@@ -17,29 +17,62 @@ export function addMoney(amount) {
 }
 
 export function getCrab() {
-    if (hasEnoughMoney(20)) {
-        ingredientBox.fillBoxes(ingredients.ingredients.CRAB);
-        money -=20;
+    let name = ingredients.ingredients.CRAB, 
+        cost = ingredients.getIngredientCost(name);
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
+        ingredientBox.fillBoxes(name);
+        money -=cost;
     }
-    
 }
 
 export function getAvocado() {
-    if (hasEnoughMoney(30)) {
-        ingredientBox.fillBoxes(ingredients.ingredients.AVOCADO);
-        money -=30;
+    let name = ingredients.ingredients.AVOCADO, 
+        cost = ingredients.getIngredientCost(name);
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
+        ingredientBox.fillBoxes(name);
+        money -=cost;
     }
     
 }
 
 export function getCucumber() {
-    if (hasEnoughMoney(20)) {
-        ingredientBox.fillBoxes(ingredients.ingredients.CUCUMBER);
-        money -=20;
+    let name = ingredients.ingredients.CUCUMBER, 
+        cost = ingredients.getIngredientCost(name);
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
+        ingredientBox.fillBoxes(name);
+        money -=cost;
     }
     
 }
 
 export function getRice() {
     //ingredientBox.fillBoxes(ingredients.ingredients.CRAB);
+}
+
+export function getTuna() {
+    let name = ingredients.ingredients.TUNA, 
+        cost = ingredients.getIngredientCost(name);
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
+        ingredientBox.fillBoxes(name);
+        money -=cost;
+    }
+}
+
+export function getSalmon() {
+    let name = ingredients.ingredients.SALMON, 
+        cost = ingredients.getIngredientCost(name);
+        
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
+        ingredientBox.fillBoxes(name);
+        money -=cost;
+    }
+}
+
+export function getEel() {
+    let name = ingredients.ingredients.EEL, 
+        cost = ingredients.getIngredientCost(name);
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
+        ingredientBox.fillBoxes(name);
+        money -=cost;
+    }
 }
