@@ -7,6 +7,7 @@ import * as ingredients from './objects/ingredients.js';
 import * as customers   from './objects/customers.js';
 import * as shapes      from './utils/shapes.js';
 import * as levelControl from './objects/level.js';
+import * as upgradeMenu from  './objects/upgrademenu.js';
 
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
@@ -50,7 +51,7 @@ function init()
         styleBorderLeft  = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderLeftWidth'], 10) || 0;
         styleBorderTop   = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderTopWidth'], 10)  || 0;
     }
-    
+    upgradeMenu.upgradeInit(canvas);
     // rollControl.rollListInit();
     // plates.createPlate();
     // //console.log(plates.plateHolder);
@@ -150,7 +151,7 @@ function startGame()
     // ingredients.createCucumber(100, 240);
     // //customers.getRandomCustomer();
     // drawing.Invalidate();
-
+    clearInterval(activeInterval);
     levelControl.startLevel(0);
 }
 

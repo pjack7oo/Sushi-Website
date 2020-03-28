@@ -73,7 +73,7 @@ function getWantedRoll(customer, level = 0)
 {
     switch(level) {
         default:
-            var i = Math.floor(Math.random()*1) + 1;
+            var i = Math.floor(Math.random()*1);
             console.log(i);
             
             var roll = rolls.getRoll(i);
@@ -105,7 +105,7 @@ function drawCustomer(ctx, customer)
     if (customer.isThinking)
     {
         drawing.drawSpeechBubble(customer.x, customer.y - 50, customer.w, 50,
-             '...', '10px Arial', 'black');
+             '...', '20px Arial', 'black');
     }
     else {
         drawWantedRolls(ctx, customer.x, customer.y - 50 , customer.w, 50, customer)

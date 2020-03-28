@@ -12,6 +12,7 @@ import * as player      from './player.js';
 import * as ingredientMenu from './ingredientmenu.js';
 import * as ingredientBox  from './ingredientbox.js';
 import * as clock         from './clock.js';
+import * as upgradeMenu   from './upgrademenu.js';
 
 
 
@@ -150,10 +151,11 @@ function nextLevel(context) {
     cancelAnimationFrame(activeInterval);
     activeInterval = undefined;
     currentLevel += 1;
-    ioControl.clearButtons();
-    ioControl.addButton(shapes.createButton(350,200,100,50,"Next", true, 1, startLevel, "StartLevel-Next"));
-    canvas.addEventListener('click', ioControl.buttonClick, false);
-    nextLevelScreen();
+    // ioControl.clearButtons();
+    // ioControl.addButton(shapes.createButton(350,200,100,50,"Next", true, 1, startLevel, "StartLevel-Next"));
+    // canvas.addEventListener('click', ioControl.buttonClick, false);
+    // nextLevelScreen();
+    upgradeMenu.upgradeScreen();
 }
 //display money made and button to continue to next level
 function nextLevelScreen() {

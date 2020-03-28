@@ -244,6 +244,18 @@ function checkButtons(mouse) {
   }
 }
 
+function checkUpgradeButtons(mouse) {
+  for (let button of buttons) {
+    if (inBounds(mouse, button)) {
+      console.log(true);
+      if (button.containsArgs) {
+        button.callBack(argv[0], argv[1]);
+      }
+      button.callBack();
+    }
+  }
+}
+
 
 export function checkButtonsGiven(e, buttons) {
   var mouse = getMouse(e);

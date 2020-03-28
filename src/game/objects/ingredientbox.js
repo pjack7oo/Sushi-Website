@@ -190,6 +190,9 @@ export function initIngredientBoxes() {
     ingredientBox1.fillIngredient(ingredients.ingredients.AVOCADO);
     ingredientBox1.fillIngredient(ingredients.ingredients.CRAB);
     ingredientBox1.fillIngredient(ingredients.ingredients.CUCUMBER);
+    ingredientBox2.fillIngredient(ingredients.ingredients.TUNA);
+    ingredientBox2.fillIngredient(ingredients.ingredients.SALMON);
+    ingredientBox2.fillIngredient(ingredients.ingredients.EEL);
 }
 
 
