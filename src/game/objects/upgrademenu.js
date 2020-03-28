@@ -33,7 +33,7 @@ function upgradeDraw()
 {
     drawing.clear(context);
     drawing.drawTextBox(context, 225, 0, 150, 100, "Upgrade Menu", "30px Arial", "Red", "white", "Red");
-    
+    riceCookerUpgradesDraw();
     
     ioControl.drawIoButtons();
 }
@@ -71,7 +71,7 @@ function teaKettleUpgradesSetup() {
 }
 
 function riceCookerUpgradesDraw() {
-
+    drawing.drawRoundRect(context, 100, 10, 150, 200, 5, true, true, 'Gray', "Green", 1);
 }
 function storageBoxUpgradesDraw() {
 
