@@ -3,6 +3,7 @@ import * as levelControl from './level.js';
 import * as drawing      from '../utils/drawing.js';
 import * as shapes       from '../utils/shapes.js';
 import * as player       from './player.js';
+import * as riceCooker   from './riceCooker.js';
 
 var activeInterval;
 var canvas, context;
@@ -13,8 +14,11 @@ export function upgradeScreen()
 
     ioControl.clearButtons();
     ioControl.addButton(shapes.createButton(350,200,100,50,"Next-Level", true, 1, startNextLevel, "StartLevel-Next"));
-    canvas.addEventListener('click', ioControl.buttonClick, false);
-    
+    canvas.addEventListener('click', upgradeMenuClick, false);
+    riceCookerUpgradesSetup();
+    canvas.onmousemove = function(e) {
+        checkButtons(e);
+    }
 
     upgradeUpdate();
 }
@@ -25,10 +29,24 @@ export function upgradeInit(canvs) {
 
 }
 
+function upgradeMenuClick(e) {
+    ioControl.buttonClick(e);
+    ioControl.checkButtonsGiven(e, upgradeButtons);
+}
+
+function checkButtons(e) {
+    let mouse = ioControl.getMouse(e);
+    console.log(mouse);
+    
+    for (let button of upgradeButtons) {
+        button.checkHover(mouse);
+    }
+}
+
 function upgradeUpdate() {
     activeInterval = requestAnimationFrame(upgradeUpdate);
     
-    updateButtons();
+    //updateButtons();
     upgradeDraw();
 }
 
@@ -39,6 +57,7 @@ function upgradeDraw()
     riceCookerUpgradesDraw();
     
     ioControl.drawIoButtons();
+    drawing.drawButtons(context, upgradeButtons);
     
 }
 
@@ -51,8 +70,9 @@ function startNextLevel() {
 
 
 function riceCookerUpgradesSetup() {
-    ioControl.addButton(shapes.createButton(100,200,100,50,"500", true, 1, startNextLevel, "Upgrade Cook Time"));
-    setupMaxStorageUpgrade(100,250,checkPrice)
+    upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,100,200,100,50, 10, riceCooker.getCookTimeUpgradeCost(),
+        'Black', "20px Arial", "Gray", "Green", "Red", riceCooker.riceCookerUpgradeCookTime, riceCooker.getCookTimeUpgradeCost, "Rice Cooker Upgrade Cook Time"));
+    
 }
 function storageBoxUpgradesSetup() {
 

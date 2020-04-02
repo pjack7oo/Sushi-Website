@@ -1,6 +1,7 @@
 import * as drawing from '../utils/drawing.js';
 import * as ingredients from './ingredients.js';
 import * as ioControl   from '../utils/iocontrol.js';
+import * as player      from './player.js';
 
 
 
@@ -36,9 +37,22 @@ class IngredientBox {
         this.typeStorage3Missing = [0,1,2,3];
     
         this.maxStorage   = 4;
+        this.maxStorageUpgradeCost = 500;
     }
 
-    
+    get storageUpgradeCost() {
+        return this.maxStorageUpgradeCost;
+    }
+
+    upgradeMaxStorage() {
+        if (player.hasEnoughMoney(this.maxStorageUpgradeCost)) {
+            player.removeMoney(this.maxStorageUpgradeCost);
+            this.maxStorage ++;
+            this.maxStorageUpgradeCost += 500;
+            return true;
+        }
+        return false;
+    }
 
     drawBox(context) {
         drawing.drawRectangle(context, this.x, this.y, this.w, this.h, true, "#B87C4B", "#966047", 5 );

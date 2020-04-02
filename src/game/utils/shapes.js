@@ -1,3 +1,4 @@
+import { Invalidate } from "./drawing.js";
 
 export const shapeType = {
     RECTANGLE: 'Rectangle',
@@ -103,7 +104,7 @@ export class Point {
     }
 }
 
-class UpgradeButton {
+export class UpgradeButton {
     constructor(type, x, y, w, h, radius, cost, textColor, font, outColor, activeColor, inactiveColor, callback, costCallback, name) {
         this.type   = type;
         this.x      = x;
@@ -121,6 +122,8 @@ class UpgradeButton {
         this.callBack =    callback;
         this.costCallback = costCallback;
         this.name         = name;
+        this.fill = true;
+        this.stroke = true;
     }
     update() {
         this.cost = this.costCallback();
@@ -138,6 +141,7 @@ class UpgradeButton {
         else {
             this.intColor = this.inactiveColor;
         }
+        Invalidate();
     }
 }
 

@@ -341,7 +341,9 @@ export function drawButtons(ctx, buttons) {
         ctx.font = button.font;
         ctx.textAlign = button.fontLoc;
         ctx.fillStyle = button.textColor;
-
+        if (button.text == undefined) {
+            button.text = button.cost.toString();
+        }
         printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
     }
 
