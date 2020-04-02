@@ -21,6 +21,7 @@ export function drawClock (context) {
 
 export function updateClockProgress(progress) {
     clockProgress = progress;
+    drawing.Invalidate();
 }
 
 export function setTime (maxTime) {
