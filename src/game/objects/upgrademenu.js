@@ -6,6 +6,7 @@ import * as player       from './player.js';
 
 var activeInterval;
 var canvas, context;
+var upgradeButtons = [];
 
 export function upgradeScreen()
 {
@@ -17,6 +18,7 @@ export function upgradeScreen()
 
     upgradeUpdate();
 }
+
 export function upgradeInit(canvs) {
     canvas = canvs;
     context = canvas.getContext('2d');
@@ -26,6 +28,7 @@ export function upgradeInit(canvs) {
 function upgradeUpdate() {
     activeInterval = requestAnimationFrame(upgradeUpdate);
     
+    updateButtons();
     upgradeDraw();
 }
 
@@ -36,6 +39,7 @@ function upgradeDraw()
     riceCookerUpgradesDraw();
     
     ioControl.drawIoButtons();
+    
 }
 
 function startNextLevel() {
@@ -44,12 +48,7 @@ function startNextLevel() {
     levelControl.startLevel();
 }
 
-function checkPrice(cost, callback) {
-    if (player.getCurrentMoney >= cost) {
-        player.addMoney(-cost);
-        callback();
-    }
-}
+
 
 function riceCookerUpgradesSetup() {
     ioControl.addButton(shapes.createButton(100,200,100,50,"500", true, 1, startNextLevel, "Upgrade Cook Time"));

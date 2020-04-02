@@ -103,6 +103,44 @@ export class Point {
     }
 }
 
+class UpgradeButton {
+    constructor(type, x, y, w, h, radius, cost, textColor, font, outColor, activeColor, inactiveColor, callback, costCallback, name) {
+        this.type   = type;
+        this.x      = x;
+        this.y      = y;
+        this.w      = w;
+        this.h      = h;
+        this.radius = radius;
+        this.cost   = cost;
+        this.textColor = textColor;
+        this.font   = font;
+        this.outColor = outColor;
+        this.intColor = inactiveColor;
+        this.inactiveColor = inactiveColor;
+        this.activeColor   = activeColor;
+        this.callBack =    callback;
+        this.costCallback = costCallback;
+        this.name         = name;
+    }
+    update() {
+        this.cost = this.costCallback();
+    }
+    checkHover(mouse) {
+        let rect = {
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h
+        }
+        if (inRect(mouse.x, mouse.y, rect)) {
+            this.intColor = this.activeColor;
+        }
+        else {
+            this.intColor = this.inactiveColor;
+        }
+    }
+}
+
 class Button {
     constructor() {
         this.type = shapeType.RECTANGLE;

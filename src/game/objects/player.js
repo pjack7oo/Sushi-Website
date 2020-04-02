@@ -16,6 +16,10 @@ export function addMoney(amount) {
     money += amount;
 }
 
+export function removeMoney(amount) {
+    money -= amount;
+}
+
 export function getCrab() {
     let name = ingredients.ingredients.CRAB, 
         cost = ingredients.getIngredientCost(name);
