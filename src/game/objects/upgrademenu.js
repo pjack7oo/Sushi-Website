@@ -43,10 +43,17 @@ function checkButtons(e) {
     }
 }
 
+function updateButtons() {
+    for(let button of updateButtons) {
+        button.update();
+        button.checkAvailable(player.getCurrentMoney());
+    }
+}
+
 function upgradeUpdate() {
     activeInterval = requestAnimationFrame(upgradeUpdate);
     
-    //updateButtons();
+    updateButtons();
     upgradeDraw();
 }
 

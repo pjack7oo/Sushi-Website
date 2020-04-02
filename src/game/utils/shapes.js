@@ -1,12 +1,14 @@
+
+//import {hasEnoughMoney} from '../objects/player.js';
 import { Invalidate } from "./drawing.js";
 
-export const shapeType = {
+export const shapeType = Object.freeze({
     RECTANGLE: 'Rectangle',
     CIRCLE   : 'Circle',
     IMAGE    : 'Image',
     ROUNDRECT: 'RoundRect',
     ROLL     : 'Roll'
-}
+});
 
 export class Box {
     constructor() {
@@ -127,6 +129,15 @@ export class UpgradeButton {
     }
     update() {
         this.cost = this.costCallback();
+    }
+    checkAvailable(money) {
+        if (money >= cost) {
+            this.intColor = this.activeColor;
+        }
+        else {
+            this.intColor = this.inactiveColor;
+        }
+        Invalidate();
     }
     checkHover(mouse) {
         let rect = {
