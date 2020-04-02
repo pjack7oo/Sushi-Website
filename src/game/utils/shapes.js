@@ -129,9 +129,10 @@ export class UpgradeButton {
     }
     update() {
         this.cost = this.costCallback();
+        Invalidate();
     }
     checkAvailable(money) {
-        if (money >= cost) {
+        if (money >= this.cost) {
             this.intColor = this.activeColor;
         }
         else {

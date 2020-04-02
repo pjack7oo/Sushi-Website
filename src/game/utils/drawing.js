@@ -12,6 +12,8 @@ import * as ingredientMenu from '../objects/ingredientmenu.js';
 import * as ingredientBox  from '../objects/ingredientbox.js';
 import * as clock       from   '../objects/clock.js';
 import { drawTable } from '../objects/table.js'
+import * as levelControl from '../objects/level.js';
+import * as player from '../objects/player.js';
 
 
 
@@ -22,6 +24,11 @@ var context = canvas.getContext('2d');
 var validCanvas = false;
 var gridActive  = false;// for faster drawing during building
 
+
+
+export function getCanvasValidity() {
+    return validCanvas;
+}
 function render(lagOffset) //probably will be removed
 {
     clear(context);
@@ -66,7 +73,7 @@ export function printAtWordWrap(context, text, x, y, lineHeight, maxWidth, textC
     context.font = font;
     context.textAlign = alignment;
     context.fillStyle = textColor;
-
+    
     var lines = text.split("\n");
 
     for (var i = 0; i < lines.length; i++) {
@@ -218,6 +225,10 @@ export function draw() {
         //     context.strokeRect(mySelect.renderType.x, mySelect.renderType.y, mySelect.renderType.w, mySelect.renderType.h);
         // }
         clock.drawClock(context);
+        printAtWordWrap(context,"Level: ",300, 20, 10, 100, "Blue", "20px Arial", "center");
+        printAtWordWrap(context,levelControl.getCurrentLevel().toString(),330, 20, 10, 30, "Blue", "20px Arial");
+        printAtWordWrap(context,"Money: ",0, 20, 10, 100, "Green", "20px Arial", "left");
+        printAtWordWrap(context,player.getCurrentMoney().toString(),70, 20, 10, 100, "Green", "20px Arial", "left");
         //draw on top like stats
         drawGrid();
         validCanvas = true;
@@ -341,14 +352,23 @@ export function drawButtons(ctx, buttons) {
         ctx.font = button.font;
         ctx.textAlign = button.fontLoc;
         ctx.fillStyle = button.textColor;
-        if (button.text == undefined) {
-            button.text = button.cost.toString();
-        }
+        
         printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
     }
 
 }
-
+export function drawUpgradeButtons(ctx, buttons) {
+    for (let button of buttons) {
+        drawShape(ctx, button);
+        ctx.font = button.font;
+        ctx.textAlign = button.fontLoc;
+        ctx.fillStyle = button.textColor;
+        
+        button.text = button.cost.toString();
+        
+        printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
+    }
+}
 function drawImage(ctx, object) {
     ctx.drawImage(object.image, object.x, object.y, object.w, object.h);
 }

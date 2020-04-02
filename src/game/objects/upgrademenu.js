@@ -36,7 +36,7 @@ function upgradeMenuClick(e) {
 
 function checkButtons(e) {
     let mouse = ioControl.getMouse(e);
-    console.log(mouse);
+    
     
     for (let button of upgradeButtons) {
         button.checkHover(mouse);
@@ -64,7 +64,7 @@ function upgradeDraw()
     riceCookerUpgradesDraw();
     
     ioControl.drawIoButtons();
-    drawing.drawButtons(context, upgradeButtons);
+    drawing.drawUpgradeButtons(context, upgradeButtons);
     
 }
 

@@ -103,13 +103,13 @@ function levelUpdate() {
     levelDraw();
 }
 
+export function getCurrentLevel() {
+    return currentLevel;
+}
+
 function levelDraw() {
 
     drawing.draw();
-    drawing.printAtWordWrap(context,"Level: ",300, 20, 10, 100, "Blue", "20px Arial", "center");
-    drawing.printAtWordWrap(context,currentLevel.toString(),330, 20, 10, 30, "Blue", "20px Arial");
-    drawing.printAtWordWrap(context,"Money: ",0, 20, 10, 100, "Green", "20px Arial", "left");
-    drawing.printAtWordWrap(context,player.getCurrentMoney().toString(),70, 20, 10, 100, "Green", "20px Arial", "left");
     
 }
 function checkCustomerAvailable() {
