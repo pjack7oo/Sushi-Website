@@ -77,7 +77,7 @@ function startNextLevel() {
 
 
 function riceCookerUpgradesSetup() {
-    upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,100,200,100,50, 10, riceCooker.getCookTimeUpgradeCost(),
+    upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,100,38,100,50, 10, riceCooker.getCookTimeUpgradeCost(),
         'Black', "20px Arial", "Gray", "Green", "Red", riceCooker.riceCookerUpgradeCookTime, riceCooker.getCookTimeUpgradeCost, "Rice Cooker Upgrade Cook Time"));
     
 }
@@ -97,7 +97,9 @@ function teaKettleUpgradesSetup() {
 }
 
 function riceCookerUpgradesDraw() {
-    drawing.drawRoundRect(context, 100, 10, 150, 200, 5, true, true, 'Gray', "Green", 1);
+    drawing.drawRoundRect(context, 0, 10, 200, 200, 5, true, true, 'Gray', "Green", 1);
+    drawing.printAtWordWrap(context, "RiceCooker", 100, 25, 20, 50, "Green", "20px Arial", "Center");
+    drawing.printAtWordWrap(context, "Cooking Time", 5, 50, 20, 50, 'Green', "20px Arial", "left" );
 }
 function storageBoxUpgradesDraw() {
 

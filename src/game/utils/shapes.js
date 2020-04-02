@@ -168,7 +168,7 @@ class Button {
         this.text = '';
         this.textColor = 'Black';
         this.font = '25px Arial';
-        this.fontLoc = 'Center';
+        this.fontLoc = 'center';
         this.intColor = 'Red';
         this.outColor = 'Gray';
         this.active = false;
