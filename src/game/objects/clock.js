@@ -47,7 +47,7 @@ function drawFace (context, x, y, radius) {
     grad.addColorStop(1, '#333');
 
     drawing.drawCircle(context, x, y, radius, true,'White', grad, 10);
-    drawing.drawCircle(context, x, y, radius*0.1, true, '#333', '#333', 1);
+    
 }
 
 function drawNumbers(context, x, y, radius) {
@@ -124,4 +124,5 @@ function drawBackground (context, x, y, pos, radius) {
 
     context.translate(-x, -y);
     context.closePath();
+    drawing.drawCircle(context, x, y, radius*0.1, true, '#333', '#333', 1);
 }
