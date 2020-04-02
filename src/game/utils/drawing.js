@@ -559,8 +559,10 @@ export function drawRollInSpeechBubble(x, y, w, h, roll, intColor, outColor) {
     drawShape(context, roll.renderType);
 
 }
-
-function drawGrid() {
+export function toggleGrid() {
+    gridActive = !gridActive;
+}
+export function drawGrid() {
     if (gridActive) {
         context.lineWidth = 1;
         for (let i = 0; i < 24; i++) {
