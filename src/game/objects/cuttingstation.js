@@ -85,7 +85,7 @@ export function checkCutRoll()
         }
     }
     
-        //drawProgressBar(cuttingStation.x, cuttingStation.y, cuttingStation.w, 20, precentComplete); //TODO implement drawProgressBar
+        //drawProgressBar(cuttingStation.x, cuttingStation.y, cuttingStation.w, 20, precentComplete); 
         //todo implement cutAnimation
 }
 

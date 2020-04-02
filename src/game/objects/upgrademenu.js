@@ -44,7 +44,7 @@ function checkButtons(e) {
 }
 
 function updateButtons() {
-    for(let button of updateButtons) {
+    for(let button of upgradeButtons) {
         button.update();
         button.checkAvailable(player.getCurrentMoney());
     }
