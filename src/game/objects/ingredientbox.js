@@ -209,6 +209,31 @@ export function initIngredientBoxes() {
     ingredientBox2.fillIngredient(ingredients.ingredients.EEL);
 }
 
+export function resetIngredientBoxes() {
+    ingredientBox1.fillIngredient(ingredients.ingredients.AVOCADO);
+    ingredientBox1.fillIngredient(ingredients.ingredients.CRAB);
+    ingredientBox1.fillIngredient(ingredients.ingredients.CUCUMBER);
+    ingredientBox2.fillIngredient(ingredients.ingredients.TUNA);
+    ingredientBox2.fillIngredient(ingredients.ingredients.SALMON);
+    ingredientBox2.fillIngredient(ingredients.ingredients.EEL);
+}
+
+export function upgradeIngredientBox1Storage() {
+    ingredientBox1.upgradeMaxStorage();
+}
+
+export function upgradeIngredientBox2Storage() {
+    ingredientBox2.upgradeMaxStorage();
+}
+
+export function getIngredientBox1UpgradeCost() {
+    return ingredientBox1.storageUpgradeCost;
+    
+}
+
+export function getIngredientBox2UpgradeCost() {
+    return ingredientBox2.storageUpgradeCost;
+}
 
 
 export function drawIngredientBoxes(context) {
