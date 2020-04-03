@@ -6,6 +6,8 @@ import * as plateControl from './plates.js';
 import * as player   from './player.js';
 
 var customers = [];
+var customerImage = new Image();
+customerImage.src = './game/images/Cat.png';
 var startWaitTime = 0;
 var waitTime = 4000;
 var wait = false;
@@ -26,8 +28,7 @@ class Customer {
         this.isThinking = true;
         this.want = [];
         this.boostedMoral = false;
-        this.image = new Image();
-        this.image.src = './game/images/Cat.png';
+        this.image = customerImage;
         this.reviewer = false;
         this.money = 20;
         this.id = 0;
