@@ -7,6 +7,8 @@ import * as ingredients from './objects/ingredients.js';
 import * as customers   from './objects/customers.js';
 import * as shapes      from './utils/shapes.js';
 import * as levelControl from './objects/level.js';
+import * as upgradeMenu from  './objects/upgrademenu.js';
+import * as ingredientBox from './objects/ingredientbox.js';
 
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
@@ -50,7 +52,8 @@ function init()
         styleBorderLeft  = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderLeftWidth'], 10) || 0;
         styleBorderTop   = parseInt(document.defaultView.getComputedStyle(canvas, null)['borderTopWidth'], 10)  || 0;
     }
-    
+    upgradeMenu.upgradeInit(canvas);
+    ingredientBox.initIngredientBoxes();
     // rollControl.rollListInit();
     // plates.createPlate();
     // //console.log(plates.plateHolder);
@@ -150,7 +153,7 @@ function startGame()
     // ingredients.createCucumber(100, 240);
     // //customers.getRandomCustomer();
     // drawing.Invalidate();
-
+    clearInterval(activeInterval);
     levelControl.startLevel(0);
 }
 
@@ -161,11 +164,11 @@ function startGame()
 //     ioControl.checkButtons(mousePos);
 // }
 
-function startScreen()
+export function startScreen()
 {
 
     ioControl.addButton(shapes.createButton(300,350, 100, 50, "Start", true, 1, startGame, "StartGame-Start"));
-    
+    ioControl.addButton(shapes.createButton(200,350, 100, 50, "Upgrade", true, 1, upgradeMenu.upgradeScreen, "StartGame-Start"));
     canvas.addEventListener('click', ioControl.buttonClick, false);
 
     activeInterval = setInterval(startUpdate, interval);

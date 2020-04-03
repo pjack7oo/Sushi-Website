@@ -1,11 +1,14 @@
 
-export const shapeType = {
+//import {hasEnoughMoney} from '../objects/player.js';
+import { Invalidate } from "./drawing.js";
+
+export const shapeType = Object.freeze({
     RECTANGLE: 'Rectangle',
     CIRCLE   : 'Circle',
     IMAGE    : 'Image',
     ROUNDRECT: 'RoundRect',
     ROLL     : 'Roll'
-}
+});
 
 export class Box {
     constructor() {
@@ -103,6 +106,57 @@ export class Point {
     }
 }
 
+export class UpgradeButton {
+    constructor(type, x, y, w, h, radius, cost, textColor, font, outColor, activeColor, inactiveColor, callback, costCallback, name) {
+        this.type   = type;
+        this.x      = x;
+        this.y      = y;
+        this.w      = w;
+        this.h      = h;
+        this.radius = radius;
+        this.cost   = cost;
+        this.textColor = textColor;
+        this.font   = font;
+        this.outColor = outColor;
+        this.intColor = inactiveColor;
+        this.inactiveColor = inactiveColor;
+        this.activeColor   = activeColor;
+        this.callBack =    callback;
+        this.costCallback = costCallback;
+        this.name         = name;
+        this.fill = true;
+        this.stroke = true;
+    }
+    update() {
+        this.cost = this.costCallback();
+        Invalidate();
+    }
+    checkAvailable(money) {
+        if (money >= this.cost) {
+            this.intColor = this.activeColor;
+        }
+        else {
+            this.intColor = this.inactiveColor;
+        }
+        Invalidate();
+    }
+    checkHover(mouse) {
+        let rect = {
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h
+        }
+        if (inRect(mouse.x, mouse.y, rect)) {
+            this.intColor = this.activeColor;
+        }
+        else {
+            this.intColor = this.inactiveColor;
+        }
+        Invalidate();
+    }
+}
+
 class Button {
     constructor() {
         this.type = shapeType.RECTANGLE;
@@ -114,7 +168,7 @@ class Button {
         this.text = '';
         this.textColor = 'Black';
         this.font = '25px Arial';
-        this.fontLoc = 'Center';
+        this.fontLoc = 'center';
         this.intColor = 'Red';
         this.outColor = 'Gray';
         this.active = false;

@@ -11,6 +11,8 @@ import * as rollingMatt from './rollingmatt.js';
 import * as player      from './player.js';
 import * as ingredientMenu from './ingredientmenu.js';
 import * as ingredientBox  from './ingredientbox.js';
+import * as clock         from './clock.js';
+import * as upgradeMenu   from './upgrademenu.js';
 
 
 
@@ -56,7 +58,8 @@ export function startLevel() {
     canvas.addEventListener('keydown', ioControl.doKeyPress, false);
     // add custom init
     //plates.createPlate();
-    ingredientBox.initIngredientBoxes();
+    clock.resetClock();
+    
     ingredientMenu.ingredientsMenuInit(context);
     rollingMatt.clearMatt();
     //ingredients.clearActiveIngredients();
@@ -76,6 +79,7 @@ export function startLevel() {
     //         levelUpdate(context);
     //         break
     // }
+    
     levelUpdate(context);
 }
 
@@ -83,7 +87,7 @@ function levelUpdate() {
     activeInterval = requestAnimationFrame(levelUpdate);
     
     customers.updateCustomers();
-    ingredientMenu.updateMenu();
+    //ingredientMenu.updateMenu();
     checkLevelTime();
     if (checkLevelEnd()) {
         nextLevel(context);
@@ -99,13 +103,13 @@ function levelUpdate() {
     levelDraw();
 }
 
+export function getCurrentLevel() {
+    return currentLevel;
+}
+
 function levelDraw() {
 
     drawing.draw();
-    drawing.printAtWordWrap(context,"Level: ",300, 20, 10, 100, "Blue", "20px Arial", "center");
-    drawing.printAtWordWrap(context,currentLevel.toString(),330, 20, 10, 30, "Blue", "20px Arial");
-    drawing.printAtWordWrap(context,"Money: ",0, 20, 10, 100, "Green", "20px Arial", "left");
-    drawing.printAtWordWrap(context,player.getCurrentMoney().toString(),70, 20, 10, 100, "Green", "20px Arial", "left");
     
 }
 function checkCustomerAvailable() {
@@ -133,7 +137,7 @@ function checkLevelTime() {
         elapsedTime = currentTime - startTime,
         precentage  = (elapsedTime / maxTime)*100;
         //console.log(precentage);
-          
+        clock.updateClockProgress(precentage);
             
         if (precentage >= 100)
         {
@@ -147,10 +151,11 @@ function nextLevel(context) {
     cancelAnimationFrame(activeInterval);
     activeInterval = undefined;
     currentLevel += 1;
-    ioControl.clearButtons();
-    ioControl.addButton(shapes.createButton(350,200,100,50,"Next", true, 1, startLevel, "StartLevel-Next"));
-    canvas.addEventListener('click', ioControl.buttonClick, false);
-    nextLevelScreen();
+    // ioControl.clearButtons();
+    // ioControl.addButton(shapes.createButton(350,200,100,50,"Next", true, 1, startLevel, "StartLevel-Next"));
+    // canvas.addEventListener('click', ioControl.buttonClick, false);
+    // nextLevelScreen();
+    upgradeMenu.upgradeScreen();
 }
 //display money made and button to continue to next level
 function nextLevelScreen() {

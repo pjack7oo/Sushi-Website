@@ -5,6 +5,7 @@ import { getFromMatt, changeFromMatt } from '../utils/iocontrol.js';
 import * as ingredients from './ingredients.js'
 import * as ingredientBox from './ingredientbox.js';
 import * as  riceCooker  from './riceCooker.js';
+import * as player       from './player.js';
 
 var canvas = document.getElementById('canvas');
 
@@ -26,7 +27,23 @@ export const rollingMatt = {
     lineWidth: 1,
     image: null,
     startTime: 0,
-    isActive: false
+    isActive: false,
+    speed: 5,//seconds
+    speedUpgradeCost: 500
+}
+
+export function getSpeedUpgradeCost() {
+    return rollingMatt.speedUpgradeCost;
+}
+
+export function upgradeSpeed() {
+    if (player.hasEnoughMoney(rollingMatt.speedUpgradeCost)) {
+        player.removeMoney(rollingMatt.speedUpgradeCost);
+        rollingMatt.speed -= 0.5;
+        rollingMatt.speedUpgradeCost += 500;
+        return true;
+    }
+    return false;
 }
 
 function drawIngredients(context)
@@ -253,10 +270,10 @@ export function drawRollingMatt(context) {
     }
     
     if (isInnerIngredient()) {
-        context.fillText('Inner', 350, 399);
+        context.fillText('Inner', rollingMatt.x + rollingMatt.w/2, rollingMatt.y - 10);
     }
     else {
-        context.fillText('Outer', 350, 399);
+        context.fillText('Outer', rollingMatt.x + rollingMatt.w/2, rollingMatt.y - 10);
     }
     drawIngredients(context);
 }

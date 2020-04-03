@@ -1,7 +1,8 @@
 import * as shapes from '../utils/shapes.js'
 import * as drawing from '../utils/drawing.js';
-import * as ingredients from '../objects/ingredients.js';
+import * as ingredients from './ingredients.js';
 import * as ioControl   from '../utils/iocontrol.js';
+import * as player from './player.js';
 
 
 
@@ -19,9 +20,40 @@ export const riceCooker = {
     startTime: 0,
     isActive: false,
     riceCount: 4,
-    rice: null
+    rice: null,
+    cookTime:15,//seconds
+    cookTimeUpgradeCost: 500,
+    riceCountUpgradeCost: 500
 
 }
+
+export function getCookTimeUpgradeCost () {
+    return riceCooker.cookTimeUpgradeCost;
+}
+
+export function getRiceCountUpgradeCost () {
+    return riceCooker.riceCountUpgradeCost;
+}
+export function riceCookerUpgradeCookTime() {
+    if (player.hasEnoughMoney(riceCooker.cookTimeUpgradeCost)) {
+        player.removeMoney(riceCooker.cookTimeUpgradeCost);
+        riceCooker.cookTime --;
+        riceCooker.cookTimeUpgradeCost += 500;
+        return true
+    }
+    return false;
+}
+
+export function riceCookerUpgradeRiceCount() {
+    if (player.hasEnoughMoney(riceCooker.riceCountUpgradeCost)) {
+        player.removeMoney(riceCooker.riceCountUpgradeCost);
+        riceCooker.riceCount ++;
+        riceCooker.riceCountUpgradeCost += 500;
+        return true
+    }
+    return false;
+}
+
 
 export function checkRiceShape(mouse, context) {
     

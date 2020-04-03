@@ -154,16 +154,20 @@ export function pushRoll(roll)
     madeRolls.push(roll);
 }
 
-function getRoll(box)
-{
-    for (let i = 0; i <madeRolls.length;i++)
-    {
-        if (box.x == madeRolls[i].box.x && box.y == madeRolls[i].box.y)
-        {
-            return madeRolls[i];
-        }
-    }
-    return null;
+// function getRoll(box)
+// {
+//     for (let i = 0; i <madeRolls.length;i++)
+//     {
+//         if (box.x == madeRolls[i].box.x && box.y == madeRolls[i].box.y)
+//         {
+//             return madeRolls[i];
+//         }
+//     }
+//     return null;
+// }
+
+export function getRoll(number) {
+    return rollList.rolls[number];
 }
 
 export function removeRoll(roll)

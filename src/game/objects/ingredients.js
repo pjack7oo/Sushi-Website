@@ -25,6 +25,7 @@ export class Ingredient {
         this.canEnterCuttingStation = false;
         this.canEnterPlate = false;
         this.canSell = false;
+        this.cost    = 10;
     }
 
     
@@ -64,7 +65,7 @@ export function getIngredientColor(ingredient)
             break;
         case ingredients.TUNA:
             color.intColor = "#D90D36";
-            color.outColor = "#D90D36";
+            color.outColor = "#CF0C33";
             break;
     }
 
@@ -104,6 +105,39 @@ export function getIngredientRenderType(ingredient, x, y)
     return shape;
 }
 
+export function getIngredientCost(ingredient) {
+    let cost;
+    switch(ingredient)
+    {
+        default:
+            console.log("no shape");
+            
+            break;
+        case ingredients.AVOCADO:
+            cost = 30;
+            break;
+        case ingredients.CRAB:
+            cost = 30;
+            break;
+        case ingredients.CUCUMBER:
+            cost = 20;
+            break;
+        case ingredients.EEL:    
+            cost = 50;
+            break;
+        case ingredients.SALMON:
+            cost = 50;
+            break;
+        case ingredients.TUNA:
+            cost = 50;
+            break;
+    }
+
+    return cost;
+}
+
+
+
 
 export function clearActiveIngredients() {
     activeIngredients = [];
@@ -122,6 +156,7 @@ function createIngredient(name, renderType)
     var ingredient = new Ingredient();
     ingredient.name = name;
     ingredient.renderType = renderType;
+    ingredient.cost = getIngredientCost(name);
     return ingredient;
 }
 
@@ -130,6 +165,7 @@ export function createRice(x,y)
     var box =  new shapes.RoundRect(x, y, 60, 60, 10, 'White', 'White', true, true);
     
     var rice = createIngredient(ingredients.RICE, box);
+    rice.cost = 10;
     return rice;
     //activeIngredients.push(rice);
 }
@@ -138,6 +174,7 @@ export function createCucumber(x,y)
 {
     var box = shapes.createBox(x, y, 50, 10, true, "#E9FF96", "#67AB05");
     var cucumber = createIngredientWithXY(ingredients.CUCUMBER, x, y);
+    cucumber.cost = 20;
     //return cucumber;
     activeIngredients.push(cucumber);
 }
@@ -146,6 +183,7 @@ export function createCrab(x,y)
 {
     var box = shapes.createBox(x, y, 50, 20, true, 'white', 'red');
     var crab = createIngredientWithXY(ingredients.CRAB, x, y);
+    crab.cost = 30;
     //return crab;
     activeIngredients.push(crab);
 }
@@ -154,7 +192,14 @@ export function createAvocado(x,y)
 {
     var box = shapes.createBox(x, y, 50, 20, true, "#F2E880", "#356211");
     var avocado = createIngredientWithXY(ingredients.AVOCADO, x, y);
+    avocado.cost = 30;
     activeIngredients.push(avocado);
+}
+
+export function  createTuna(x, y) {
+    var tuna = createIngredientWithXY(ingredients.TUNA, x, y);
+    tuna.cost = 30;
+    activeIngredients.push(tuna);
 }
 
 // export function drawActiveIngredients(context)

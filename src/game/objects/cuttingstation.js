@@ -3,6 +3,8 @@ import * as drawing from '../utils/drawing.js';
 import * as ioControl from '../utils/iocontrol.js';
 import * as shapes from '../utils/shapes.js';
 import * as progBar from '../utils/progressBar.js';
+import { rollingMatt } from './rollingmatt.js';
+import * as player from './player.js';
 
 const shapeType = {
     RECTANGLE: 'Rectangle',
@@ -25,16 +27,42 @@ export const cuttingStation = {
     item: null,
     startTime: 0,
     isActive: false,
-    cuttingSpeed: 1 ,
+    cuttingSpeed: 8, //seconds ,
+    cuttingSpeedCost: 500,
     progress: 0,
+
 }
 var bar = new progBar.progressbar(cuttingStation.x, cuttingStation.y -60, cuttingStation.w, 20);
+
+export function getCuttingSpeedCost() {
+    return cuttingStation.cuttingSpeedCost;
+}
+
+export function upgradeCuttingSpeed() {
+    if (player.hasEnoughMoney(cuttingStation.cuttingSpeedCost)) {
+        player.removeMoney(cuttingStation.cuttingSpeedCost);
+        cuttingStation.cuttingSpeed --;
+        cuttingStation.cuttingSpeedCost += 500;
+        return true;
+    }
+    return false;
+}
+
+export function buyNewCuttingBoard() {
+    if (player.hasEnoughMoney(2000)) {
+        //todo buy cutting board
+    }
+}
+export function getSecondBoardCost() {
+    return 2000;
+}
+
 export function checkCutRoll()
 {
     if (cuttingStation.isActive == true){
         let currentTime     = performance.now(),
             elapsedTime     = currentTime - cuttingStation.startTime,
-            percentComplete = elapsedTime / (8000 / cuttingStation.cuttingSpeed) * 100;
+            percentComplete = elapsedTime / (cuttingStation.cuttingSpeed*1000) * 100;
             cuttingStation.progress = percentComplete;
             drawing.Invalidate();
             
@@ -60,7 +88,7 @@ export function checkCutRoll()
         }
     }
     
-        //drawProgressBar(cuttingStation.x, cuttingStation.y, cuttingStation.w, 20, precentComplete); //TODO implement drawProgressBar
+        //drawProgressBar(cuttingStation.x, cuttingStation.y, cuttingStation.w, 20, precentComplete); 
         //todo implement cutAnimation
 }
 

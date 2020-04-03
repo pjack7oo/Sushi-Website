@@ -3,6 +3,7 @@ import * as drawing from '../utils/drawing.js';
 import * as rolls   from  './rolls.js';
 import * as progBar from '../utils/progressBar.js';
 import * as plateControl from './plates.js';
+import * as player   from './player.js';
 
 var customers = [];
 var startWaitTime = 0;
@@ -28,7 +29,7 @@ class Customer {
         this.image = new Image();
         this.image.src = './game/images/Cat.png';
         this.reviewer = false;
-        this.money = 10;
+        this.money = 20;
         this.id = 0;
         this.setProgress = (progress) => {
                 this.progress =progress;
@@ -67,11 +68,20 @@ export function getLevelCustomer(level) {
     customers.push(customer);
     drawing.Invalidate();
 }
-
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
 function getWantedRoll(customer, level = 0)
 {
     switch(level) {
         default:
+            var i = getRandomInt(2);
+            console.log(i);
+            
+            var roll = rolls.getRoll(i);
+            customer.want.push(roll);
+            break;
+        case 0:
             var roll = rolls.CaliforniaRoll;
             customer.want.push(roll);
             break;
@@ -97,7 +107,7 @@ function drawCustomer(ctx, customer)
     if (customer.isThinking)
     {
         drawing.drawSpeechBubble(customer.x, customer.y - 50, customer.w, 50,
-             '...', '10px Arial', 'black');
+             '...', '20px Arial', 'black');
     }
     else {
         drawWantedRolls(ctx, customer.x, customer.y - 50 , customer.w, 50, customer)
@@ -109,7 +119,7 @@ function drawWantedRolls(ctx, x, y, w, h, customer)
     drawing.drawRoundRectWPoint(ctx, x, y, w, h+15, 
         10,true, true, '#add8e6', 'grey');
     
-    drawing.printAtWordWrap(ctx, customer.want[0].name, x + w/2, y + h+13, 15, w, 'Black', '15px Arial', "center");
+    drawing.printAtWordWrap(ctx, customer.want[0].name, x + w/2, y + h+5, 15, w, 'Black', '15px Arial', "center");
     customer.want[0].isCut = true;
     rolls.drawRollWithCoords(ctx, x + w/2, y + h/2, 10, customer.want[0]);
     
@@ -162,7 +172,8 @@ function checkCustomerOrder(customer, plate)
                 customerLeave(customer);
                 wait = true;
                 startWaitTime = performance.now();
-                drawing.Invalidate()
+                drawing.Invalidate();
+                player.addMoney(customer.money);
                 return money;
             }
         }
