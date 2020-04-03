@@ -129,6 +129,8 @@ export function cutRoll()
 
 export function checkCuttingStation(mySelect)
 {
+    console.log(cuttingStation.item);
+    
     if (mySelect != null){
         if (mySelect.canEnterCuttingStation == false)
         {
@@ -140,7 +142,7 @@ export function checkCuttingStation(mySelect)
             drawing.Invalidate();
             return;
         }
-        if (shapes.Contains(cuttingStation,mySelect.renderType))
+        if (shapes.Contains(cuttingStation,mySelect.renderType) && cuttingStation.item == null)
         {
             cuttingStation.item = mySelect;
             console.log(cuttingStation.item);

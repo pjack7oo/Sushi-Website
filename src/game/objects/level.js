@@ -59,7 +59,7 @@ export function startLevel() {
     // add custom init
     //plates.createPlate();
     clock.resetClock();
-    
+    cutSt.resetCuttingStation();
     ingredientMenu.ingredientsMenuInit(context);
     rollingMatt.clearMatt();
     //ingredients.clearActiveIngredients();
