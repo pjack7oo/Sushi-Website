@@ -46,6 +46,7 @@ function exitUpgrade() {
     cancelAnimationFrame(activeInterval);
     drawing.toggleGrid();
     ioControl.clearButtons();
+    canvas.removeEventListener('click', upgradeMenuClick, false);
     game.startScreen();
 }
 
