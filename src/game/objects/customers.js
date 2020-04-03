@@ -29,7 +29,7 @@ class Customer {
         this.image = new Image();
         this.image.src = './game/images/Cat.png';
         this.reviewer = false;
-        this.money = 10;
+        this.money = 20;
         this.id = 0;
         this.setProgress = (progress) => {
                 this.progress =progress;
@@ -68,12 +68,14 @@ export function getLevelCustomer(level) {
     customers.push(customer);
     drawing.Invalidate();
 }
-
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
 function getWantedRoll(customer, level = 0)
 {
     switch(level) {
         default:
-            var i = Math.floor(Math.random()*1);
+            var i = getRandomInt(2);
             console.log(i);
             
             var roll = rolls.getRoll(i);
