@@ -353,7 +353,7 @@ export function drawButtons(ctx, buttons) {
         ctx.textAlign = button.fontLoc;
         ctx.fillStyle = button.textColor;
         
-        printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
+        printAtWordWrap(ctx, button.text, button.x + button.w / 2 + 3, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
     }
 
 }
@@ -366,7 +366,7 @@ export function drawUpgradeButtons(ctx, buttons) {
         
         button.text = button.cost.toString();
         
-        printAtWordWrap(ctx, button.text, button.x + button.w / 2, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
+        printAtWordWrap(ctx, button.text, button.x + button.w / 2+3, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
     }
 }
 function drawImage(ctx, object) {
