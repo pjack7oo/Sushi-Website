@@ -59,7 +59,7 @@ export function startLevel() {
     // add custom init
     //plates.createPlate();
     clock.resetClock();
-    ingredientBox.initIngredientBoxes();
+    
     ingredientMenu.ingredientsMenuInit(context);
     rollingMatt.clearMatt();
     //ingredients.clearActiveIngredients();
@@ -87,7 +87,7 @@ function levelUpdate() {
     activeInterval = requestAnimationFrame(levelUpdate);
     
     customers.updateCustomers();
-    ingredientMenu.updateMenu();
+    //ingredientMenu.updateMenu();
     checkLevelTime();
     if (checkLevelEnd()) {
         nextLevel(context);
