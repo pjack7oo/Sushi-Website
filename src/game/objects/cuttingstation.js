@@ -53,13 +53,16 @@ export function buyNewCuttingBoard() {
         //todo buy cutting board
     }
 }
+export function getSecondBoardCost() {
+    return 2000;
+}
 
 export function checkCutRoll()
 {
     if (cuttingStation.isActive == true){
         let currentTime     = performance.now(),
             elapsedTime     = currentTime - cuttingStation.startTime,
-            percentComplete = elapsedTime / (8000 / cuttingStation.cuttingSpeed) * 100;
+            percentComplete = elapsedTime / (cuttingStation.cuttingSpeed*1000) * 100;
             cuttingStation.progress = percentComplete;
             drawing.Invalidate();
             
