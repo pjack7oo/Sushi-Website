@@ -235,6 +235,7 @@ export function myUp() {
 }
 
 function checkButtons(mouse) {
+  
   for (let button of buttons) {
     if (inBounds(mouse, button)) {
       console.log(true);
