@@ -9,28 +9,34 @@ var customers = [];
 var customerImage = new Image();
 customerImage.src = './game/images/Cat.png';
 var startWaitTime = 0;
-var waitTime = 4000;
-var wait = false;
+var waitTime = 4;//seconds
+var wait = true;
+var availableSlots = [];
 var colors = ["red","red","OrangeRed","OrangeRed","DarkOrange","Orange","Gold","yellow","GreenYellow","LawnGreen","Lime"];
+export function customerINit(slots) {
+    for(let i=0;i <slots;i++){
+        availableSlots.push(i);
+    }
+}
 class Customer {
-    constructor() {
+    constructor(difficulty,offset) {
         //this.renderType   = shapes.;
         this.type = shapes.shapeType.IMAGE;
-        this.x = 0;
+        this.x = 0 + offset*110;
         this.y = 100;
         this.w = 100;
         this.h = 200;
         this.xOffset = -30;
         this.yOffset = -20;
-        this.thinkingTime = 5000;
-        this.temperTime = 20000;
+        this.thinkingTime = 5; //seconds
+        this.temperTime = 40; //seconds
         this.startTime = 0;
         this.isThinking = true;
         this.want = [];
         this.boostedMoral = false;
         this.image = customerImage;
         this.reviewer = false;
-        this.money = 20;
+        this.money = 15;
         this.id = 0;
         this.setProgress = (progress) => {
                 this.progress =progress;
@@ -38,12 +44,17 @@ class Customer {
             }
         this.progress = 0;
         this.bar = null;
+        //this.difficulty == difficulty;//
+        if (difficulty ==1) {
+            this.money = 30;
+            //this.temperTime = 50;
+        }
     }
 }
 
-export function getRandomCustomer()
+export function getRandomCustomer(difficulty)
 {
-    var customer = new Customer();
+    var customer = new Customer(difficulty);
     startTime(customer);
     customer.id = customers.length -1;
     customers.push(customer);
@@ -55,8 +66,14 @@ export function getCustomerLength() {
     return customers.length;
 }
 
-export function getLevelCustomer(level) {
-    var customer = new Customer();
+export function getLevelCustomer(level, difficulty) {
+    let offset = 0;
+    if (customers.length>0) {
+        if (customers[0].x==0) {
+            offset = 1;
+        }
+    }
+    var customer = new Customer(difficulty,offset);
     startTime(customer);
     console.log(customer);
     customer.bar =new progBar.progressbar(customer.x, customer.y -72, customer.w, 20);
@@ -65,27 +82,46 @@ export function getLevelCustomer(level) {
         default:
             getWantedRoll(customer, level);
             break;
+            // case (level%10 ==0 ? level : null):
+            //     difficulty++;
+            //     getWantedRoll(customer, level);
     }
+    if (difficulty == 1) {
+        let i = getRandomInt(100);
+        if (i >50) {
+            customer.temperTime == 50;
+            getWantedRoll(customer, level);
+        }
+        
+    }
+    //getWantedRoll(customer, level);
     customers.push(customer);
     drawing.Invalidate();
 }
-function getRandomInt(max) {
+export function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
+
 function getWantedRoll(customer, level = 0)
 {
+   
+    console.log(level, level%10===0);
+    
     switch(level) {
+        
+        case 0:
+            var roll = rolls.CaliforniaRoll;
+            customer.want.push(roll);
+            
+            break;
         default:
             var i = getRandomInt(2);
-            console.log(i);
+            //console.log(i);
             
             var roll = rolls.getRoll(i);
             customer.want.push(roll);
             break;
-        case 0:
-            var roll = rolls.CaliforniaRoll;
-            customer.want.push(roll);
-            break;
+        
     }
 
 }
@@ -109,9 +145,11 @@ function drawCustomer(ctx, customer)
     {
         drawing.drawSpeechBubble(customer.x, customer.y - 50, customer.w, 50,
              '...', '20px Arial', 'black');
+        drawing.printAtWordWrap(ctx,customer.want.length.toString(),customer.x+10, customer.y - 20,10,10,"Red","25px Arial","center");
     }
     else {
-        drawWantedRolls(ctx, customer.x, customer.y - 50 , customer.w, 50, customer)
+        drawWantedRolls(ctx, customer.x, customer.y - 50 , customer.w, 50, customer);
+        drawing.printAtWordWrap(ctx,customer.want.length.toString(),customer.x+10, customer.y - 20,10,10,"Red","25px Arial","center");
     }
 }
 
@@ -165,18 +203,25 @@ function checkCustomerOrder(customer, plate)
         console.log(plate.roll.name);
         
         if (plate.roll.name == wantedRoll.name){
+            console.log("roll correct",customer.want.length );
+            
             rollToRemove = wantedRoll;
             customer.want.splice(find(isWantedRoll),1);
             plateControl.removePlate(plate);
-            if (customer.want.length == 0) {
+            if (customer.want.length != 0) {
+                customer.temperTime +20;
+                drawing.Invalidate();
+            }
+            else {
                 let money = customer.money;
                 customerLeave(customer);
-                wait = true;
+                //wait = true;
                 startWaitTime = performance.now();
                 drawing.Invalidate();
                 player.addMoney(customer.money);
                 return money;
             }
+            
         }
         else {
             plateControl.removePlate(plate);
@@ -209,7 +254,7 @@ export function updateCustomers() {
         if (customer.isThinking)
         {
             let elapsedTime = currentTime - customer.startTime,
-                percentage  = (elapsedTime / customer.thinkingTime)*100;
+                percentage  = (elapsedTime / (customer.thinkingTime*1000))*100;
             
             // customer.setProgress(percentage);
             drawing.Invalidate();
@@ -223,7 +268,7 @@ export function updateCustomers() {
         }
         else {
             let elapsedTime = currentTime - customer.startTime,
-                percentage  = (elapsedTime / customer.temperTime)*100;
+                percentage  = (elapsedTime / (customer.temperTime*1000))*100;
             //console.log(percentage);
             
             customer.setProgress(percentage);
@@ -231,36 +276,51 @@ export function updateCustomers() {
             if (percentage >= 100)
             {
                 customerLeave(customer);
-                wait = true;
+                //wait = true;
                 startWaitTime = performance.now();
                 drawing.Invalidate();
             }
         }
     }
 }
-
+export function enableWait() {
+    wait = true;
+    startWaitTime = performance.now();
+}
 export function updateGetCustomer() {
     if (wait) {
         let currentTime = performance.now(),
             elapsedTime = currentTime - startWaitTime,
-            percentage  = (elapsedTime / waitTime)*100;
+            percentage  = (elapsedTime / (waitTime*1000))*100;
             
             
             if (percentage >= 100)
             {
+                console.log("passed");
+                
                 wait = false;
                 return true;
             }
             return false;
     }
-    return true;
+    return false;
 }
 
 function customerLeave(customer) {
-    console.log(customer.id);
+    console.log(customer.id,"Bye");
     
-    //customers.splice(customer.id,1);
-    console.log(customers.splice(customer.id,1));
-    console.log(customers);
+    //customers.splice(customer.id,1);//
+    removeCustomer(customer.id);
+    //console.log(customers.splice(customer.id,1));
+    //console.log(customers);
+}
+
+function removeCustomer(id) {
+    let max = customers.length;
+    for (let i = 0; i<max;i++) {
+        if (customers[i].id == id ) {
+            customers.splice(i,1);
+        }
+    }
 }
 
