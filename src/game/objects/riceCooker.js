@@ -57,7 +57,7 @@ export function riceCookerUpgradeRiceCount() {
 
 export function checkRiceShape(mouse, context) {
     
-    drawing.drawShape(context, riceCooker.rice);
+    //drawing.drawShape(context, riceCooker.rice);
     let ret;
                 
     ret = ioControl.moveItem(mouse, riceCooker.rice);
