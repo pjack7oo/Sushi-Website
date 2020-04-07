@@ -106,13 +106,17 @@ function drawBackground (context, x, y, pos, radius) {
     
     var grad = context.createRadialGradient(x,y,radius, x,y, radius * 2);
     grad.addColorStop(0,'White');
-    grad.addColorStop(.5, colors[i]);
     
     
-    if (pos*100-oldnum > 10) {
+    
+    if (pos*100-oldnum > 10 && i >0) {
+        console.log(i,pos*100);
+        
         oldnum = pos*100;
-        grad.addColorStop(.5, colors[i--]);
+        i--
+        
     }
+    grad.addColorStop(.5, colors[i]);
     pos =  pos  *360;
     pos= 1.5*Math.PI+pos*Math.PI / 180;
     context.beginPath();
