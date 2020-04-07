@@ -18,7 +18,7 @@ import * as upgradeMenu   from './upgrademenu.js';
 
 var currentLevel = 0;
 // var levelCustomers = [];
-var availableCustomerCount = 2;
+var availableCustomerCount = 1;
 var startTime = 0;
 var maxTime   = 80;//seconds
 var levelActive = false;

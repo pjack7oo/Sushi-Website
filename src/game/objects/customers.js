@@ -317,10 +317,12 @@ function customerLeave(customer) {
 
 function removeCustomer(id) {
     let max = customers.length;
+    let custToRemove;
     for (let i = 0; i<max;i++) {
         if (customers[i].id == id ) {
-            customers.splice(i,1);
+            custToRemove = i;
         }
     }
+    customers.splice(custToRemove,1);
 }
 
