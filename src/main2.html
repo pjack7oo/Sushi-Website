@@ -8,29 +8,67 @@
   <meta name="Author" content="Piotr Jackowski">
 
   <link rel="icon" type="image/gif" href="../animated_favicon1.gif" >
-  <link href="style.css" rel="stylesheet">
+  <link href="./stylesheets/style.css" rel="stylesheet">
+  <link href="./stylesheets/login.css" rel='stylesheet'>
   <script src="script.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+    
 </head>
 <body>
+    <div id="login" class="modal">
+  
+        <form class="modal-content animate" action="/action_page.php" method="post">
+          <div class="imgcontainer">
+            <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <img src="../Images/Cat.png" alt="Avatar" class="avatar">
+          </div>
+      
+          <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="username" placeholder="Enter Username" name="uname" required>
+      
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+              
+            <button type="submit">Login</button>
+            <label>
+              <input type="checkbox" checked="checked" name="remember"> Remember me
+            </label>
+          </div>
+      
+          <div class="container" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('login').style.display='none'" class="cancelbutton">Cancel</button>
+            <span class="psw">Forgot <a href="#">password?</a></span>
+          </div>
+        </form>
+      </div>
     <div class="page-container">
         <header>
             <li><a href="#main">Home</a></li>
             <li><a href="#game">Game</a></li>
             <li><a href="#learn">Learn</a></li>
-            <li><a href="about.html">About</a></li>
+            <li><a href="#about">About</a></li>
+            <button id='loginButton' onclick="document.getElementById('login').style.display='block'" style="width:auto;">Login</button>
+            <script>
+                var loginForm = document.getElementById('login');
+                window.onclick = function(e) {
+                    if (e.target == loginForm) {
+                        loginForm.style.display = 'none';
+                    }
+                }
+            </script>
             <div class="search-bar">
                 <form>
                     <input type="text" placeholder="Search Rolls.." name="search">
                     <button type="submit"><i class="fa fa-search"></i></button>
                 </form>
-                
             </div>
         </header>
         <div class="borderLeft"></div>
         <div class="borderRight"></div>
+        
         <div class=Main>
             <a id="main"></a>
             <h1 align='center'>Sushi 101</h1>
@@ -160,6 +198,7 @@
         <footer id="footer">
             <!--external link-->
             <a href="http://www.youtube.com/">Youtube</a>
+            <a href="https://www.freepik.com/free-photos-vectors/fish">Fish vector created by agnessz_arts - www.freepik.com</a>
         </footer>    
     </div>
     

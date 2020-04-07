@@ -12,7 +12,7 @@ body {
         "main   main   main "
         "footer footer footer"; */
     gap: 10px;
-
+    
 }
 
 header {
@@ -216,7 +216,8 @@ header a:hover {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
+    text-align: center;
+    -webkit-text-size-adjust: auto;
     }
     
 
