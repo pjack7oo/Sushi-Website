@@ -27,7 +27,6 @@ const request = require('request');
 //     });
 //   });
 // });
-
 describe('test', () => {
 
   it('should return 200 status code', function(done) {
