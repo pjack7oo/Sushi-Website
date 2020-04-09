@@ -1,14 +1,15 @@
 language: node_js
 sudo: false
 node_js:
-    - 10
+- 10
 branch:
-    - master
+- master
 install:
-    - npm install
-script: 
-    - mocha
+- npm install
+script:
+- mocha
 deploy:
-    provider: heroku
-    api_key: bc4e25e3-140a-4198-b977-5f4a882437ae
-    app: young-stream-38284
+  provider: heroku
+  api_key:
+    secure: RZWs+b+kizzbnRvpdrq1vybGMmjvvi5eBRkX0xz8fyuzi9DPt2PGh9Jc2VPc13d7NWObSqy7DY/lXGPWjJeav7+I8SEDLO1QKeGy3u7o0FI1CkQ1elnWx/MfBIxKnw8cNeLji/OS0YmJ6MqPtd6uBYZeTh43+KHECjdAfvzHRTzPXiogGTDS4CLYcVoPRKmoVzGGZHz+DDwES0LxVPRbV/+m+xoVaF/cCfw3aoNalxR5jAvILqk42rlJUIzFQQQEfs0LsjHD7vsth+cs+e5xaUJJlKuhiRaKiUp87blrHdJzeLbwbet0UG1b8U8/fwtNipCgTJqRcuTlzWVnf3TQvyFqdrly7LRkGE9+f3UUUagxGvTftSRBWHm+BkoDrf6EbIvPXgpjZBlrUfoo7933kIZCcCDBWDzM04NnK4U5B9IervavHA5YxAPvgR4AETSE7h8M8PBSqrLtEYZz5gk0GI3u0iOS9X4TZVrivwiPR5+YmWCtGeQi9BIr5Og54B5vOCYKcCVKXJCv5W45AvSYRQ6qPlOt7sxB3/mxjsfBF+hFKz97sx7KBquyWtG953fGJV0/wkyvSZhEnCu6LrxQIfs+1qsAEdHlmPXB8pcOe6XixwI60SRoEXnMjoWd4wTRpWVmQ9nvMziqrrLELR8Vcr8UuRzGi/igXSWRGhmqwlg=
+  app: young-stream-38284
