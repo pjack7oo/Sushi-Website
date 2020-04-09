@@ -5,6 +5,7 @@ node_js:
     - 7
 branch:
     - master
+    - css-grid
 install:
     - npm install
 script: {
