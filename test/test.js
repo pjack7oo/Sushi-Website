@@ -1,7 +1,7 @@
 
 const expect = require('chai').expect
 const request = require('request');
-//const server = require('../server/index.js');
+const server = require('../server/index.js');
 
 //Start the app
 // const env = Object.assign({}, process.env, {PORT: 5000});
