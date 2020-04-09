@@ -8,7 +8,7 @@ branch:
 install:
     - npm install
 script:
-    "start" : node ./server/index.js
+    "start" : node /server/index.js
     "test"  : "mocha"
 deploy:
     provider: heroku
