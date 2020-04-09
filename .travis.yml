@@ -9,7 +9,7 @@ branch:
 install:
     - npm install
 script: {
-    "start" : ./server/index,js
+    "start" : ./server/index.js
     "test"  : mocha
 }
 deploy:
