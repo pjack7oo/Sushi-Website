@@ -48,6 +48,6 @@ describe('test', () => {
     });
   });
 
-  server.close();
+  
 });
 
