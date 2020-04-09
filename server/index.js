@@ -18,13 +18,19 @@ express()
   
   //.get('/', (req, res) => res.render('main2.html'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+  // .on('SIGTERM')
 
 
 
 
 
-
-
+  // process.on('SIGTERM', () => {
+  //   console.info('SIGTERM signal received.');
+  //   console.log('Closing http server.');
+  //   server.close(() => {
+  //     console.log('Http server closed.');
+  //   });
+  // });
 // var app = express();
 
 // const publicDir = path.join(__dirname, 'public');

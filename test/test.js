@@ -29,6 +29,11 @@ const server = require('../server/index.js');
 // });
 describe('test', () => {
 
+  after((done) => {
+    delete require.cache[require.resolve('../server/index.js')];
+    done();
+  });
+
   it('should return 200 status code', function(done) {
     request('http://localhost:5000', function(error, response, body) {
       expect(response.statusCode).to.equal(200);
@@ -43,6 +48,6 @@ describe('test', () => {
     });
   });
 
-
+  server.close();
 });
 
