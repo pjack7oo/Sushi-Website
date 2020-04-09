@@ -46,6 +46,7 @@ describe('test', () => {
   });
 
   after( function(done) {
+    server.close();
     delete require.cache[require.resolve('../server/index.js')];
     done();
   });
