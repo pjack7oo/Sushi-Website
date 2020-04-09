@@ -8,4 +8,4 @@ branch:
 install:
     - npm install
 script:
-    - npm index.js
+    - npm ./server/index.js
