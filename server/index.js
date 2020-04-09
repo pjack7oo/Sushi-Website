@@ -10,6 +10,10 @@ router.get('/',function(req,res){
   //__dirname : It will resolve to your project folder.
 });
 
+router.get('/', (req, res) => {
+  res.send('ci with travis');
+});
+
 express()
   .use(express.static(path.join(publicDir, 'public')))
   .use('/', router)
