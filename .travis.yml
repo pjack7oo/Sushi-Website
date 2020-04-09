@@ -7,9 +7,10 @@ branch:
     - master
 install:
     - npm install
-script:
-    - node ./server/index.js
-    - mocha"
+script: {
+    "start" : ./server/index,js
+    "test"  : mocha
+}
 deploy:
     provider: heroku
     api_key: bc4e25e3-140a-4198-b977-5f4a882437ae
