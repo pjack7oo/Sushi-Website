@@ -3,13 +3,15 @@ const path = require('path')
 const PORT = process.env.PORT || 5000
 const router = express.Router();
 
+const publicDir = path.join(__dirname, '../');
+
 router.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/public/main2.html'));
+  res.sendFile(path.join(publicDir + '/public/main2.html'));
   //__dirname : It will resolve to your project folder.
 });
 
 express()
-  .use(express.static(path.join(__dirname, 'public')))
+  .use(express.static(path.join(publicDir, 'public')))
   .use('/', router)
   
   
