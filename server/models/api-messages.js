@@ -10,5 +10,6 @@ ApiMessages.prototype.PASSWORD_RESET_EXPIRED        = 6;
 ApiMessages.prototype.PASSWORD_RESET_HASH_MISMATCH  = 7;
 ApiMessages.prototype.PASSWORD_RESET_EMAIL_MISMATCH = 8;
 ApiMessages.prototype.COULD_NOT_RESET_PASSWORD      = 9;
+ApiMessages.PASSWORD_CONFIRM_MISMATCH               = 10;
 
 module.exports = ApiMessages;
