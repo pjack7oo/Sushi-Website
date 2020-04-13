@@ -80,7 +80,35 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: "http://localhost:5000"
+            url: "http://localhost:5000/api/account/register",
+            data:"email=" + email + "&name=" + name + "&username=" + username +"&password=" + password + "&passwordConfirm=" + passwordConfirm,
+            success: function (resp) {
+                console.log("success");
+
+                if ( resp.success === true) {
+                    document.getElementById('register').style.display='none';
+                    return;
+                }
+                if (resp.extras.msg) {
+                    switch (resp.extras.msg) {
+                        case SushiCat.ApiMessages.DB_ERROR:
+                        case SushiCat.ApiMessages.COULD_NOT_CREATE_USER:
+                            $ctnErr.html("<p>Oops! SushiCat had a problem and could not register you.  Please try again in a few minutes.</p>");
+                            $ctnErr.addClass("bi-ctn-err").slideDown();
+                            break;
+                        case SushiCat.ApiMessages.USERNAME_ALREADY_EXISTS:
+                            $ctnErr.html("<p>The username that you provided is already registered.</p>");
+                            $ctnErr.addClass("bi-ctn-err").slideDown();
+                            $txtUname.addClass(invalidInputStyle);
+                            break;
+                    }
+                }
+            },
+            error: function (e) {
+                console.log(e.message);
+                $ctnErr.html("<p>Oops! SushiCat had a problem and could not register you.  Please try again in a few minutes.</p>");
+                $ctnErr.addClass("bi-ctn-err").slideDown();
+            }
         })
     })
 })
