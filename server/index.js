@@ -21,6 +21,7 @@ router.get('/',function(req,res){
   res.sendFile(path.join(publicDir + '/public/main2.html'));
   //__dirname : It will resolve to your project folder.
 });
+
 router.get('/about', function(req, res) {
   res.sendStatus(404);
 });
