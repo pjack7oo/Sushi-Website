@@ -7,7 +7,7 @@ branch:
 install:
 - npm install
 script:
-- mocha
+- mocha ./server/test
 deploy:
   provider: heroku
   api_key:
