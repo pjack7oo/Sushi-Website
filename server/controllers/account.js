@@ -1,4 +1,4 @@
-var AccountController = function(userModel, session, mailer) {
+var AccountController = function(userModel, session, userSession, mailer) {
     this.crypto           = require('crypto');
     this.uuid             = require('node-uuid');
     this.ApiResponse      = require('../models/api-response.js');
@@ -7,6 +7,7 @@ var AccountController = function(userModel, session, mailer) {
     this.User             = require('../models/user.js');
     this.userModel        = userModel;
     this.session          = session;
+    this.userSession      = userSession;
     this.mailer           = mailer;
 };
 
@@ -21,49 +22,65 @@ AccountController.prototype.setSession = function (session) {
 AccountController.prototype.hashPassword = function(password, salt, callback) {
     var iterations = 10000,
         keyLen     = 64;
-    this.crypto.pbkdf2(password, salt, iterations, keyLen, callback);
+    this.crypto.pbkdf2(password, salt, iterations, keyLen,'sha512', callback);
 }
 
 AccountController.prototype.logon = function(username, password, callback) {
+
     var me = this;
 
     me.userModel.findOne({ username: username}, function (err, user) {
 
         if (err) {
-            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR } }));
         }
 
-        if (user) {
-
+        if (user && user.passwordSalt) {
+            
             me.hashPassword(password, user.passwordSalt, function (err, passwordHash) {
 
                 if (passwordHash == user.passwordHash) {
+
                     var userProfileModel = new me.UserProfileModel({
-                        email: user.email,
                         username: user.username,
                         name: user.name
                     });
 
+                   
                     me.session.userProfileModel = userProfileModel;
+                    me.session.id = me.uuid.v4();
 
-                    return callback(err, new me.ApiResponse({
-                        success: true,
-                        extras: {
-                            userProfileModel: userProfileModel
+                    
+                    me.userSession.userId = user._id;
+                    me.userSession.sessionId = me.session.id;                    
+
+                    me.userSession.save(function (err, sessionData, numberAffected) {
+                        
+                        if (err) {
+                            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR } }));
                         }
-                    }));
+
+                        if (sessionData) {
+                            
+                            return callback(err, new me.ApiResponse({
+                                success: true, extras: {
+                                    userProfileModel: userProfileModel,
+                                    sessionId: me.session.id
+                                }
+                            }));                            
+                        } else {
+                            
+                            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_CREATE_SESSION } }));
+                        }
+                    });                    
                 } else {
-                    return callback(err, new me.ApiResponse({
-                        success: false,
-                        extras: {
-                            msg: me.ApiMessages.INVALID_PWD    
-                        }
-                    }));
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.INVALID_PWD } }));
                 }
             });
         } else {
-            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.EMAIL_NOT_FOUND } }));
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.USERNAME_NOT_FOUND } }));
         }
+
     });
 };
 
@@ -74,22 +91,30 @@ AccountController.prototype.logoff = function () {
 
 AccountController.prototype.register = function (newUser, callback) {
     var me = this;
+    
+    
     me.userModel.findOne({ username: newUser.username }, function (err, user) {
-
+        
+        
         if(err) {
             return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
         }
 
         if (user) {
-            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.EMAIL_NOT_FOUND }}));
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.USERNAME_ALREADY_EXISTS }}));
         } else {
-            newUser.save(function (err, user, numberAffected) {
-
+            
+            
+            newUser.save(function (err,user, num) {
+                
+                
+                
+                
                 if (err) {
                     return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR } }));
                 }
 
-                if (numberAffected === 1) {
+                if (user) {
                     var userProfileModel = new me.UserProfileModel({
                         email: user.email,
                         username: user.username,
@@ -183,7 +208,7 @@ AccountController.prototype.getUserFromRegistration = function (userRegistration
         email   : userRegistrationModel.email,
         name    : userRegistrationModel.name,
         username: userRegistrationModel.username,
-        passwordHash: this.crypto.pbkdf2Sync(userRegistrationModel.password, cryptoIter, cryptoKeyLen),
+        passwordHash: this.crypto.pbkdf2Sync(userRegistrationModel.password, passwordSalt, cryptoIter, cryptoKeyLen, 'sha512'),
         passwordSalt: passwordSalt
     });
 
