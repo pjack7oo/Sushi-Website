@@ -11,9 +11,13 @@
   <link href="./stylesheets/style.css" rel="stylesheet">
   <link href="./stylesheets/login.css" rel='stylesheet'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="js/session.js" type="text/javascript"></script>
+  <script src="js/settings.js" type="text/javascript"></script>
   <script src="js/api-messages.js" type="text/javascript"></script>
   <script src="js/settings.js" type="text/javascript"></script>
   <script src="js/sign-up.js" type="text/javascript"></script>
+  <script src="js/sign-in.js" type="text/javascript"></script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
@@ -22,22 +26,23 @@
 <body>
     <div id="login" class="modal">
   
-        <form class="modal-content animate">
+        <form class="modal-content animate" onsubmit="event.preventDefault()">
           <div class="imgcontainer">
             <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close Modal">&times;</span>
             <img src="../Images/Cat.png" alt="Avatar" class="avatar">
           </div>
       
           <div class="container">
+            <div id="login-ctn-err" class="bi-invisible"></div>
             <label for="uname"><b>Username</b></label>
-            <input type="username" placeholder="Enter Username" name="uname" required>
+            <input type="username" placeholder="Enter Username" name="uname" id="login-username" required>
       
             <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
+            <input type="password" placeholder="Enter Password" name="psw" id="login-password" required>
               
             <button type="submit" id="login-submit">Login</button>
             <label>
-              <input type="checkbox" checked="checked" name="remember"> Remember me
+              <input type="checkbox" checked="checked" id="checked" name="remember"> Remember me
             </label>
           </div>
       
