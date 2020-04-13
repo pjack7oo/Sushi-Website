@@ -38,12 +38,12 @@ router.route('/account/register')
     });
     
 
-router.route('/account/logon')
+router.route('/account/login')
     .post(function (req, res) {
         var userSession   = new UserSession(),
         accountController = new AccountController(User, req.session, userSession, mailer);
 
-        var userLogon = new userLogon(req.body);
+        var userLogon = new UserLogon(req.body);
 
         accountController.logon(userLogon.username, userLogon.password, function (err, response) {
             return res.send(response);
@@ -62,9 +62,23 @@ router.route('/account/logoff')
         res.send(new ApiResponse({ success: true }));
     });
 
-// router.route('/account/resetpassword')
-//     .post(function (req, res) {
+router.route('/account/resetpassword')
+    .post(function (req, res) {
 
-//     })
+        var accountController = new AccountController(User, req.session, mailer);
+        var userPasswordReset = new UserPasswordReset(req.body);
+        accountController.resetPassword(userPasswordReset.email, function (err, response) {
+            return res.send(response);
+        });
+    });
 
+router.route('/account/resetpasswordfinal')
+    .post(function (req, res) {
+
+        var accountController = new AccountController(User, req.session, mailer);
+        var userPasswordResetFinal = new UserPasswordResetFinal(req.body);
+        accountController.resetPasswordFinal(userPasswordResetFinal.email, userPasswordResetFinal.newPassword, userPasswordResetFinal.newPasswordConfirm, userPasswordResetFinal.passwordResetHash, function (err, response) {
+            return res.send(response);
+        });
+    });
 module.exports = router;
