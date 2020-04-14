@@ -65,7 +65,7 @@ export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana", textCo
     ctx.textAlign = "center";
     ctx.fillStyle = textColor;
     //ctx.fillText(text,x+ w/2,y+h/1.75);
-    printAtWordWrap(ctx, text, x + w / 2, y + h / 2, 30, 174, textColor, font, "center");
+    printAtWordWrap(ctx, text, x + w / 2, y + h / 2 + 5, 30, 174, textColor, font, "center");
     Invalidate();
 }
 
@@ -214,7 +214,7 @@ export function draw() {
         
         plates.drawPlates(context);
         
-        ioControl.drawMySelect(context);
+        
         ingredientMenu.drawMenu();
         ioControl.drawIoButtons();
         riceCooker.drawRice(context);
@@ -231,6 +231,7 @@ export function draw() {
         printAtWordWrap(context,player.getCurrentMoney().toString(),70, 20, 10, 100, "Green", "20px Arial", "left");
         //draw on top like stats
         drawGrid();
+        ioControl.drawMySelect(context);
         validCanvas = true;
     }
 }
