@@ -29,7 +29,7 @@ class Customer {
         this.xOffset = -30;
         this.yOffset = -20;
         this.thinkingTime = 5; //seconds
-        this.temperTime = 40; //seconds
+        this.temperTime = 30; //seconds
         this.startTime = 0;
         this.isThinking = true;
         this.want = [];
@@ -50,6 +50,16 @@ class Customer {
             //this.temperTime = 50;
         }
     }
+}
+
+export function getData() {
+    var customerData = {};
+    customerData.waitTime = waitTime;
+    return customerData;
+}
+
+export function setData(data) {
+    waitTime = data.waitTime;
 }
 
 export function getRandomCustomer(difficulty)
