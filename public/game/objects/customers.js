@@ -4,6 +4,7 @@ import * as rolls   from  './rolls.js';
 import * as progBar from '../utils/progressBar.js';
 import * as plateControl from './plates.js';
 import * as player   from './player.js';
+import * as teaKettle from './teakettle.js';
 
 var customers = [];
 var customerImage = new Image();
@@ -202,6 +203,23 @@ export function giveCustomerPlate(plate)
                     }
                 }
             } 
+        }
+    }
+}
+
+export function giveCustomerTea(tea) {
+    if (tea != null) {
+        for(let customer of customers) {
+            if (!customer.isThinking) {
+                if (checkCustomerBounding(customer, tea.renderType)){
+                    console.log(customer.temperTime);
+                    customer.temperTime += 10;
+                    console.log(customer.temperTime);
+                    
+                    
+                    teaKettle.removeCup();
+                }
+            }
         }
     }
 }
