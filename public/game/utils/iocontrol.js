@@ -8,6 +8,8 @@ import * as customers from "../objects/customers.js";
 import * as ingredientBox from '../objects/ingredientbox.js';
 import { shapeType, inCircle } from "./shapes.js";
 import * as riceCooker  from "../objects/riceCooker.js";
+import * as shapes      from '../utils/shapes.js';
+import * as teaKettle   from '../objects/teakettle.js';
 
 //moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 var ghostcanvas;
@@ -156,6 +158,9 @@ export function myDown(e) {
   if (checkShapes(plates.getMoveablePlates(), mouse)) {
     return;
   }
+  if (teaKettle.checkCup(mouse)) {
+    return;
+  }
 
   if (ingredientBox.checkClickOnShapes(e, gctx)) {
     
@@ -229,6 +234,11 @@ export function myUp() {
     cutStation.checkCuttingStation(mySelect[0]);
     plates.addRollToPlate(mySelect[0]);
     customers.giveCustomerPlate(mySelect[0]);
+    if(mySelect[0] instanceof teaKettle.Cup) {
+      console.log(mySelect[0] instanceof teaKettle.Cup);
+      
+      customers.giveCustomerTea(mySelect[0]);
+    }
   }
   mySelect[0] = null;
   canvas.onmousemove = null;
@@ -348,18 +358,33 @@ function myMove(e) {
 
 export function drawMySelect(context) {
   if (mySelect[0] != null) {
-    context.strokeStyle = mySelectColor;
-    context.lineWidth = mySelectWidth;
-    context.fillStyle = mySelect[0].renderType
-    context.strokeRect(
-      mySelect[0].renderType.x,
-      mySelect[0].renderType.y,
-      mySelect[0].renderType.w,
-      mySelect[0].renderType.h
-    );
-    context.fillRect(mySelect[0].renderType.x,
-      mySelect[0].renderType.y,
-      mySelect[0].renderType.w,
-      mySelect[0].renderType.h);
+    if (mySelect[0] instanceof rollControl.Roll) {
+      
+    }
+    else {
+      
+      if (mySelect[0].renderType.type == shapes.shapeType.ROUNDRECT) {
+        drawing.drawRoundRect(context, mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h, 
+                              mySelect[0].renderType.radius,true, true, mySelect[0].renderType.intColor, mySelectColor, 1);
+      }
+      else {
+        context.strokeStyle = mySelectColor;
+        context.lineWidth = mySelectWidth;
+        context.fillStyle = mySelect[0].renderType.intColor;
+        context.strokeRect(
+          mySelect[0].renderType.x,
+          mySelect[0].renderType.y,
+          mySelect[0].renderType.w,
+          mySelect[0].renderType.h
+        );
+        context.fillRect(
+          mySelect[0].renderType.x,
+          mySelect[0].renderType.y,
+          mySelect[0].renderType.w,
+          mySelect[0].renderType.h
+        );
+      }
+    }
+    
   }
 }
