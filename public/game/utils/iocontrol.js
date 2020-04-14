@@ -106,8 +106,10 @@ export function getMouse(e) {
   // my = e.pageY - offsetY;
 
   var rect = canvas.getBoundingClientRect();
-
-  return { x: e.clientX - rect.left, y: e.clientY - Math.floor(rect.top) };
+  
+  
+  
+  return { x: e.clientX - rect.left- 10, y: e.clientY - Math.floor(rect.top) - 10 };
 }
 
 export function initGhost(height, width) {
