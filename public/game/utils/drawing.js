@@ -14,6 +14,7 @@ import * as clock       from   '../objects/clock.js';
 import { drawTable } from '../objects/table.js'
 import * as levelControl from '../objects/level.js';
 import * as player from '../objects/player.js';
+import * as teaKettle from '../objects/teakettle.js';
 
 
 
@@ -157,7 +158,7 @@ export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intC
 
 export function clear(ctx) {
     ctx.fillStyle = 'White';
-    ctx.fillRect(0, 0, 600, 500);
+    ctx.fillRect(0, 0, 700, 500);
 }
 
 export function clearArea(ctx, x, y, w, h, color = "white") {
@@ -213,7 +214,7 @@ export function draw() {
         // }
         
         plates.drawPlates(context);
-        
+        teaKettle.drawTeaKettle(context);
         
         ingredientMenu.drawMenu();
         ioControl.drawIoButtons();
