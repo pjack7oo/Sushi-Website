@@ -6,6 +6,9 @@ import * as player        from '../objects/player.js';
 //import * as plates      from '../objects/plates.js';
 import * as level         from '../objects/level.js';
 import * as ingredientBox from '../objects/ingredientbox.js';
+import * as cuttingSt     from '../objects/cuttingstation.js';
+import * as customers     from '../objects/customers.js';
+
 
 var gameData = {};
 
@@ -19,7 +22,7 @@ export function saveINIT() {
     ioControl.addButton(shapes.createButton(300, 400, 100, 50, "Load", true, 1, load, 'LoadGame'));
 }
 
-function save() {
+export function save() {
     getGameData();
     localStorage.setItem('testObject', encrypt(gameData));
     console.log('Saved', gameData);
@@ -36,16 +39,20 @@ function load() {
 }
 
 function getGameData() {
-    let riceCookerUpgrades    = riceCooker.getData(),
-        rollingMattUpgrades   = rollingMatt.getData(),
-        ingredientBoxUpgrades = ingredientBox.getData(),
-        playerData            = player.getData(),
-        levelData             = level.getData();
+    let riceCookerUpgrades     = riceCooker.getData(),
+        rollingMattUpgrades    = rollingMatt.getData(),
+        ingredientBoxUpgrades  = ingredientBox.getData(),
+        cuttingStationUpgrades = cuttingSt.getData(),
+        playerData             = player.getData(),
+        customerData           = customers.getData(),
+        levelData              = level.getData();
 
     upgrades.riceCooker = riceCookerUpgrades;
     upgrades.rollingMatt = rollingMattUpgrades;
     upgrades.ingredientBox = ingredientBoxUpgrades;
+    upgrades.cuttingStation = cuttingStationUpgrades;
     gameData.upgrades = upgrades;
+    gameData.customers = customerData;
     gameData.player   = playerData;
     gameData.level    = levelData;
 }
@@ -54,7 +61,8 @@ function loadData() {
     riceCooker.setData(gameData.upgrades.riceCooker);
     rollingMatt.setData(gameData.upgrades.rollingMatt);
     ingredientBox.setData(gameData.upgrades.ingredientBox);
-
+    cuttingSt.setData(gameData.upgrades.cuttingStation);
+    customers.setData(gameData.customers);
     player.setData(gameData.player)
     level.setData(gameData.level);
 }
