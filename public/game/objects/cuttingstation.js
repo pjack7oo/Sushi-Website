@@ -40,6 +40,18 @@ var bar = new progBar.progressbar(
   20
 );
 
+export function getData() {
+  var cuttingStationData = {};
+  cuttingStationData.cuttingSpeed     = cuttingStation.cuttingSpeed;
+  cuttingStationData.cuttingSpeedCost = cuttingStation.cuttingSpeedCost;
+  return cuttingStationData;
+}
+
+export function setData(data) {
+  cuttingStation.cuttingSpeed = data.cuttingSpeed;
+  cuttingStation.cuttingSpeedCost = data.cuttingSpeedCost;
+}
+
 export function getCuttingSpeedCost() {
   return cuttingStation.cuttingSpeedCost;
 }
