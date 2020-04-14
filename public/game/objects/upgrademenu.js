@@ -9,19 +9,21 @@ import * as rollingMatt  from './rollingmatt.js';
 import * as cuttingStation from './cuttingstation.js';
 import * as teaKettle      from './teakettle.js';
 import * as game         from '../game.js';
-
+import {save} from '../utils/save.js';
 var activeInterval;
 var canvas, context;
 var upgradeButtons = [];
 
 export function upgradeScreen()
 {
-
+    canvas.removeEventListener('click', ioControl.buttonClick, false);
     ioControl.clearButtons();
-    ioControl.addButton(shapes.createButton(300,150,100,50,"Next-Level", true, 1, startNextLevel, 
+    ioControl.addButton(shapes.createButton(350,400,100,50,"Next-Level", true, 1, startNextLevel, 
                         "StartLevel-Next", shapes.shapeType.ROUNDRECT, 'center', "20px Arial"));
-    ioControl.addButton(shapes.createButton(200,150,100,50,"Exit", true, 1, exitUpgrade, 
+    ioControl.addButton(shapes.createButton(150,400,100,50,"Exit", true, 1, exitUpgrade, 
                         "Exit to main screen", shapes.shapeType.ROUNDRECT, 'center', "20px Arial"));
+    ioControl.addButton(shapes.createButton(250, 400, 100, 50, "Save", true, 1, save, 'SaveGame',
+                        shapes.shapeType.ROUNDRECT, 'center', "20px Arial"));
     canvas.addEventListener('click', upgradeMenuClick, false);
 
     riceCookerUpgradesSetup(0,200);
@@ -31,7 +33,7 @@ export function upgradeScreen()
     canvas.onmousemove = function(e) {
         checkButtons(e);
     }
-    drawing.toggleGrid();
+    //drawing.toggleGrid();
     
     upgradeUpdate();
 }
@@ -44,7 +46,7 @@ export function upgradeInit(canvs) {
 
 function exitUpgrade() {
     cancelAnimationFrame(activeInterval);
-    drawing.toggleGrid();
+    //drawing.toggleGrid();
     ioControl.clearButtons();
     canvas.removeEventListener('click', upgradeMenuClick, false);
     game.startScreen();
@@ -100,7 +102,7 @@ function upgradeDraw()
 
 function startNextLevel() {
     cancelAnimationFrame(activeInterval);
-    drawing.toggleGrid();
+    //drawing.toggleGrid();
     ioControl.clearButtons();
     canvas.removeEventListener('click', upgradeMenuClick, false);
     levelControl.startLevel();
@@ -142,27 +144,39 @@ function teaKettleUpgradesSetup(x,y) { //401 200
 }
 
 function riceCookerUpgradesDraw(x,y) {//200
+    var data = riceCooker.getData();
     drawing.drawRoundRect(context, x, y, 200, 150, 5, true, true, 'Gray', "Green", 1);
     drawing.printAtWordWrap(context, "RiceCooker", x + 100, y + 18, 20, 50, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Cooking Time", x + 5, y + 40, 20, 50, 'Green', "20px Arial", "left" );
     drawing.printAtWordWrap(context, "Storage count", x + 5, y + 100, 20, 50, 'Green', "20px Arial", "left" );
+    drawing.drawTextBox(context, x + 100, y + 30, 30,30, data.cookTime.toString(), "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 90, 30,30, data.riceCount.toString(), "20px Arial");
 }
 function storageBoxUpgradesDraw(x,y) {//0 10
+    var data = storage.getData();
     drawing.drawRoundRect(context, x, y, 200, 150, 5, true, true, 'Gray', "Green", 1);
     drawing.printAtWordWrap(context, "Storage", x+100, y+18, 20, 50, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Veg Max Storage", x+5, y+40, 20, 100, 'Green', "20px Arial", "left" );
     drawing.printAtWordWrap(context, "Fish Max Storage", x+5, y+100, 20, 100, 'Green', "20px Arial", "left" );
+    drawing.drawTextBox(context, x + 100, y + 30, 30,30, data.ingredientBox1.maxStorage.toString(), "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 90, 30,30, data.ingredientBox2.maxStorage.toString(), "20px Arial");
 }
 function rollingMattUpgradesDraw(x,y) {//400 10
+    var data = rollingMatt.getData();
     drawing.drawRoundRect(context, x, y, 200, 150, 5, true, true, 'Gray', "Green", 1);
     drawing.printAtWordWrap(context, "Rolling Matt", x+100, y+18, 20, 150, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Rolling Speed", x+5, y+85, 20, 50, 'Green', "20px Arial", "left" );
+    drawing.drawTextBox(context, x + 100, y + 75, 30,30, data.speed.toString(), "20px Arial");
+    
 }
 function cuttingBoardUpgradesDraw(x,y) {//201 200
+    var data = cuttingStation.getData();
     drawing.drawRoundRect(context, x, y, 199, 150, 5, true, true, 'Gray', "Green", 1);
     drawing.printAtWordWrap(context, "Cutting Board", x+100, y+18, 20, 150, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Cutting Speed", x+5, y+40, 20, 50, 'Green', "20px Arial", "left" );
     drawing.printAtWordWrap(context, "Second Board", x+5, y+100, 20, 50, 'Green', "20px Arial", "left" );
+    drawing.drawTextBox(context, x + 100, y + 30, 30,30, data.cuttingSpeed.toString(), "20px Arial");
+    
 }
 function teaKettleUpgradesDraw(x,y) {//401 200
     drawing.drawRoundRect(context, x, y, 199, 150, 5, true, true, 'Gray', "Green", 1);
