@@ -32,21 +32,21 @@ function buttonClickMenu(e) {
 }
 
 function createStartMenuButton() {
-    ioControl.addButton(shapes.createButton(550, 250, 50, 25, "Ingredients", true, 1, openMenu, "IngredientsMenu-Activate", 
+    ioControl.addButton(shapes.createButton(650, 250, 50, 25, "Ingredients", true, 1, openMenu, "IngredientsMenu-Activate", 
                         shapes.shapeType.ROUNDRECT,'center' ,"9px Arial" , "#ADD8E6", "Gray"));    
 }
 
 function createMenuButtons() {
-    ioControl.addButton(shapes.createButton(571, 254, 25, 25, "X", true, 1, closeMenu, "IngredientsMenu-X",   
+    ioControl.addButton(shapes.createButton(671, 254, 25, 25, "X", true, 1, closeMenu, "IngredientsMenu-X",   
                         shapes.shapeType.ROUNDRECT, 'center',  "15px Arial" ,"#ADD8E6", "Gray"));
-    ioControl.addButton(shapes.createButton(409, 254, 25, 25, "<<", true, 1, undo, "IngredientsMenu-<<",   
+    ioControl.addButton(shapes.createButton(509, 254, 25, 25, "<<", true, 1, undo, "IngredientsMenu-<<",   
                         shapes.shapeType.ROUNDRECT, 'center',  "15px Arial" ,"#ADD8E6", "Gray"));
 
 }
 
 function createSubMenuButtons() {
     clearButtons();
-    var x = 440,
+    var x = 540,
         y = 254;
     ingredientButtons.push(shapes.createButton( x, y, 50,25,"Fish", true , 1, setFishButtons, "FishMenu", 
                             shapes.shapeType.ROUNDRECT, 'Center', "15px Arial", "green", "Gray" ));
@@ -62,7 +62,7 @@ function clearButtons() {
 
 function setFishButtons() {
     clearButtons();
-    var x = 410,
+    var x = 510,
         y = 280;
     state = stateTypes.FISH;
     ingredientButtons.push(shapes.createButton(x, y,50,25,"Crab", true , 1, player.getCrab, "Create-Crab",
@@ -73,7 +73,7 @@ function setFishButtons() {
     x += 60;
     ingredientButtons.push(shapes.createButton(x, y,50,25,"Salmon", true , 1, player.getSalmon, "Create-Salmon",
                             shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
-    x = 410;
+    x = 510;
     y += 30;
     ingredientButtons.push(shapes.createButton(x, y,50,25,"Eel", true , 1, player.getEel, "Create-Eel",
                             shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
@@ -82,15 +82,15 @@ function setFishButtons() {
 
 function setVegButtons() {
     clearButtons();
-    var x = 410,
+    var x = 510,
         y = 280;
     state = stateTypes.INGREDIENTS;
     ingredientButtons.push(shapes.createButton(x, y,50,25,"Avocado", true , 1, player.getAvocado, "Create-Avocado",
-                            shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
+                            shapes.shapeType.ROUNDRECT, "center", "12px Arial", "White", "Red"));
     x += 60;
     
     ingredientButtons.push(shapes.createButton(x, y,50,25,"Cucumber", true , 1, player.getCucumber, "Create-Cucumber",
-                            shapes.shapeType.ROUNDRECT, "center", "15px Arial", "White", "Red"));
+                            shapes.shapeType.ROUNDRECT, "center", "10px Arial", "White", "Red"));
 }
 
 function removeMenuButton() {
@@ -165,7 +165,7 @@ export function drawMenu() {
 function drawMenuArea() {
     context.fillStyle = "White";
     context.lineWidth = 2;
-    drawing.drawRoundRect(context, 405,250, 195, 150, 10, true, true, "White", "black");
+    drawing.drawRoundRect(context, 505,250, 195, 150, 10, true, true, "White", "black");
     // context.fillRect( 405, 250, 195,150);
     
     
