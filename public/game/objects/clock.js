@@ -7,7 +7,7 @@ var oldnum = 0;
 var i = 9;
 
 export function drawClock (context) {
-    var x      = 545,
+    var x      = 645,
         y      = 55,
         radius = 50;
     drawFace(context, x, y, radius);
