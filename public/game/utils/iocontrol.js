@@ -207,7 +207,7 @@ function checkShapes(shapes, mouse) {
   let l = shapes.length;
   if (l > 0) {
     for (let i = 0; i < l; i++) {
-      drawing.drawShape(gctx, shapes[i]);
+      //drawing.drawShape(gctx, shapes[i]);
       let ret;
       if (shapes[i].renderType.type == shapeType.CIRCLE) {
         ret = moveCircle(mouse, shapes[i]);

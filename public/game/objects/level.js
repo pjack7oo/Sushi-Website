@@ -20,18 +20,19 @@ var currentLevel = 0;
 // var levelCustomers = [];
 var availableCustomerCount = 1;
 var startTime = 0;
-var maxTime   = 60000;
+var maxTime   = 80;//seconds
 var levelActive = false;
 var goalAmount  = 0;
 var interval = 20;
 var activeInterval;
+var difficulty =0;
 
 
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
 var context = canvas.getContext('2d');
 //level number determines number of customers in the level
-export function startLevel() {
+export function startLevel(level) {
     cancelAnimationFrame(activeInterval);
     ioControl.clearButtons();
     startTime = performance.now();
@@ -42,7 +43,7 @@ export function startLevel() {
     console.log("start");
     
     clearInterval(activeInterval);
-    rollControl.rollListInit();
+    //rollControl.rollListInit();
     rollControl.clearMadeRolls();
     plates.clearMoveablePlates();
 
@@ -59,12 +60,13 @@ export function startLevel() {
     // add custom init
     //plates.createPlate();
     clock.resetClock();
-    
+    cutSt.resetCuttingStation();
     ingredientMenu.ingredientsMenuInit(context);
     rollingMatt.clearMatt();
     //ingredients.clearActiveIngredients();
     // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
     riceCooker.createRice();
+    
     // addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
     //ingredients.createAvocado(50, 320);
     // addBox(shapeType.RECTANGLE, 25, 125, 40, 25, ingredients.CRAB,true, 'white', 'Red',2);
@@ -79,7 +81,15 @@ export function startLevel() {
     //         levelUpdate(context);
     //         break
     // }
-    
+    if (level == 3) {
+        availableCustomerCount++;
+    }
+    if (level ==10) {
+        difficulty++;
+        availableCustomerCount++;
+    }
+    customers.customerINit(availableCustomerCount);
+    getCustomer(level);
     levelUpdate(context);
 }
 
@@ -92,11 +102,47 @@ function levelUpdate() {
     if (checkLevelEnd()) {
         nextLevel(context);
     }
-    if (checkCustomerAvailable()) {
-        console.log("new customer");
-        
-        getCustomer();
+    if (checkCustomerAvailable() && levelActive) {
+        if (customers.updateGetCustomer()) {
+
+            if (customers.getCustomerLength()==0) {
+                getCustomer();
+                customers.enableWait();
+            }
+            else {
+                let i = customers.getRandomInt(100);
+                if (i >50) {
+                    getCustomer();
+                    console.log("second new customer");
+                    customers.enableWait();
+                 }
+                else {
+                    console.log("no customer");
+                    customers.enableWait();
+                }
+            }
+        }
     }
+    // if (checkCustomerAvailable()) {
+    //     if (customers.getCustomerLength()==0) {
+    //         if (customers.updateGetCustomer())
+    //         getCustomer();
+    //         console.log("new customer");
+    //     }
+    //     else {
+    //         let i = customers.getRandomInt(100);
+    //         if (i >50) {
+    //             getCustomer();
+    //             console.log("second new customer");
+    //         }
+    //         else {
+    //             console.log("no customer");
+    //         }
+    //     }
+        
+        
+    //     //getCustomer();
+    // }
     cutSt.checkCutRoll();
 
 
@@ -128,8 +174,8 @@ function checkCustomerAvailable() {
     return(customers.getCustomerLength() < availableCustomerCount);
 }
 function getCustomer() {
-    if (customers.updateGetCustomer()) {
-        customers.getLevelCustomer(currentLevel);
+    if (checkCustomerAvailable()) {
+        customers.getLevelCustomer(currentLevel,difficulty);
     }
 }
 
@@ -147,7 +193,7 @@ function checkLevelTime() {
     if (levelActive) {
         let currentTime = performance.now(),
         elapsedTime = currentTime - startTime,
-        precentage  = (elapsedTime / maxTime)*100;
+        precentage  = (elapsedTime / (maxTime*1000))*100;
         //console.log(precentage);
         clock.updateClockProgress(precentage);
             

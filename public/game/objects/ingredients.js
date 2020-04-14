@@ -26,6 +26,7 @@ export class Ingredient {
         this.canEnterPlate = false;
         this.canSell = false;
         this.cost    = 10;
+        this.id = 0;
     }
 
     

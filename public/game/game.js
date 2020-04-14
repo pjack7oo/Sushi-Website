@@ -55,6 +55,7 @@ function init()
     }
     upgradeMenu.upgradeInit(canvas);
     ingredientBox.initIngredientBoxes();
+    rollControl.rollListInit();
     // rollControl.rollListInit();
     // plates.createPlate();
     // //console.log(plates.plateHolder);

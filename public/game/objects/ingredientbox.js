@@ -103,7 +103,9 @@ class IngredientBox {
             for (let i = 0; i <max;i++) {
                 let x = this.x + 10,
                     y = this.y + 5 + 25*(this.typeStorage1Missing[i]);
-                this.typeStorage1.push(ingredients.createIngredientWithXY(this.typeStorage1name, x, y ));
+                    let ingredient = ingredients.createIngredientWithXY(this.typeStorage1name, x, y);
+                    ingredient.id = i;
+                this.typeStorage1.push(ingredient);
                 
             }
             this.typeStorage1Missing = [];
@@ -114,7 +116,9 @@ class IngredientBox {
             for (let i = 0; i <max;i++) {
                 let x = this.x + 70,
                     y = this.y + 5 + 25*(this.typeStorage2Missing[i]);
-                this.typeStorage2.push(ingredients.createIngredientWithXY(this.typeStorage2name, x, y ));
+                    let ingredient = ingredients.createIngredientWithXY(this.typeStorage2name, x, y);
+                    ingredient.id = i;
+                this.typeStorage2.push(ingredient);
                
             }
             this.typeStorage2Missing = [];
@@ -124,7 +128,9 @@ class IngredientBox {
             for (let i = 0; i <max;i++) {
                 let x = this.x + 135,
                     y = this.y + 5 + 25*(this.typeStorage3Missing[i]);
-                this.typeStorage3.push(ingredients.createIngredientWithXY(this.typeStorage3name, x, y ));
+                    let ingredient = ingredients.createIngredientWithXY(this.typeStorage3name, x, y);
+                    ingredient.id = i;
+                this.typeStorage3.push(ingredient);
                 
             }
             this.typeStorage3Missing = [];
@@ -139,13 +145,15 @@ class IngredientBox {
         let l = this.typeStorage1.length;
         if (l > 0) {
             for (let i = 0; i < l; i++) {
-                drawing.drawShape(context, this.typeStorage1[i]);
+                //drawing.drawShape(context, this.typeStorage1[i]);
                 let ret;
                 
                 ret = ioControl.moveItem(mouse, this.typeStorage1[i]);
                 
-
+                //console.log(this.typeStorage1Missing);
+                
                 if (ret) {
+                    //this.typeStorage1Missing.push(this.typeStorage1[i].id);
                     return ret;
                 }
             }
@@ -153,7 +161,7 @@ class IngredientBox {
         l = this.typeStorage2.length;
         if (l > 0) {
             for (let i = 0; i < l; i++) {
-                drawing.drawShape(context, this.typeStorage2[i]);
+                //drawing.drawShape(context, this.typeStorage2[i]);
                 let ret;
                 
                 ret = ioControl.moveItem(mouse, this.typeStorage2[i]);
@@ -167,7 +175,7 @@ class IngredientBox {
         l = this.typeStorage3.length;
         if (l > 0) {
             for (let i = 0; i < l; i++) {
-                drawing.drawShape(context, this.typeStorage3[i]);
+                //drawing.drawShape(context, this.typeStorage3[i]);
                 let ret;
                 
                 ret = ioControl.moveItem(mouse, this.typeStorage3[i]);
@@ -290,35 +298,42 @@ export function removeIngredient(ingredient) {
     if (ingredientBox1.contains(ingredient.name)) {
         if (ingredientBox1.typeStorage1name == ingredient.name) {
             let missing = ingredientBox1.typeStorage1.findIndex(findIngredient);
+            ingredientBox1.typeStorage1Missing.push(ingredientBox1.typeStorage1[missing].id);
+            
             ingredientBox1.typeStorage1.splice(missing, 1);
-            ingredientBox1.typeStorage1Missing.push(missing);
+            
         }
         if (ingredientBox1.typeStorage2name == ingredient.name) {
             let missing = ingredientBox1.typeStorage2.findIndex(findIngredient);
+            
+            ingredientBox1.typeStorage2Missing.push(ingredientBox1.typeStorage2[missing].id);
             ingredientBox1.typeStorage2.splice(missing, 1);
-            ingredientBox1.typeStorage2Missing.push(missing);
         }
         if (ingredientBox1.typeStorage3name == ingredient.name) {
             let missing = ingredientBox1.typeStorage3.findIndex(findIngredient);
+            
+            ingredientBox1.typeStorage3Missing.push(ingredientBox1.typeStorage3[missing].id);
             ingredientBox1.typeStorage3.splice(missing, 1);
-            ingredientBox1.typeStorage3Missing.push(missing);
         }
     }
     if (ingredientBox2.contains(ingredient.name)) {
         if (ingredientBox2.typeStorage1name == ingredient.name) {
             let missing = ingredientBox2.typeStorage1.findIndex(findIngredient);
+            
+            ingredientBox2.typeStorage1Missing.push(ingredientBox2.typeStorage1[missing].id);
             ingredientBox2.typeStorage1.splice(missing, 1);
-            ingredientBox2.typeStorage1Missing.push(missing);
         }
         if (ingredientBox2.typeStorage2name == ingredient.name) {
             let missing = ingredientBox2.typeStorage2.findIndex(findIngredient);
+            
+            ingredientBox2.typeStorage2Missing.push(ingredientBox2.typeStorage2[missing].id);
             ingredientBox2.typeStorage2.splice(missing, 1);
-            ingredientBox2.typeStorage2Missing.push(missing);
         }
         if (ingredientBox2.typeStorage3name == ingredient.name) {
             let missing = ingredientBox2.typeStorage3.findIndex(findIngredient);
+            ingredientBox2.typeStorage3Missing.push(ingredientBox2.typeStorage3[missing].id);
             ingredientBox2.typeStorage3.splice(missing, 1);
-            ingredientBox2.typeStorage3Missing.push(missing);
+            
         }
     }
     // ingredientBox1.typeStorage1.splice(ingredientBox1.typeStorage1.findIndex(findIngredient), 1);
