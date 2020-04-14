@@ -1,6 +1,7 @@
 import * as ingredientBox from './ingredientbox.js';
 import * as ingredients   from './ingredients.js';
-
+import * as cutSt         from './cuttingstation.js';
+import * as fish          from './fish.js';
 var money = 1000;
 var currentLevel = 0;
 
@@ -56,8 +57,10 @@ export function getRice() {
 export function getTuna() {
     let name = ingredients.ingredients.TUNA, 
         cost = ingredients.getIngredientCost(name);
-    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
-        ingredientBox.fillBoxes(name);
+    let tuna = fish.createTuna(cost);
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem()) {
+        cutSt.insertFish(tuna);
+        //ingredientBox.fillBoxes(name);
         money -=cost;
     }
 }
@@ -65,18 +68,23 @@ export function getTuna() {
 export function getSalmon() {
     let name = ingredients.ingredients.SALMON, 
         cost = ingredients.getIngredientCost(name);
-        
-    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
-        ingredientBox.fillBoxes(name);
+    let salmon =  fish.createSalmon(cost);
+    
+    // console.log(salmon instanceof fish.Fish);
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem()) {
+        cutSt.insertFish(salmon);
+        //ingredientBox.fillBoxes(name);
         money -=cost;
     }
+    
 }
-
 export function getEel() {
     let name = ingredients.ingredients.EEL, 
         cost = ingredients.getIngredientCost(name);
-    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name)) {
-        ingredientBox.fillBoxes(name);
+    let eel = fish.createEel(cost);  
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem()) {
+        cutSt.insertFish(eel);
+        //ingredientBox.fillBoxes(name);
         money -=cost;
     }
 }
