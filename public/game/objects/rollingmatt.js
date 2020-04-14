@@ -17,7 +17,7 @@ var noriImage = new Image();
 noriImage.src = './game/images/nori.jpg'
 export const rollingMatt = {
     type: shapes.shapeType.RECTANGLE,
-    x: 300,
+    x: 240,
     y: 400,
     w: 100,
     h: 100,
