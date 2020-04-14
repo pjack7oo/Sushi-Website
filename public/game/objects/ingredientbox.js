@@ -48,7 +48,10 @@ class IngredientBox {
         if (player.hasEnoughMoney(this.maxStorageUpgradeCost)) {
             player.removeMoney(this.maxStorageUpgradeCost);
             this.maxStorage ++;
-            this.maxStorageUpgradeCost += 500;
+            this.maxStorageUpgradeCost +=1000;
+            this.typeStorage1Missing.push(4);
+            this.typeStorage2Missing.push(4);
+            this.typeStorage3Missing.push(4);
             return true;
         }
         return false;
@@ -101,8 +104,10 @@ class IngredientBox {
             // let x = this.x + 10,
             //     y = this.y + 5 + 22*(this.typeStorage1.length);
             for (let i = 0; i <max;i++) {
+                console.log(i);
+                
                 let x = this.x + 10,
-                    y = this.y + 5 + 25*(this.typeStorage1Missing[i]);
+                    y = this.y + 5 + 15*(this.typeStorage1Missing[i]);
                     let ingredient = ingredients.createIngredientWithXY(this.typeStorage1name, x, y);
                     ingredient.id = i;
                 this.typeStorage1.push(ingredient);
@@ -115,7 +120,7 @@ class IngredientBox {
             let max = this.typeStorage2Missing.length;
             for (let i = 0; i <max;i++) {
                 let x = this.x + 70,
-                    y = this.y + 5 + 25*(this.typeStorage2Missing[i]);
+                    y = this.y + 5 + 15*(this.typeStorage2Missing[i]);
                     let ingredient = ingredients.createIngredientWithXY(this.typeStorage2name, x, y);
                     ingredient.id = i;
                 this.typeStorage2.push(ingredient);
@@ -127,7 +132,7 @@ class IngredientBox {
             
             for (let i = 0; i <max;i++) {
                 let x = this.x + 135,
-                    y = this.y + 5 + 25*(this.typeStorage3Missing[i]);
+                    y = this.y + 5 + 15*(this.typeStorage3Missing[i]);
                     let ingredient = ingredients.createIngredientWithXY(this.typeStorage3name, x, y);
                     ingredient.id = i;
                 this.typeStorage3.push(ingredient);
@@ -362,6 +367,18 @@ export function addIngredient(ingredient)
         }
         if (ingredientBox1.typeStorage3name == ingredient.name) {
             ingredientBox1.typeStorage3.push(ingredient);
+        }
+    }
+    if (ingredientBox2.contains(ingredient.name)) {
+        if (ingredientBox2.typeStorage1name == ingredient.name) {
+            
+            ingredientBox2.typeStorage1.push(ingredient);
+        }
+        if (ingredientBox2.typeStorage2name == ingredient.name) {
+            ingredientBox2.typeStorage2.push(ingredient);
+        }
+        if (ingredientBox2.typeStorage3name == ingredient.name) {
+            ingredientBox2.typeStorage3.push(ingredient);
         }
     }
 }
