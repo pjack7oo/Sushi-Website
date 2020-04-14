@@ -27,6 +27,24 @@ export const riceCooker = {
 
 }
 
+
+
+export function setData(data) {
+    riceCooker.cookTime = data.cookTime;
+    riceCooker.riceCount = data.riceCount;
+    riceCooker.cookTimeUpgradeCost = data.cookTimeUpgradeCost;
+    riceCooker.riceCountUpgradeCost = data.riceCountUpgradeCost;
+}
+
+export function getData() {
+    var riceCookerData = {};
+    riceCookerData.cookTime = riceCooker.cookTime;
+    riceCookerData.riceCount = riceCooker.riceCount
+    riceCookerData.cookTimeUpgradeCost = riceCooker.cookTimeUpgradeCost;
+    riceCookerData.riceCountUpgradeCost = riceCooker.riceCountUpgradeCost;
+    return riceCookerData;
+}
+
 export function getCookTimeUpgradeCost () {
     return riceCooker.cookTimeUpgradeCost;
 }

@@ -1,14 +1,15 @@
-import * as drawing     from './utils/drawing.js';
-import * as rollControl from './objects/rolls.js';
-import * as cutSt       from './objects/cuttingstation.js';
-import * as plates      from './objects/plates.js';
-import * as ioControl   from './utils/iocontrol.js';
-import * as ingredients from './objects/ingredients.js';
-import * as customers   from './objects/customers.js';
-import * as shapes      from './utils/shapes.js';
-import * as levelControl from './objects/level.js';
-import * as upgradeMenu from  './objects/upgrademenu.js';
+import * as drawing       from './utils/drawing.js';
+import * as rollControl   from './objects/rolls.js';
+import * as cutSt         from './objects/cuttingstation.js';
+import * as plates        from './objects/plates.js';
+import * as ioControl     from './utils/iocontrol.js';
+import * as ingredients   from './objects/ingredients.js';
+import * as customers     from './objects/customers.js';
+import * as shapes        from './utils/shapes.js';
+import * as levelControl  from './objects/level.js';
+import * as upgradeMenu   from  './objects/upgrademenu.js';
 import * as ingredientBox from './objects/ingredientbox.js';
+import * as saveControl   from './utils/save.js';
 
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
@@ -169,6 +170,7 @@ export function startScreen()
 
     ioControl.addButton(shapes.createButton(300,350, 100, 50, "Start", true, 1, startGame, "StartGame-Start"));
     ioControl.addButton(shapes.createButton(200,350, 100, 50, "Upgrade", true, 1, upgradeMenu.upgradeScreen, "StartGame-Start"));
+    saveControl.saveINIT();
     canvas.addEventListener('click', ioControl.buttonClick, false);
 
     activeInterval = setInterval(startUpdate, interval);

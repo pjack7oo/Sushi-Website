@@ -103,6 +103,18 @@ function levelUpdate() {
     levelDraw();
 }
 
+export function getData() {
+    var levelData = {};
+    levelData.level = currentLevel;
+    levelData.availableCustomerCount = availableCustomerCount;
+    return levelData;
+}
+
+export function setData(data) {
+    currentLevel = data.level;
+    availableCustomerCount = data.availableCustomerCount;
+}
+
 export function getCurrentLevel() {
     return currentLevel;
 }

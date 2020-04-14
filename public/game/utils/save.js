@@ -1,8 +1,16 @@
-import * as ioControl from './iocontrol.js';
-import * as shapes    from './shapes.js';
+import * as ioControl     from './iocontrol.js';
+import * as shapes        from './shapes.js';
+import * as riceCooker    from '../objects/riceCooker.js';
+import * as rollingMatt   from '../objects/rollingmatt.js';
+import * as player        from '../objects/player.js';
+//import * as plates      from '../objects/plates.js';
+import * as level         from '../objects/level.js';
+import * as ingredientBox from '../objects/ingredientbox.js';
 
-var riceCooker = {'cookTime': 10, 'riceCount': 5};
-var upgrades = {'riceCooker': riceCooker};
+var gameData = {};
+
+var riceCookerUpgrades = {};
+var upgrades = {};
 var testObject = {'level': 2, 'money': 1500, 'upgrades': upgrades, 'saveNum': 1};
 var retrievedItem;
 
@@ -12,9 +20,9 @@ export function saveINIT() {
 }
 
 function save() {
-    
-    localStorage.setItem('testObject', encrypt(testObject));
-    console.log('Saved', testObject);
+    getGameData();
+    localStorage.setItem('testObject', encrypt(gameData));
+    console.log('Saved', gameData);
     
 }
 
@@ -22,14 +30,38 @@ function load() {
     retrievedItem = localStorage.getItem('testObject');
     retrievedItem = decrypt(retrievedItem);
     retrievedItem = JSON.parse(retrievedItem);
+    gameData = retrievedItem;
+    loadData();
     console.log(retrievedItem);
-    
+}
+
+function getGameData() {
+    let riceCookerUpgrades    = riceCooker.getData(),
+        rollingMattUpgrades   = rollingMatt.getData(),
+        ingredientBoxUpgrades = ingredientBox.getData(),
+        playerData            = player.getData(),
+        levelData             = level.getData();
+
+    upgrades.riceCooker = riceCookerUpgrades;
+    upgrades.rollingMatt = rollingMattUpgrades;
+    upgrades.ingredientBox = ingredientBoxUpgrades;
+    gameData.upgrades = upgrades;
+    gameData.player   = playerData;
+    gameData.level    = levelData;
+}
+
+function loadData() {
+    riceCooker.setData(gameData.upgrades.riceCooker);
+    rollingMatt.setData(gameData.upgrades.rollingMatt);
+    ingredientBox.setData(gameData.upgrades.ingredientBox);
+
+    player.setData(gameData.player)
+    level.setData(gameData.level);
 }
 
 
 function encrypt(data) {
-    var iterations = 10000,
-        keyLen     = 64
+    
     let encrypt= CryptoJS.AES.encrypt(JSON.stringify(data), "SaveGame");
     return encrypt;
 }

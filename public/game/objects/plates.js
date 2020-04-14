@@ -33,6 +33,15 @@ export class Plate {
     }
 }
 
+// export function getData() {
+
+// }
+
+// export function setData(data) {
+
+// }
+
+
 export function clearMoveablePlates() {
     moveablePlates = [];
 }

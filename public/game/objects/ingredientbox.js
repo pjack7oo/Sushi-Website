@@ -198,6 +198,24 @@ export function isFullStorage(type) {
     }
 }
 
+export function getData() {
+    var ingredientBoxData = {};
+    ingredientBoxData.ingredientBox1 = {};
+    ingredientBoxData.ingredientBox2 = {};
+    ingredientBoxData.ingredientBox1.maxStorage            = ingredientBox1.maxStorage;
+    ingredientBoxData.ingredientBox1.maxStorageUpgradeCost = ingredientBox1.maxStorageUpgradeCost;
+    ingredientBoxData.ingredientBox2.maxStorage            = ingredientBox2.maxStorage;
+    ingredientBoxData.ingredientBox2.maxStorageUpgradeCost = ingredientBox2.maxStorageUpgradeCost;
+    return ingredientBoxData;
+}
+
+export function setData(data) {
+    ingredientBox1.maxStorage            = data.ingredientBox1.maxStorage;
+    ingredientBox1.maxStorageUpgradeCost = data.ingredientBox1.maxStorageUpgradeCost;
+    ingredientBox2.maxStorage            = data.ingredientBox2.maxStorage;
+    ingredientBox2.maxStorageUpgradeCost = data.ingredientBox2.maxStorageUpgradeCost;
+}
+
 export function initIngredientBoxes() {
     ingredientBox1 = new IngredientBox(30, 280, 200, 110, mainIngredientTypes.FISH, "#B87C4B", "#966047");
     ingredientBox2 = new IngredientBox(30, 390, 200, 110, mainIngredientTypes.VEGETABLES, "#B87C4B", "#966047");

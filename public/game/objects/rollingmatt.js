@@ -36,6 +36,19 @@ export function getSpeedUpgradeCost() {
     return rollingMatt.speedUpgradeCost;
 }
 
+export function getData() {
+    var rollingMattUpgrades = {};
+    rollingMattUpgrades.speed = rollingMatt.speed;
+    rollingMattUpgrades.speedUpgradeCost = rollingMatt.speedUpgradeCost;
+    return rollingMattUpgrades;
+}
+
+export function setData(data) {
+    rollingMatt.speed = data.speed;
+    rollingMatt.speedUpgradeCost = data.speedUpgradeCost;
+}
+
+
 export function upgradeSpeed() {
     if (player.hasEnoughMoney(rollingMatt.speedUpgradeCost)) {
         player.removeMoney(rollingMatt.speedUpgradeCost);

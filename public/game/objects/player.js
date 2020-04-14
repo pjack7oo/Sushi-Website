@@ -20,6 +20,16 @@ export function removeMoney(amount) {
     money -= amount;
 }
 
+export function getData() {
+    var playerData = {};
+    playerData.money = money;
+    return playerData;
+}
+
+export function setData(data) {
+    money = data.money;
+}
+
 export function getCrab() {
     let name = ingredients.ingredients.CRAB, 
         cost = ingredients.getIngredientCost(name);
