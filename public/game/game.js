@@ -10,6 +10,7 @@ import * as levelControl  from './objects/level.js';
 import * as upgradeMenu   from  './objects/upgrademenu.js';
 import * as ingredientBox from './objects/ingredientbox.js';
 import * as saveControl   from './utils/save.js';
+import * as teaKettle     from './objects/teakettle.js';
 
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
@@ -56,6 +57,8 @@ function init()
     upgradeMenu.upgradeInit(canvas);
     ingredientBox.initIngredientBoxes();
     rollControl.rollListInit();
+    cutSt.cuttingStationInit();
+    teaKettle.teaKettleInit();
     // rollControl.rollListInit();
     // plates.createPlate();
     // //console.log(plates.plateHolder);
