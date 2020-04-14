@@ -346,15 +346,20 @@ function myMove(e) {
   }
 }
 
-export function drawMySelect(ctx) {
+export function drawMySelect(context) {
   if (mySelect[0] != null) {
     context.strokeStyle = mySelectColor;
     context.lineWidth = mySelectWidth;
+    context.fillStyle = mySelect[0].renderType
     context.strokeRect(
       mySelect[0].renderType.x,
       mySelect[0].renderType.y,
       mySelect[0].renderType.w,
       mySelect[0].renderType.h
     );
+    context.fillRect(mySelect[0].renderType.x,
+      mySelect[0].renderType.y,
+      mySelect[0].renderType.w,
+      mySelect[0].renderType.h);
   }
 }
