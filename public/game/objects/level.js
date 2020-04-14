@@ -32,7 +32,7 @@ var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
 var context = canvas.getContext('2d');
 //level number determines number of customers in the level
-export function startLevel(level) {
+export function startLevel() {
     cancelAnimationFrame(activeInterval);
     ioControl.clearButtons();
     startTime = performance.now();
@@ -66,6 +66,7 @@ export function startLevel(level) {
     //ingredients.clearActiveIngredients();
     // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
     riceCooker.createRice();
+    ingredientBox.resetIngredientBoxes();
     
     // addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
     //ingredients.createAvocado(50, 320);
@@ -81,15 +82,15 @@ export function startLevel(level) {
     //         levelUpdate(context);
     //         break
     // }
-    if (level == 3) {
+    if (currentLevel == 3) {
         availableCustomerCount++;
     }
-    if (level ==10) {
+    if (currentLevel ==10) {
         difficulty++;
         availableCustomerCount++;
     }
     customers.customerINit(availableCustomerCount);
-    getCustomer(level);
+    getCustomer(currentLevel);
     levelUpdate(context);
 }
 
@@ -152,12 +153,14 @@ function levelUpdate() {
 export function getData() {
     var levelData = {};
     levelData.level = currentLevel;
+    levelData.difficulty = difficulty;
     levelData.availableCustomerCount = availableCustomerCount;
     return levelData;
 }
 
 export function setData(data) {
     currentLevel = data.level;
+    difficulty   = data.difficulty;
     availableCustomerCount = data.availableCustomerCount;
 }
 
