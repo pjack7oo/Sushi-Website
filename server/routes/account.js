@@ -5,8 +5,10 @@ const express = require('express'),
       UserRegistration  = require('../models/user-registration.js'),
       User              = require('../models/user.js'),
       UserSession       = require('../models/user-session.js'),
-      UserLogon         = require('../models/user-logon.js');
+      UserSendSave      = require('../models/user-sendSave.js'),
+      UserLogon         = require('../models/user-logon.js'),
       MailerMock        = require("../test/mailer-mock.js"),
+      
       mailer = new MailerMock();      //TODO or remove
 var session = [],
     url = "http://localhost:42550";
@@ -49,6 +51,23 @@ router.route('/account/login')
             return res.send(response);
         });
     });
+
+router.route('/account/save')
+    .post(function(req, res) {
+        var userSession = new UserSession(),
+            accountController = new AccountController(User, req.session, userSession, mailer);
+
+        var userSendSave = new UserSendSave(req.body);
+
+        accountController.saveData(userSendSave.username, userSendSave.gameData,userSendSave.date, userSendSave.userMoney, function(err, response) {
+            return res.send(response);
+        })
+    });
+
+router.route('/account/data')
+    .get(function (req, res) {
+        var 
+    })
 
 router.route('/account/logoff')
     .get(function (req, res) {
