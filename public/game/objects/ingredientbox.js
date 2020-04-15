@@ -104,7 +104,7 @@ class IngredientBox {
             // let x = this.x + 10,
             //     y = this.y + 5 + 22*(this.typeStorage1.length);
             for (let i = 0; i <max;i++) {
-                console.log(i);
+                //console.log(i);
                 
                 let x = this.x + 10,
                     y = this.y + 5 + 15*(this.typeStorage1Missing[i]);
