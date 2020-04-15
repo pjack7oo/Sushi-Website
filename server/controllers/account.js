@@ -6,6 +6,7 @@ var AccountController = function(userModel, session, userSession, mailer) {
     this.UserProfileModel = require('../models/user-profile.js');
     this.User             = require('../models/user.js');
     this.UserSaves        = require('../models/user-saves');
+    this.Rolls            = require('../models/rolls.js');
     this.userModel        = userModel;
     this.session          = session;
     this.userSession      = userSession;
@@ -95,7 +96,7 @@ AccountController.prototype.saveData = function(username, data, date, money, cal
 
         if (userSave) {
             userSave.userMoney = money;
-            userSave.data      = data;
+            userSave.gameData      = data;
             userSave.creationDate = date;
             userSave.saveNumber++;
 
@@ -142,8 +143,43 @@ AccountController.prototype.saveData = function(username, data, date, money, cal
     });
 }
 
-AccountController.prototype.getData = function (username, callback) {
+AccountController.prototype.getRolls = function(callback) {
+    var me = this;
+
+    me.Rolls.find({}, function(err, rolls) {
+        if (err) {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+        }
+        var rollList = [];
+        let length = rolls.length;
+
+        for (let i = 0; i < length; i++) {
+            rollList.push(rolls[i]);
+        }
+
+        return callback(err, new me.ApiResponse({ success: false, extras: {rollList: rollList}}));
+    });
     
+}
+
+AccountController.prototype.getData = function (username, callback) {
+    var me = this;
+
+    me.UserSaves.findOne({username: username}, function(err, userSave) {
+        if(err) {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+        }
+
+        if (userSave) {
+            return callback(err, new me.ApiResponse({
+                success: true, extras: {
+                    userSave: userSave
+                }
+            }));
+        } else {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_FIND_USERSAVE }}));
+        }
+    })
 }
 
 AccountController.prototype.logoff = function () {
