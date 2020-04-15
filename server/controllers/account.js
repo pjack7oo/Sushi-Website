@@ -5,6 +5,7 @@ var AccountController = function(userModel, session, userSession, mailer) {
     this.ApiMessages      = require('../models/api-messages.js');
     this.UserProfileModel = require('../models/user-profile.js');
     this.User             = require('../models/user.js');
+    this.UserSaves        = require('../models/user-saves');
     this.userModel        = userModel;
     this.session          = session;
     this.userSession      = userSession;
@@ -83,6 +84,67 @@ AccountController.prototype.logon = function(username, password, callback) {
 
     });
 };
+
+AccountController.prototype.saveData = function(username, data, date, money, callback) {
+    var me = this;
+
+    me.UserSaves.findOne({username: username}, function(err, userSave) {
+        if (err) {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+        }
+
+        if (userSave) {
+            userSave.userMoney = money;
+            userSave.data      = data;
+            userSave.creationDate = date;
+            userSave.saveNumber++;
+
+            userSave.save(function (err, saveData) {
+                if (err) {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+                }
+
+                if (saveData) {
+                    return callback(err, new me.ApiResponse({
+                        success: true, extras: {
+                            userSave: saveData
+                        }
+                    }));
+                } else {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_CREATE_USERSAVE }}));
+                }
+            });
+        } else {
+            var userSave = new me.UserSaves ({
+                username     : username,
+                creationDate : date,
+                userMoney    : money,
+                saveNumber   : 1,
+                gameData     : data
+            });
+
+            userSave.save(function (err, saveData) {
+                if (err) {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+                }
+                if (saveData) {
+                    return callback(err, new me.ApiResponse({
+                        success: true, extras: {
+                            userSave: saveData
+                        }
+                    }));
+                } else {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_CREATE_USERSAVE }}));
+                }
+
+            });
+        }
+    });
+}
+
+AccountController.prototype.getData = function (username, callback) {
+    
+}
 
 AccountController.prototype.logoff = function () {
     if (this.session.userProfileModel) delete this.session.userProfileModel;
