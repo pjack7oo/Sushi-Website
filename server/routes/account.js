@@ -8,7 +8,7 @@ const express = require('express'),
       UserSendSave      = require('../models/user-sendSave.js'),
       UserLogon         = require('../models/user-logon.js'),
       MailerMock        = require("../test/mailer-mock.js"),
-      
+      UserGetSave       = require('../models/user-getSave.js'),
       mailer = new MailerMock();      //TODO or remove
 var session = [],
     url = "http://localhost:42550";
@@ -58,16 +58,51 @@ router.route('/account/save')
             accountController = new AccountController(User, req.session, userSession, mailer);
 
         var userSendSave = new UserSendSave(req.body);
-
+        console.log(userSendSave.gameData);
+        
         accountController.saveData(userSendSave.username, userSendSave.gameData,userSendSave.date, userSendSave.userMoney, function(err, response) {
             return res.send(response);
         })
     });
 
-router.route('/account/data')
-    .get(function (req, res) {
-        var 
+router.route('/account/rolls')
+    .get(function(req, res) {
+        var userSession = new UserSession(),
+            accountController = new AccountController(User, req.session, userSession, mailer);
+
+        accountController.getRolls(function(err, response) {
+            if (err) {
+                console.log(err);
+            }
+            return res.send(response);
+        })
     })
+
+router.route('/account/data')
+    .post(function (req, res) {
+        var userSession = new UserSession(),
+            accountController = new AccountController(User, req.session, userSession, mailer);
+        var userGetSave = new UserGetSave(req.body);
+        console.log(userGetSave);
+        accountController.getData(userGetSave.username, function(err, response) {
+            return res.send(response);
+        })
+    })
+    .get(function (req, res) {
+        var userSession = new UserSession(),
+            accountController = new AccountController(User, req.session, userSession, mailer);
+            console.log(req.get('username'));
+            var userGetSave = new UserGetSave(req.body);
+            console.log(userGetSave);
+            
+        
+        accountController.getData(userGetSave.username, function (err, response) {
+            if (err) {
+                console.log(err);
+            }
+            return res.send(response);
+        })
+    });
 
 router.route('/account/logoff')
     .get(function (req, res) {
