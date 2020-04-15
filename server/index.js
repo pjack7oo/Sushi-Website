@@ -5,7 +5,8 @@ const express = require('express'),
       mongoose   = require('mongoose'),
       expressSession = require('express-session'),
       MongoStore    = require('connect-mongo')(expressSession),
-      accountRoutes = require('../server/routes/account');
+      accountRoutes = require('../server/routes/account'),
+      RollSchema    = require('./models/rolls.js');        
 
 const path = require('path');
 const http = require('http');
@@ -90,14 +91,35 @@ var dbName = 'SushiCatDB';
 var connectionString = 'mongodb://localhost:27017/' + dbName;
 
 mongoose.connect(connectionString);
+var db = mongoose.connection;
 
+// var calliforniaRoll = new RollSchema({
+//   name: 'California Roll',
+//   type: 'Roll',
+//   inner: ["Avocado", "Crab", "Cucumber"],
+//   outer: ["Rice"],
+//   nori : true,
+//   description: "Standard roll follow basic instructions"
+// });
+// var AlaskaRoll = new RollSchema({
+//   name: 'Alaska Roll',
+//   type: 'Roll',
+//   inner: ["Avocado", "Cucumber"],
+//   outer: ["Rice"],
+//   nori : true,
+//   description: "Standard roll follow basic instructions"
+// });
+
+// db.once('open', function() {
+  
+// })
 
 app.use(expressSession({
   ker: 'session',
   secret: 'foo',
   resave: true,
   store : new MongoStore({
-    mongooseConnection: mongoose.connection,
+    mongooseConnection: db,
     secret: 'bar',
     autoRemove: 'disabled'
   }),
