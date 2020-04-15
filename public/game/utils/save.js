@@ -8,24 +8,28 @@ import * as level         from '../objects/level.js';
 import * as ingredientBox from '../objects/ingredientbox.js';
 import * as cuttingSt     from '../objects/cuttingstation.js';
 import * as customers     from '../objects/customers.js';
+import {getUsername}      from '../../js/account-controller.js';
 
 
 var gameData = {};
-
+var saveUrl = "http://localhost:5000/api/account/save"
 var riceCookerUpgrades = {};
 var upgrades = {};
 var testObject = {'level': 2, 'money': 1500, 'upgrades': upgrades, 'saveNum': 1};
 var retrievedItem;
+var dataWasSaved = false;
 
 export function saveINIT() {
     ioControl.addButton(shapes.createButton(200, 400, 100, 50, "Save", true, 1, save, 'SaveGame'));
     ioControl.addButton(shapes.createButton(300, 400, 100, 50, "Load", true, 1, load, 'LoadGame'));
+    ioControl.addButton(shapes.createButton(400, 400, 100, 50, "Upload", true, 1, sendData, 'UploadGame'));
 }
 
 export function save() {
     getGameData();
     localStorage.setItem('testObject', encrypt(gameData));
     console.log('Saved', gameData);
+    dataWasSaved = true;
     
 }
 
@@ -55,6 +59,7 @@ function getGameData() {
     gameData.customers = customerData;
     gameData.player   = playerData;
     gameData.level    = levelData;
+    gameData.date     = new Date();
 }
 
 function loadData() {
@@ -65,6 +70,36 @@ function loadData() {
     customers.setData(gameData.customers);
     player.setData(gameData.player)
     level.setData(gameData.level);
+}
+
+function sendData() {
+    if (!dataWasSaved) {
+        return;
+    }
+    var username = getUsername();
+    var encryptedData = encrypt(data);
+    $.ajax({
+        type: 'POST',
+        url : saveUrl,
+        data:"username=" + username + "&money=" + gameData.player.money + "&date=" + gameData.date + "&data=" + encryptedData,
+        success: function(response) {
+            console.log("success sendData");
+            if (response.success === true) {
+
+            } else {
+                if (response.extras.msg) {
+                    switch(response.extras.msg) {
+                        default:
+                        //TODO Display errors
+                            break;
+                    }
+                }
+            }
+        },
+        error: function (e) {
+            console.log(e.message);
+        }
+    });
 }
 
 
