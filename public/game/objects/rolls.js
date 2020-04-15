@@ -33,11 +33,16 @@ export function rollListInit()
     // $.getJSON("./actualRolls.json", function(json){
     //     rollList = json;
     // });
-    LoadJSON(function(response){
-        rollList = JSON.parse(response);
-        console.log(rollList);
+    // LoadJSON(function(response){
+    //     rollList = JSON.parse(response);
+    //     console.log(rollList);
         
-    })
+    // })
+    var rolls = localStorage.getItem("rollList");
+    
+    rollList = JSON.parse(rolls);
+    console.log(rollList);
+    
 }
 
 function LoadJSON(callback)
