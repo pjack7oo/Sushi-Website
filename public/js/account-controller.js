@@ -1,5 +1,5 @@
 var SushiCat = SushiCat || {};
-
+var rollUrl = "http://localhost:5000/api/account/rolls";
 SushiCat.Controller = function () {
     this.localStorageKey = "SushiCat profile";
     this.save= {};
@@ -23,10 +23,21 @@ function uploadServerData (data) {
 
 }
 
-export function getUsername() {
+function getUsername() {
     return session.userProfileModel.username;
 }
 
-$(document).ready(function () {
-
-})
+function getRolls() {
+    $.ajax({
+        type:'GET',
+        url: rollUrl,
+        success: function(response) {
+            
+            var data = JSON.stringify(response.extras.rollList);
+            
+            localStorage.setItem('rollList',data);
+            console.log("loaded rolllist into localStorage");
+            
+        }
+    })
+}
