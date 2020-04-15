@@ -37,7 +37,7 @@ $(document).ready(function () {
                         expirationDate: expirationDate,
                         keepSignedIn: $keepsignedIn.is(":checked")
                     });
-
+                    
                     document.getElementById('login').style.display='none';
                     return;
                 } else {
