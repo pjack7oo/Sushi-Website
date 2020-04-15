@@ -8,11 +8,12 @@ import * as level         from '../objects/level.js';
 import * as ingredientBox from '../objects/ingredientbox.js';
 import * as cuttingSt     from '../objects/cuttingstation.js';
 import * as customers     from '../objects/customers.js';
-import {getUsername}      from '../../js/account-controller.js';
+
 
 
 var gameData = {};
-var saveUrl = "http://localhost:5000/api/account/save"
+var saveUrl = "http://localhost:5000/api/account/save",
+    dataUrl = "http://localhost:5000/api/account/data";
 var riceCookerUpgrades = {};
 var upgrades = {};
 var testObject = {'level': 2, 'money': 1500, 'upgrades': upgrades, 'saveNum': 1};
@@ -20,26 +21,26 @@ var retrievedItem;
 var dataWasSaved = false;
 
 export function saveINIT() {
-    ioControl.addButton(shapes.createButton(200, 400, 100, 50, "Save", true, 1, save, 'SaveGame'));
-    ioControl.addButton(shapes.createButton(300, 400, 100, 50, "Load", true, 1, load, 'LoadGame'));
-    ioControl.addButton(shapes.createButton(400, 400, 100, 50, "Upload", true, 1, sendData, 'UploadGame'));
+    ioControl.addButton(shapes.createButton(200, 400, 100, 50, "SaveLocal", true, 1, save, 'SaveGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    ioControl.addButton(shapes.createButton(300, 400, 100, 50, "LoadLocal", true, 1, load, 'LoadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    ioControl.addButton(shapes.createButton(400, 400, 100, 50, "Upload", true, 1, sendDataToServer, 'UploadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    ioControl.addButton(shapes.createButton(400, 350, 100, 50, "DownLoad", true, 1, getDataFromServer, 'downloadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
 }
 
 export function save() {
     getGameData();
-    localStorage.setItem('testObject', encrypt(gameData));
+    localStorage.setItem('gameData', encrypt(gameData));
     console.log('Saved', gameData);
     dataWasSaved = true;
     
 }
 
 function load() {
-    retrievedItem = localStorage.getItem('testObject');
+    let retrievedItem = localStorage.getItem('gameData');
     retrievedItem = decrypt(retrievedItem);
-    retrievedItem = JSON.parse(retrievedItem);
-    gameData = retrievedItem;
+    // retrievedItem = JSON.parse(retrievedItem);
+    gameData = JSON.parse(retrievedItem);
     loadData();
-    console.log(retrievedItem);
 }
 
 function getGameData() {
@@ -72,16 +73,21 @@ function loadData() {
     level.setData(gameData.level);
 }
 
-function sendData() {
+function sendDataToServer() {
     if (!dataWasSaved) {
         return;
     }
-    var username = getUsername();
-    var encryptedData = encrypt(data);
+    var session = JSON.parse(localStorage.getItem("sushicat-session"));
+    console.log(session);
+    var username = session.userProfileModel.username;
+    var encryptedData = encrypt(gameData);
+    var data = JSON.stringify(gameData);
+    console.log(encryptedData);
+    
     $.ajax({
         type: 'POST',
         url : saveUrl,
-        data:"username=" + username + "&money=" + gameData.player.money + "&date=" + gameData.date + "&data=" + encryptedData,
+        data:"username=" + username + "&money=" + gameData.player.money + "&date=" + gameData.date + "&gameData=" + data,
         success: function(response) {
             console.log("success sendData");
             if (response.success === true) {
@@ -100,6 +106,40 @@ function sendData() {
             console.log(e.message);
         }
     });
+}
+
+function getDataFromServer () {
+    var session = JSON.parse(localStorage.getItem("sushicat-session"));
+    if (session ==undefined || session == null) {
+        //TODO show error that not logged in to website ingame
+        return;
+    }
+    var username = session.userProfileModel.username;
+
+    $.ajax({
+        type: 'POST',
+        url: dataUrl,
+        data: "username=" + username,
+        
+        success: function(response) {
+            console.log("successfully retrieved data");
+            console.log(response);
+           
+            var data  = JSON.parse(response.extras.userSave.gameData);
+            var encryptedData = encrypt(data);
+            localStorage.setItem("gameData",encryptedData);
+            
+            
+            
+            
+            load();
+            console.log("successfully loaded data");
+            //todo load data into local storage
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    })
 }
 
 
