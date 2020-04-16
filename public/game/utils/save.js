@@ -20,11 +20,15 @@ var testObject = {'level': 2, 'money': 1500, 'upgrades': upgrades, 'saveNum': 1}
 var retrievedItem;
 var dataWasSaved = false;
 
-export function saveINIT() {
-    ioControl.addButton(shapes.createButton(200, 400, 100, 50, "SaveLocal", true, 1, save, 'SaveGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
-    ioControl.addButton(shapes.createButton(300, 400, 100, 50, "LoadLocal", true, 1, load, 'LoadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
-    ioControl.addButton(shapes.createButton(400, 400, 100, 50, "Upload", true, 1, sendDataToServer, 'UploadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
-    ioControl.addButton(shapes.createButton(400, 350, 100, 50, "DownLoad", true, 1, getDataFromServer, 'downloadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+export function saveINIT(x, y) {
+
+    ioControl.addButton(shapes.createButton(x, y, 100, 50, "SaveLocal", true, 1, save, 'SaveGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    y+=50;
+    ioControl.addButton(shapes.createButton(x,y, 100, 50, "LoadLocal", true, 1, load, 'LoadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    y+=50;
+    ioControl.addButton(shapes.createButton(x,y, 100, 50, "Upload", true, 1, sendDataToServer, 'UploadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    y+=50;
+    ioControl.addButton(shapes.createButton(x,y, 100, 50, "DownLoad", true, 1, getDataFromServer, 'downloadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
 }
 
 export function save() {
@@ -74,20 +78,24 @@ function loadData() {
 }
 
 function sendDataToServer() {
-    if (!dataWasSaved) {
+    var session = JSON.parse(localStorage.getItem("sushicat-session"));
+    var localData = localStorage.getItem('gameData');
+    
+    
+    if (localData == null || localData == undefined){
         return;
     }
-    var session = JSON.parse(localStorage.getItem("sushicat-session"));
-    console.log(session);
+    
     var username = session.userProfileModel.username;
-    var encryptedData = encrypt(gameData);
-    var data = JSON.stringify(gameData);
-    console.log(encryptedData);
+    var decryptedData = decrypt(localData);
+    var data = JSON.parse(decryptedData);
+    console.log(decryptedData);
+    
     
     $.ajax({
         type: 'POST',
         url : saveUrl,
-        data:"username=" + username + "&money=" + gameData.player.money + "&date=" + gameData.date + "&gameData=" + data,
+        data:"username=" + username + "&money=" + data.player.money + "&date=" + data.date + "&gameData=" + decryptedData,
         success: function(response) {
             console.log("success sendData");
             if (response.success === true) {
@@ -124,7 +132,7 @@ function getDataFromServer () {
         success: function(response) {
             console.log("successfully retrieved data");
             console.log(response);
-           
+           if (response.success == true){
             var data  = JSON.parse(response.extras.userSave.gameData);
             var encryptedData = encrypt(data);
             localStorage.setItem("gameData",encryptedData);
@@ -134,6 +142,8 @@ function getDataFromServer () {
             
             load();
             console.log("successfully loaded data");
+           }
+            
             //todo load data into local storage
         },
         error: function(error) {
