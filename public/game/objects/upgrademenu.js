@@ -18,18 +18,18 @@ export function upgradeScreen()
 {
     canvas.removeEventListener('click', ioControl.buttonClick, false);
     ioControl.clearButtons();
-    ioControl.addButton(shapes.createButton(350,400,100,50,"Next-Level", true, 1, startNextLevel, 
+    ioControl.addButton(shapes.createButton(400,400,100,50,"Next-Level", true, 1, startNextLevel, 
                         "StartLevel-Next", shapes.shapeType.ROUNDRECT, 'center', "20px Arial"));
-    ioControl.addButton(shapes.createButton(150,400,100,50,"Exit", true, 1, exitUpgrade, 
+    ioControl.addButton(shapes.createButton(200,400,100,50,"Exit", true, 1, exitUpgrade, 
                         "Exit to main screen", shapes.shapeType.ROUNDRECT, 'center', "20px Arial"));
-    ioControl.addButton(shapes.createButton(250, 400, 100, 50, "Save", true, 1, save, 'SaveGame',
+    ioControl.addButton(shapes.createButton(300, 400, 100, 50, "Save", true, 1, save, 'SaveGame',
                         shapes.shapeType.ROUNDRECT, 'center', "20px Arial"));
     canvas.addEventListener('click', upgradeMenuClick, false);
 
-    riceCookerUpgradesSetup(0,200);
-    storageBoxUpgradesSetup(0,10);
-    rollingMattUpgradesSetup(400,10);
-    cuttingBoardUpgradesSetup(201,200);
+    riceCookerUpgradesSetup(50,200);
+    storageBoxUpgradesSetup(50,10);
+    rollingMattUpgradesSetup(450,10);
+    cuttingBoardUpgradesSetup(251,200);
     canvas.onmousemove = function(e) {
         checkButtons(e);
     }
@@ -83,15 +83,16 @@ function upgradeUpdate() {
 function upgradeDraw()
 {
     drawing.clear(context);
-    drawing.drawTextBox(context, 225, 0, 150, 100, "Upgrade Menu", "30px Arial", "Red", "white", "Red");
-    drawing.printAtWordWrap(context,"Money: ",250, 115, 10, 100, "Green", "20px Arial", "left");
-    drawing.printAtWordWrap(context,player.getCurrentMoney().toString(),320, 115, 10, 100, "Green", "20px Arial", "left");
+    drawing.drawRectangle(context, 0,0,700,500,true,"LightBlue", "LightBlue",1);
+    drawing.drawTextBox(context, 275, 0, 150, 100, "Upgrade Menu", "30px Arial", "Red", "white", "Red");
+    drawing.printAtWordWrap(context,"Money: ",300, 115, 10, 100, "Green", "20px Arial", "left");
+    drawing.printAtWordWrap(context,player.getCurrentMoney().toString(),370, 115, 10, 100, "Green", "20px Arial", "left");
     
-    riceCookerUpgradesDraw(0,200);
-    storageBoxUpgradesDraw(0,10);
-    rollingMattUpgradesDraw(400,10);
-    cuttingBoardUpgradesDraw(201,200);
-    teaKettleUpgradesDraw(401,200);
+    riceCookerUpgradesDraw(50,200);
+    storageBoxUpgradesDraw(50,10);
+    rollingMattUpgradesDraw(450,10);
+    cuttingBoardUpgradesDraw(251,200);
+    teaKettleUpgradesDraw(451,200);
 
     ioControl.drawIoButtons();
     drawing.drawUpgradeButtons(context, upgradeButtons);
