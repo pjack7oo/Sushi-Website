@@ -32,12 +32,14 @@ AccountController.prototype.logon = function(username, password, callback) {
     var me = this;
 
     me.userModel.findOne({ username: username}, function (err, user) {
-
+        //console.log(user);
+        
         if (err) {
             return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR } }));
         }
+        
 
-        if (user && user.passwordSalt) {
+        if (user !=null && user.passwordSalt) {
             
             me.hashPassword(password, user.passwordSalt, function (err, passwordHash) {
 
@@ -45,9 +47,11 @@ AccountController.prototype.logon = function(username, password, callback) {
 
                     var userProfileModel = new me.UserProfileModel({
                         username: user.username,
-                        name: user.name
+                        name: user.name,
+                        email: user.email
                     });
 
+                   //console.log(userProfileModel);
                    
                     me.session.userProfileModel = userProfileModel;
                     me.session.id = me.uuid.v4();
@@ -255,30 +259,65 @@ AccountController.prototype.resetPassword = function (email, callback) {
     })
 };
 
-AccountController.prototype.resetPasswordFinal = function (email, newPassword, passwordResetHash, callback) {
+
+AccountController.prototype.clearSave = function(username, callback) {
     var me = this;
-    if (!me.session || !me.session.passwordResetHash) {
-        return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EXPIRED } }));
-    }
 
-    if (me.session.passwordResetHash !== passwordResetHash) {
-        return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_HASH_MISMATCH } }));
-    }
-    if (me.session.emailWhoRequestedPasswordReset !== email) {
-        return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EMAIL_MISMATCH } }));
-    }
+    me.UserSaves.findOne({username: username}, function(err, userSave) {
+        if (err) {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+        }
+        
+        
+        if (userSave) {
+            userSave.remove(function(err, save) {
+                if (err) {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+                }
 
+                if (save) {
+                    return callback(err, new me.ApiResponse({
+                        success: true, extras: null
+                    }));
+                } else {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_FIND_USERSAVE }}));
+                }
+            });
+        } else {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_FIND_USERSAVE }}));
+        }
+    })
+    
+}
+AccountController.prototype.resetPasswordFinal = function (username, newPassword, newPasswordConfirm, callback) {
+    var me = this;
+    
+    
+    // if (!me.session || !me.session.passwordResetHash) {
+    //     return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EXPIRED } }));
+    // }
+
+    // if (me.session.passwordResetHash !== passwordResetHash) {
+    //     return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_HASH_MISMATCH } }));
+    // }
+    // if (me.session.emailWhoRequestedPasswordReset !== email) {
+    //     return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EMAIL_MISMATCH } }));
+    // }
+    if (newPassword != newPasswordConfirm) {
+        return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_CONFIRM_MISMATCH } }));
+    }
     var passwordSalt = this.uuid.v4();
 
     me.hashPassword(newPassword, passwordSalt, function (err, passwordHash) {
         
-        me.userModel.update({ email: email }, { passwordHash: passwordHash, passwordSalt: passwordSalt }, function (err, numberAffected, raw) {
-
+        me.userModel.updateOne({ username: username }, { passwordHash: passwordHash, passwordSalt: passwordSalt }, function (err, raw) {
+           
+            
             if (err) {
                 return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR } }));
             }
 
-            if (numberAffected < 1) {
+            if (raw.nModified <1) {
                 return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_RESET_PASSWORD } }));
             } else {
                 return callback(err, new me.ApiResponse({ success: true, extras: null }));
@@ -316,6 +355,8 @@ AccountController.prototype.getUserFromRegistration = function (userRegistration
         }
     });
 }
+
+
 
                 
 
