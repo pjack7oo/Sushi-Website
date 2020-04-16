@@ -24,6 +24,9 @@ var width;
 var buttons = [];
 var activeInterval;
 
+var bambooimg = new Image();
+bambooimg.src = "./Images/Bamboo.png";
+
 // var activeIngredients = [];
 // var innerIngredients = [];
 // var outerIngredients = [];
@@ -171,27 +174,66 @@ function startGame()
 
 export function startScreen()
 {
-
-    ioControl.addButton(shapes.createButton(300,350, 100, 50, "Start", true, 1, startGame, "StartGame-Start"));
-    ioControl.addButton(shapes.createButton(200,350, 100, 50, "Upgrade", true, 1, upgradeMenu.upgradeScreen, "StartGame-Start"));
-    saveControl.saveINIT();
+    ioControl.clearButtons();
+    clearInterval(activeInterval);
+    ioControl.addButton(shapes.createButton(50,50, 100, 50, "Start", true, 1, startGame, "StartGame-Start"));
+    ioControl.addButton(shapes.createButton(50,100, 100, 50, "Upgrade", true, 1, upgradeMenu.upgradeScreen, "StartGame-Start"));
+    saveControl.saveINIT(50,150);
+    ioControl.addButton(shapes.createButton(50,350, 100, 50, "About", true, 1, aboutSetup, "StartGame-Start"));
     canvas.addEventListener('click', ioControl.buttonClick, false);
 
     activeInterval = setInterval(startUpdate, interval);
 }
 
+function aboutSetup() {
+    ioControl.clearButtons();
+    clearInterval(activeInterval);
+    activeInterval = setInterval(aboutDraw, interval);
+
+
+}
+
+function aboutDraw() {
+    drawing.clear(context);
+    drawing.drawRectangle(context,0,0,700,500,true, 'green','green',1);
+    ioControl.drawIoButtons();
+    ioControl.addButton(shapes.createButton(50,50, 100, 50, "Return", true, 1, startScreen, "StartGame-Start"));
+    drawing.printAtWordWrap(context, "Concept Made by: \nPiotr Jackowski\nCode by:\nPiotr Jackowski\n Art by:\nLorraine Hargrove\nPiotr Jackowski",350,50,50,250,"Orange","25px Arial","center");
+}
+
 function startUpdate()
 {
-    drawing.clear(context)
+    drawing.clear(context);
     startDraw();
 }
 
 function startDraw()
 {
-    drawing.drawTextBox(context, 225, 175, 150, 100, "Sushi Cat\nBy Piotr", "30px Arial", "Red", "white", "Red");
+    drawing.drawRectangle(context,0,0,700,500,true,"LightGreen",'LightGreen',1);
+    drawing.drawRectangle(context,0,450,700,50,true, "Brown","LightBrown",1);
+    drawing.drawTriangle(context,{x:0,y:400},{x:0,y:450},{x:500,y:455},true, true, "Brown","Brown");
+    drawBambooForest(0,0);
+    drawBambooForest(450,0);
+    drawBambooForest(100,0);
+    drawBambooForest(200,0);
+    drawBambooForest(300,0);
+    drawBambooForest(600,0);
+    drawBambooForest(800,0);
+    drawing.drawTextBox(context, 275, 75, 150, 100, "Sushi Cat", "30px Arial", "Red", "white", "Red");
+    
     
     
     ioControl.drawIoButtons();
+}
+
+function drawBambooForest(x,y){
+    drawing.drawRectImage(x-20,y,92,500,bambooimg);
+    drawing.drawRectImage(x-50,y-10,92,500,bambooimg);
+    drawing.drawRectImage(x,-50,y-92,500,bambooimg);
+    drawing.drawRectImage(x+10,y-40,92,500,bambooimg);
+    drawing.drawRectImage(x+30,y+0,92,500,bambooimg);
+    drawing.drawRectImage(x+40,y-20,92,500,bambooimg);
+    drawing.drawRectImage(x+45,y-30,92,500,bambooimg); 
 }
 
 function update() //used to update logic of parts of game like getting customers based on tim and randomness
