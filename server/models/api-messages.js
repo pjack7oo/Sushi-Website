@@ -14,5 +14,6 @@ ApiMessages.PASSWORD_CONFIRM_MISMATCH     = 10;
 ApiMessages.COULD_NOT_CREATE_SESSION      = 11;
 ApiMessages.COULD_NOT_CREATE_USERSAVE     = 12;
 ApiMessages.COULD_NOT_FIND_USERSAVE       = 13;
+ApiMessages.COULD_NOT_REMOVE_USERSAVE       = 14;
 
 module.exports = ApiMessages;
