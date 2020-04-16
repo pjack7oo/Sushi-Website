@@ -194,13 +194,13 @@ function getRollName(roll, acceptedRolls = [])
     var rollsToDel = [];
     if (acceptedRolls.length == 0)
     {
-        let rl = rollList.rolls.length;
+        let rl = rollList.length;
         
         for (let i = 0; i < rl;i++)
         {
             //console.log(rollList[i].inner.length + rollList[i].outer.length);//
             
-            if (((roll.inner.length + roll.outer.length) === (rollList.rolls[i].inner.length + rollList.rolls[i].outer.length)))
+            if (((roll.inner.length + roll.outer.length) === (rollList[i].inner.length + rollList[i].outer.length)))
             {
                 acceptedRolls.push(i);
                 console.log(i);
@@ -219,7 +219,7 @@ function getRollName(roll, acceptedRolls = [])
         let aRl = acceptedRolls.length;
         for (let i = 0; i < aRl; i++)
         {   
-            if (roll.inner.length > rollList.rolls[acceptedRolls[i]].inner.length)
+            if (roll.inner.length > rollList[acceptedRolls[i]].inner.length)
             {
                 rollsToDel.push(i);
                 continue;
@@ -227,14 +227,14 @@ function getRollName(roll, acceptedRolls = [])
             let rIl = roll.inner.length;
             for(let k = 0; k < rIl; k++)
             {
-                if (roll.inner[k] != rollList.rolls[acceptedRolls[i]].inner[k])
+                if (roll.inner[k] != rollList[acceptedRolls[i]].inner[k])
                 {
                     rollsToDel.push(i);
                     break;
                 }
             }
             
-            if (roll.outer.length > rollList.rolls[acceptedRolls[i]].outer.length)
+            if (roll.outer.length > rollList[acceptedRolls[i]].outer.length)
             {
                 rollsToDel.push(i);
                 continue;
@@ -243,7 +243,7 @@ function getRollName(roll, acceptedRolls = [])
             for(let k = 0; k < rOl; k++)
             {
                 
-                if (roll.outer[k] != rollList.rolls[acceptedRolls[i]].outer[k])
+                if (roll.outer[k] != rollList[acceptedRolls[i]].outer[k])
                 {
                     rollsToDel.push(i);
                     break;
@@ -268,7 +268,7 @@ function getRollName(roll, acceptedRolls = [])
     }
     else if (cleanArray.length == 1)
     {
-        return rollList.rolls[cleanArray[0]].name;
+        return rollList[cleanArray[0]].name;
     }
     else
     {
