@@ -18,6 +18,7 @@
   <script src="js/settings.js" type="text/javascript"></script>
   <script src="js/sign-up.js" type="text/javascript"></script>
   <script src="js/sign-in.js" type="text/javascript"></script>
+  <script src="js/accountFunctions.js" type="text/javascript"></script>
   <script src= "js/account-controller.js" type="text/javascript"></script>
   <script>getRolls()</script>  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -26,6 +27,62 @@
     
 </head>
 <body>
+    <div id="Account" class="modal">
+  
+        <div class="modal-content animate" onsubmit="event.preventDefault()">
+          <div class="imgcontainer">
+            <span onclick="document.getElementById('Account').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <img src="../Images/Cat.png" alt="Avatar" class="avatar">
+          </div>
+      
+          <div class="container">
+            <div id="account-ctn-err" class="bi-invisible"></div>
+            <div id="accountInfo">
+                <p id="accountUsername"><b>Username: </b></p>
+                <p id="accountEmail"><b>Email: </b></p>
+                <p id="accountName"><b>Name: </b></p>
+            </div>
+            
+            <div id="accountButtons">
+
+            </div>
+            <script>drawAccount()</script>
+          </div>
+      
+          <div class="container" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('Account').style.display='none';logOut();" class="logoutButton">LogOut</button>
+            <button type="button" onclick="document.getElementById('login').style.display='block';" class="loginButton">Login</button>
+            <button type="button" onclick="document.getElementById('register').style.display='block'" class="registerButton">Register</button>
+            <span class="psw">Forgot <a href="#">password?</a></span>
+          </div>
+        </div>
+    </div>
+    <div id="resetPassword" class="modal">
+  
+        <form class="modal-content animate" onsubmit="event.preventDefault()">
+          <div class="imgcontainer">
+            <span onclick="document.getElementById('resetPassword').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <img src="../Images/Cat.png" alt="Avatar" class="avatar">
+          </div>
+      
+          <div class="container">
+            <div id="resetPassword-ctn-err" class="bi-invisible"></div>
+      
+            <label for="newPassword"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="newPassword" id="newPassword" required>
+
+            <label for="newPasswordConfirm"><b>Confirm Password</b></label>
+            <input type="password" placeholder="Enter Password" name="newPasswordConfirm" id="newPasswordConfirm" required>
+              
+            <button type="submit" id="resetPassword-submit">Reset Password</button>
+            
+          </div>
+      
+          <div class="container" style="background-color:#f1f1f1">
+            <span class="psw">Forgot <a href="#">password?</a></span>
+          </div>
+        </form>
+    </div>
     <div id="login" class="modal">
   
         <form class="modal-content animate" onsubmit="event.preventDefault()">
@@ -44,12 +101,11 @@
               
             <button type="submit" id="login-submit">Login</button>
             <label>
-              <input type="checkbox" checked="checked" id="checked" name="remember"> Remember me
+              <input type="checkbox"  id="checkedLogin" name="remember"> Remember me
             </label>
           </div>
       
           <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('login').style.display='none'" class="cancelbutton">Cancel</button>
             <button type="button" onclick="document.getElementById('login').style.display='none'; document.getElementById('register').style.display='block'" class="registerButton">Register</button>
             <span class="psw">Forgot <a href="#">password?</a></span>
           </div>
@@ -84,7 +140,6 @@
           </div>
       
           <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('register').style.display='none'" class="cancelbutton">Cancel</button>
             
             <span class="psw">Forgot <a href="#">password?</a></span>
           </div>
@@ -96,7 +151,7 @@
             <li><a href="#game">Game</a></li>
             <li><a href="#learn">Learn</a></li>
             <li><a href="#about">About</a></li>
-            <button id='loginButton' onclick="document.getElementById('login').style.display='block'" style="width:auto;">Login</button>
+            <button id='accountButton' onclick="document.getElementById('Account').style.display='block';drawAccount();" style="width:auto;">Account</button>
             <script>
                 var loginForm = document.getElementById('login');
                 window.onclick = function(e) {
