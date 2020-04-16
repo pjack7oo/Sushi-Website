@@ -1,4 +1,4 @@
-#loginButton {
+#accountButton {
     background:deepskyblue;
   color: white;
   padding: 14px 20px;
@@ -9,7 +9,7 @@
   border-radius: 15px;
 }
 
-#loginButton:hover {
+#accountButton:hover {
   background: #1565C0;
 }
 
@@ -21,7 +21,12 @@ input[type=username], input[type=password], input[type=text-email], input[type=t
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
-.cancelbutton {
+.cancelButton {
+  width: auto;
+  padding: 10px 18px;
+  background-color: darkgreen;
+}
+.logoutButton {
   width: auto;
   padding: 10px 18px;
   background-color: darkgreen;
@@ -31,9 +36,15 @@ input[type=username], input[type=password], input[type=text-email], input[type=t
   padding: 10px 18px;
   background-color: darkgreen;
 }
+.loginButton {
+  width: auto;
+  padding: 10px 18px;
+  background-color: darkgreen;
+}
 .imgcontainer {
   text-align: center;
   margin: 24px 0 12px 0;
+  width: auto;
   position: relative;
 }
 img.avatar {
@@ -44,6 +55,7 @@ img.avatar {
 
 .container {
   padding: 16px;
+  
 }
 
 span.psw {
