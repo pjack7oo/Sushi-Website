@@ -198,8 +198,7 @@ export function draw() {
         cutStation.drawCuttingStation(context);//cuttingStation
         riceCooker.drawRiceCooker(context); //ricecooker
 
-        rollControl.drawRolls(context);
-        ingredientBox.drawIngredientBoxes(context);
+       
         //ingredients.drawActiveIngredients(context);
         // rollMatt.drawIngredients(context);
         //drawShapes(context, ingredients.activeIngredients);
@@ -218,6 +217,8 @@ export function draw() {
         
         ingredientMenu.drawMenu();
         ioControl.drawIoButtons();
+        rollControl.drawRolls(context);
+        ingredientBox.drawIngredientBoxes(context);
         riceCooker.drawRice(context);
         // if (mySelect != null)
         // {
