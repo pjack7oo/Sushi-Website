@@ -3,7 +3,7 @@ body {
 }
 .page-container {
     display: grid;
-    grid-template-columns: 40px 92px 10% auto 10% 92px 40px;
+    grid-template-columns: 40px 92px 25% auto 25% 92px 40px;
     grid-template-rows: auto auto auto auto auto auto;
     /* grid-template-areas:
         "header header header"
