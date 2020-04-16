@@ -40,7 +40,10 @@ export class TeaKettle {
     }
     draw(context) {
         drawing.drawRoundRectImage(this.x, this.y, this.w, this.h, this.trayImage, true, this.w, this.h);
+        
+        
         drawing.drawRoundRectImage(this.x + 5, this.y+10, this.w-100, this.h- 10, this.image, true, this.w-100, this.h -20);
+        
         if (this.cup instanceof Cup) {
             this.cup.draw(context);
         }
