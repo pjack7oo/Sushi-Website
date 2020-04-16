@@ -359,7 +359,7 @@ function myMove(e) {
 export function drawMySelect(context) {
   if (mySelect[0] != null) {
     if (mySelect[0] instanceof rollControl.Roll) {
-      
+      rollControl.drawRollWithCoords(context,mySelect[0].renderType.x + mySelect[0].radius*2 , mySelect[0].renderType.y + mySelect[0].radius*2, mySelect[0].radius, mySelect[0]);
     }
     else {
       
