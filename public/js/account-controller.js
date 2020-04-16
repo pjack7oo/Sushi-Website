@@ -36,9 +36,10 @@ function getRolls() {
             
             var data = JSON.stringify(response.extras.rollList);
             
+            
             localStorage.setItem('rollList',data);
             console.log("loaded rolllist into localStorage");
-            
+            populateRolls(data);
         }
     })
 }
@@ -117,3 +118,85 @@ $(document).ready(function() {
         }
     }
 });
+
+function populateRolls(data){
+    var rollContainer = document.getElementById('SpecificRolls');
+    var data = JSON.parse(data);
+    
+    
+    for (let roll of data){
+        var item            = document.createElement('div'),
+            itemContent     = document.createElement('div'),
+            itemDescription = document.createElement('div'),
+            itemBox         = document.createElement('div'),
+            itemIngredients = document.createElement('div'),
+            itemImg         = document.createElement('div'),
+            itemInner       = document.createElement('div'),
+            itemOuter       = document.createElement('div');
+
+        
+        
+        item.className            = "learn-item";
+        itemContent.className     = 'content';
+        itemDescription.className = 'rollDescription';
+        itemBox.className         = "box1";
+        itemIngredients.className = 'rollIngredients';
+        itemImg.className         = 'Image';
+        itemInner.className       = 'nestedRollIngrd';
+        itemOuter.className       = 'nestedRollIngrd';
+        
+        var rollName = document.createElement('p');
+            rollName.innerHTML = roll.name;
+        item.appendChild(rollName);
+
+        var description = document.createElement('p');
+        description.innerHTML = roll.description;
+        description.align = "center";
+        itemDescription.appendChild(description);
+
+        var innerDescription = document.createElement('p');
+        innerDescription.innerHTML = "Inner Ingredients";
+        itemInner.appendChild(innerDescription);
+        for(let ingrd of roll.inner){
+            var para =document.createElement('p');
+            console.log(ingrd);
+            para.innerHTML = ingrd;
+            itemInner.appendChild(para);
+        }
+        var outerDescription = document.createElement('p');
+        outerDescription.innerHTML = "Outer Ingredients";
+        itemOuter.appendChild(outerDescription);
+        for(let ingrd of roll.outer){
+            var para =document.createElement('p');
+            console.log(ingrd);
+            para.innerHTML = ingrd;
+            itemOuter.appendChild(para);
+        }
+        var base64Flag = 'data:image/png;base64,';
+        var imgStr = bufferToBase64(roll.image.data.data);
+        var str = base64Flag+imgStr;
+        var img = document.createElement('img');
+        img.src = str;
+        itemImg.appendChild(img);
+        //TODO store and retrieve img of roll
+        itemIngredients.appendChild(itemInner);
+        itemIngredients.appendChild(itemOuter);
+        itemBox.appendChild(itemIngredients);
+        itemBox.appendChild(itemImg);
+        itemContent.appendChild(itemDescription);
+        itemContent.appendChild(itemBox);
+        item.appendChild(itemContent);
+        rollContainer.appendChild(item);
+    }   
+}
+
+function bufferToBase64(buffer) {
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+
+    bytes.forEach((b)=>{binary += String.fromCharCode(b)});
+
+    return window.btoa(binary);
+}
+
+
