@@ -9,6 +9,8 @@ const express = require('express'),
       UserLogon         = require('../models/user-logon.js'),
       MailerMock        = require("../test/mailer-mock.js"),
       UserGetSave       = require('../models/user-getSave.js'),
+      UserPasswordReset = require('../models/user-passwordReset.js'),
+      UserClearSave     = require('../models/user-clearSave.js');
       mailer = new MailerMock();      //TODO or remove
 var session = [],
     url = "http://localhost:42550";
@@ -20,7 +22,8 @@ router.route('/account/register')
     .post(function(req, res) {
         
         
-        var accountController = new AccountController(User, req.session, mailer);
+        var userSession   = new UserSession(),
+        accountController = new AccountController(User, req.session, userSession, mailer);
         var userRegistration  = new UserRegistration(req.body);
         
         var apiResponse1 = accountController.getUserFromRegistration(userRegistration);
@@ -58,7 +61,7 @@ router.route('/account/save')
             accountController = new AccountController(User, req.session, userSession, mailer);
 
         var userSendSave = new UserSendSave(req.body);
-        console.log(userSendSave.gameData);
+        //console.log(userSendSave.gameData);
         
         accountController.saveData(userSendSave.username, userSendSave.gameData,userSendSave.date, userSendSave.userMoney, function(err, response) {
             return res.send(response);
@@ -106,32 +109,49 @@ router.route('/account/data')
 
 router.route('/account/logoff')
     .get(function (req, res) {
-        var accountController = new AccountController(User, req.session, mailer);
+        var userSession   = new UserSession(),
+        accountController = new AccountController(User, req.session, userSession, mailer);
         accountController.logoff();
         res.send(new ApiResponse({success: true}));
     })
     .post(function (req, res) {
-        var accountController = new AccountController(User, req.session, mailer);
+        var userSession   = new UserSession(),
+        accountController = new AccountController(User, req.session, userSession, mailer);
         accountController.logoff();
         res.send(new ApiResponse({ success: true }));
+    });
+
+// router.route('/account/resetpassword')
+//     .post(function (req, res) {
+
+//         var accountController = new AccountController(User, req.session, mailer);
+//         var userPasswordReset = new UserPasswordReset(req.body);
+//         accountController.resetPassword(userPasswordReset.email, function (err, response) {
+//             return res.send(response);
+//         });
+//     });
+
+router.route('/account/clearSave')
+    .post(function (req, res) {
+
+        var userSession   = new UserSession(),
+        accountController = new AccountController(User, req.session, userSession, mailer);
+        var userClearSave = new UserClearSave(req.body);
+        console.log(userClearSave);
+        
+        accountController.clearSave(userClearSave.username, function (err, response) {
+            return res.send(response);
+        });
     });
 
 router.route('/account/resetpassword')
     .post(function (req, res) {
 
-        var accountController = new AccountController(User, req.session, mailer);
-        var userPasswordReset = new UserPasswordReset(req.body);
-        accountController.resetPassword(userPasswordReset.email, function (err, response) {
-            return res.send(response);
-        });
-    });
+        var userSession   = new UserSession(),
+        accountController = new AccountController(User, req.session, userSession, mailer);
+        var userPasswordResetFinal = new UserPasswordReset(req.body);
 
-router.route('/account/resetpasswordfinal')
-    .post(function (req, res) {
-
-        var accountController = new AccountController(User, req.session, mailer);
-        var userPasswordResetFinal = new UserPasswordResetFinal(req.body);
-        accountController.resetPasswordFinal(userPasswordResetFinal.email, userPasswordResetFinal.newPassword, userPasswordResetFinal.newPasswordConfirm, userPasswordResetFinal.passwordResetHash, function (err, response) {
+        accountController.resetPasswordFinal(userPasswordResetFinal.username, userPasswordResetFinal.newPassword, userPasswordResetFinal.newPasswordConfirm, function (err, response) {
             return res.send(response);
         });
     });
