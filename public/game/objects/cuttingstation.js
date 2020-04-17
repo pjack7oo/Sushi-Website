@@ -7,6 +7,7 @@ import { rollingMatt } from "./rollingmatt.js";
 import * as player from "./player.js";
 import {Fish} from './fish.js';
 import * as ingredientBox from './ingredientbox.js';
+import * as upgradeMenu from './upgrademenu.js';
 
 const shapeType = {
   RECTANGLE: "Rectangle",
@@ -14,7 +15,7 @@ const shapeType = {
 };
 var boardImage = new Image();
 boardImage.src = "./game/images/TexturesCom_CloseupBambooCuttingBoard_M.png";
-
+var useSecondBoard = false;
 export class CuttingStation{
   constructor(x, y, w, h) {
     this.type = shapeType.RECTANGLE;
@@ -107,6 +108,8 @@ export function cuttingStationInit() {
   );
   //cuttingStation2 = new CuttingStation(510, 400, 150, 100);
 }
+
+
 // const cuttingStatio1n = {
 //   type: shapeType.RECTANGLE,
 //   x: 410,
@@ -132,12 +135,18 @@ export function getData() {
   var cuttingStationData = {};
   cuttingStationData.cuttingSpeed     = cuttingStation.cuttingSpeed;
   cuttingStationData.cuttingSpeedCost = cuttingStation.cuttingSpeedCost;
+  cuttingStationData.useSecondBoard = useSecondBoard;
   return cuttingStationData;
 }
 
 export function setData(data) {
   cuttingStation.cuttingSpeed = data.cuttingSpeed;
   cuttingStation.cuttingSpeedCost = data.cuttingSpeedCost;
+  
+  useSecondBoard = data.useSecondBoard;
+  if (useSecondBoard == true) {
+    initSecondBoard();
+  }
 }
 
 export function getCuttingSpeedCost() {
@@ -154,22 +163,29 @@ export function upgradeCuttingSpeed() {
   return false;
 }
 
+function initSecondBoard() {
+  useSecondBoard = true;
+  cuttingStation2 = new CuttingStation(510, 400, 150, 100);
+  bar2 = new progBar.progressbar(
+    cuttingStation2.x,
+    cuttingStation2.y - 60,
+    cuttingStation2.w,
+    20
+  );
+}
 export function buyNewCuttingBoard() {
   if (player.hasEnoughMoney(2000)) {
-    cuttingStation2 = new CuttingStation(510, 400, 150, 100);
-    bar2 = new progBar.progressbar(
-      cuttingStation2.x,
-      cuttingStation2.y - 60,
-      cuttingStation2.w,
-      20
-    );
+    initSecondBoard();
     player.removeMoney(2000);
-
+      upgradeMenu.removeUpgradeButton('Cuttin Board Upgrade Second Board');
     //todo buy cutting board
   }
 }
 export function getSecondBoardCost() {
   return 2000;
+}
+export function hasSecondBoard(){
+  return cuttingStation2 != null || cuttingStation2!= undefined;
 }
 
 export function checkCutRoll() {
@@ -206,7 +222,7 @@ export function drawCuttingStation(context) {
           cuttingStation2.y - 40,
           cuttingStation2.w,
           40,
-          "Cutting!"
+          "Cutting!", true, true, 5, " 20px Verdana"
         );
         progBar.drawColorProgressbar(cuttingStation2.progress, bar2, false);
       } else {
@@ -216,7 +232,7 @@ export function drawCuttingStation(context) {
           cuttingStation2.y - 40,
           cuttingStation2.w,
           40,
-          "Ready to cut! Press C key"
+          "Ready to cut! Press C key", true, true, 5, "10px Verdana"
         );
       }
       //drawing.drawRoundRectImage(cuttingStation.x, cuttingStation.y, cuttingStation.w, cuttingStation.h, cuttingStation.image);
@@ -239,7 +255,7 @@ export function drawCuttingStation(context) {
         cuttingStation.y - 40,
         cuttingStation.w,
         40,
-        "Cutting!"
+        "Cutting!", true, true, 5, " 20px Verdana"
       );
       progBar.drawColorProgressbar(cuttingStation.progress, bar, false);
     } else {
@@ -249,7 +265,7 @@ export function drawCuttingStation(context) {
         cuttingStation.y - 40,
         cuttingStation.w,
         40,
-        "Ready to cut! Press C key"
+        "Ready to cut! Press C key", true, true, 5, " 10px Verdana"
       );
     }
     //drawing.drawRoundRectImage(cuttingStation.x, cuttingStation.y, cuttingStation.w, cuttingStation.h, cuttingStation.image);
@@ -330,4 +346,14 @@ export function resetCuttingStation() {
   cuttingStation.item = null;
   cuttingStation.isActive = false;
   cuttingStation.startTime = 0;
+  if (useSecondBoard == true) {
+    if (cuttingStation2 == null || cuttingStation2 == undefined){
+      initSecondBoard();
+    }
+    else {
+      cuttingStation2.item = null;
+      cuttingStation2.isActive = false;
+      cuttingStation2.startTime = 0;
+    }
+  }
 }
