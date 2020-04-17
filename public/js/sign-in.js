@@ -1,6 +1,15 @@
 var signIn = "http://localhost:5000/api/account/login",
     sessionTimeout = 1000*60*60*24;
 
+
+function resetSignInVals(){
+    var $ctnErr = $('#login-ctn-err'),
+        $txtUsername = $('#login-username'),
+        $txtPassword = $('#login-password');
+    $ctnErr.val('');
+    $txtPassword.val('');
+    $txtUsername.val('');
+}
 $(document).ready(function () {
     
     
@@ -40,6 +49,7 @@ $(document).ready(function () {
                         keepSignedIn: $keepsignedIn.checked
                     });
                     drawAccount();
+                    resetSignInVals();
                     document.getElementById('login').style.display='none';
                     return;
                 } else {
