@@ -120,6 +120,9 @@ header a:hover {
     display: inline-block;
     border-radius: 20px;
 }
+.learn-item>p {
+    padding: 5px;
+}
 .learn-item>.content {
     display: none;
     overflow: hidden;
