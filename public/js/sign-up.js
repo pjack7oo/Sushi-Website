@@ -22,6 +22,21 @@ var passwordIsComplex = function(password) {
     return true;
 }
 
+function resetSignUpVals() {
+    var $ctnErr = $('#ctn-err'),
+    $txtEmail = $('#txt-email'),
+    $txtName  = $('#txt-name'),
+    $txtUname = $('#txt-username'),
+    $txtPassword = $('#txt-password'),
+    $txtPasswordConfirm = $('#txt-password-confirm');
+    $ctnErr.val('');
+    $txtEmail.val('');
+    $txtName.val('');
+    $txtPassword.val('');
+    $txtPasswordConfirm.val('');
+    $txtUname.val('');
+}
+
 $(document).ready(function() {
     $('#register-submit').click(function() {
         //console.log("register");
@@ -86,6 +101,7 @@ $(document).ready(function() {
                 console.log("success signup");
 
                 if ( resp.success === true) {
+                    resetSignUpVals();
                     document.getElementById('register').style.display='none';
                     return;
                 } else {
