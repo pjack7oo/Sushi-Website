@@ -39,7 +39,10 @@ function getRolls() {
             
             localStorage.setItem('rollList',data);
             console.log("loaded rolllist into localStorage");
-            populateRolls(data);
+            $(document).ready(function(){
+                populateRolls(data);
+            })
+            
         }
     })
 }
@@ -159,7 +162,7 @@ function populateRolls(data){
         itemInner.appendChild(innerDescription);
         for(let ingrd of roll.inner){
             var para =document.createElement('p');
-            console.log(ingrd);
+            
             para.innerHTML = ingrd;
             itemInner.appendChild(para);
         }
@@ -168,7 +171,7 @@ function populateRolls(data){
         itemOuter.appendChild(outerDescription);
         for(let ingrd of roll.outer){
             var para =document.createElement('p');
-            console.log(ingrd);
+            
             para.innerHTML = ingrd;
             itemOuter.appendChild(para);
         }
