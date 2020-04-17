@@ -8,7 +8,8 @@ import * as level         from '../objects/level.js';
 import * as ingredientBox from '../objects/ingredientbox.js';
 import * as cuttingSt     from '../objects/cuttingstation.js';
 import * as customers     from '../objects/customers.js';
-
+import * as timedBox      from './timedBox.js';
+import * as teaKettle     from '../objects/teakettle.js';
 
 
 var gameData = {};
@@ -22,19 +23,20 @@ var dataWasSaved = false;
 
 export function saveINIT(x, y) {
 
-    ioControl.addButton(shapes.createButton(x, y, 100, 50, "SaveLocal", true, 1, save, 'SaveGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    ioControl.addButton(shapes.createButton(x, y, 100, 50, "Save", true, 1, save, 'SaveGame',shapes.shapeType.RECTANGLE,"center", "25px Arial"));
     y+=50;
-    ioControl.addButton(shapes.createButton(x,y, 100, 50, "LoadLocal", true, 1, load, 'LoadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    ioControl.addButton(shapes.createButton(x,y, 100, 50, "Load", true, 1, load, 'LoadGame',shapes.shapeType.RECTANGLE,"center", "25px Arial"));
     y+=50;
-    ioControl.addButton(shapes.createButton(x,y, 100, 50, "Upload", true, 1, sendDataToServer, 'UploadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    ioControl.addButton(shapes.createButton(x,y, 100, 50, "Upload", true, 1, sendDataToServer, 'UploadGame',shapes.shapeType.RECTANGLE,"center", "20px Arial"));
     y+=50;
-    ioControl.addButton(shapes.createButton(x,y, 100, 50, "DownLoad", true, 1, getDataFromServer, 'downloadGame',shapes.shapeType.RECTANGLE,"center", "18px Arial"));
+    ioControl.addButton(shapes.createButton(x,y, 100, 50, "DownLoad", true, 1, getDataFromServer, 'downloadGame',shapes.shapeType.RECTANGLE,"center", "20px Arial"));
 }
 
 export function save() {
     getGameData();
     localStorage.setItem('gameData', encrypt(gameData));
     console.log('Saved', gameData);
+    timedBox.createTimedBox(280,200,170,50,"Data was Saved!", 2,'center',true, true, "white", "red");
     dataWasSaved = true;
     
 }
@@ -44,6 +46,7 @@ function load() {
     retrievedItem = decrypt(retrievedItem);
     // retrievedItem = JSON.parse(retrievedItem);
     gameData = JSON.parse(retrievedItem);
+    timedBox.createTimedBox(280,200,170,50,"Data was Loaded!", 2,'center',true, true, "white", "red");
     loadData();
 }
 
@@ -54,6 +57,7 @@ function getGameData() {
         cuttingStationUpgrades = cuttingSt.getData(),
         playerData             = player.getData(),
         customerData           = customers.getData(),
+        teaKettleData          = teaKettle.getData(),
         levelData              = level.getData();
 
     upgrades.riceCooker = riceCookerUpgrades;
@@ -64,6 +68,7 @@ function getGameData() {
     gameData.customers = customerData;
     gameData.player   = playerData;
     gameData.level    = levelData;
+    gameData.teaKettle = teaKettleData;
     gameData.date     = new Date();
 }
 
@@ -75,14 +80,19 @@ function loadData() {
     customers.setData(gameData.customers);
     player.setData(gameData.player)
     level.setData(gameData.level);
+    teaKettle.setData(gameData.teaKettle);
 }
 
 function sendDataToServer() {
     var session = JSON.parse(localStorage.getItem("sushicat-session"));
     var localData = localStorage.getItem('gameData');
     
-    
+    if (session == null || session == undefined) {
+        timedBox.createTimedBox(280,200,170,50,"Not Logged In!", 2,'center',true, true, "white", "red");
+        return;
+    }
     if (localData == null || localData == undefined){
+        timedBox.createTimedBox(280,200,170,50,"No Data has been saved!", 2,'center',true, true, "white", "red");
         return;
     }
     
@@ -99,12 +109,13 @@ function sendDataToServer() {
         success: function(response) {
             console.log("success sendData");
             if (response.success === true) {
-
+                timedBox.createTimedBox(280,200,170,50,"Data Sent!", 2,'center',true, true, "white", "red");
             } else {
                 if (response.extras.msg) {
                     switch(response.extras.msg) {
                         default:
                         //TODO Display errors
+                        timedBox.createTimedBox(280,200,170,50,"Failed to send data!", 2,'center',true, true, "white", "red");
                             break;
                     }
                 }
@@ -120,6 +131,7 @@ function getDataFromServer () {
     var session = JSON.parse(localStorage.getItem("sushicat-session"));
     if (session ==undefined || session == null) {
         //TODO show error that not logged in to website ingame
+        timedBox.createTimedBox(280,200,170,50,"Not Logged In!", 2,'center',true, true, "white", "red");
         return;
     }
     var username = session.userProfileModel.username;
@@ -139,7 +151,7 @@ function getDataFromServer () {
             
             
             
-            
+            timedBox.createTimedBox(325,200,170,50,"Data Retrieved!", 2,'center',true, true, "white", "red");
             load();
             console.log("successfully loaded data");
            }
@@ -148,6 +160,7 @@ function getDataFromServer () {
         },
         error: function(error) {
             console.log(error);
+            timedBox.createTimedBox(325,200,170,50,"Failed to sendData!", 2,'center',true, true, "white", "red");
         }
     })
 }
