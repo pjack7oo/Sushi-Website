@@ -196,6 +196,8 @@ export function checkMatt(mySelect)
                 return;
             }
             outerIngredients.push(mySelect);
+            console.log(outerIngredients);
+            
             if (mySelect.name == ingredients.ingredients.RICE) {
                 riceCooker.removeRice(mySelect);
             }
