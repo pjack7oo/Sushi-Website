@@ -89,6 +89,8 @@ class IngredientBox {
     }
 
     drawBoxIngredients(context) {
+        
+        
         drawing.drawShapes(context, this.typeStorage1);
         drawing.drawShapes(context, this.typeStorage2);
         drawing.drawShapes(context, this.typeStorage3);
@@ -113,8 +115,9 @@ class IngredientBox {
                 this.typeStorage1.push(ingredient);
                 
             }
-            this.typeStorage1Missing = [];
             
+            this.typeStorage1Missing = [];
+            return max;
         }
         else if (this.typeStorage2name == type) {
             let max = this.typeStorage2Missing.length;
@@ -127,6 +130,7 @@ class IngredientBox {
                
             }
             this.typeStorage2Missing = [];
+            return max;
         } else if (this.typeStorage3name == type) {
             let max = this.typeStorage3Missing.length;
             
@@ -139,9 +143,10 @@ class IngredientBox {
                 
             }
             this.typeStorage3Missing = [];
+            return max;
         } else {
             console.log("Fail to fill no type of " + name);
-            
+            return 0;
         }
     }
 
@@ -288,14 +293,16 @@ export function checkClickOnShapes(e, context) {
 
 export function fillBoxes(type) {
     if (ingredientBox1.contains(type)) {
-        ingredientBox1.fillIngredient(type);
+        let ret = ingredientBox1.fillIngredient(type);
         console.log(ingredientBox1);
-        
+        return ret;
     }
     else if (ingredientBox2.contains(type)) {
-        ingredientBox2.fillIngredient(type);
+        let ret = ingredientBox2.fillIngredient(type);
         console.log(ingredientBox2);
+        return ret;
     }
+    return 0;
 }
 var ingredientToRemove;
 export function removeIngredient(ingredient) {
