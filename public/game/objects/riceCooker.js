@@ -21,7 +21,7 @@ export const riceCooker = {
     image: null,
     startTime: 0,
     isActive: false,
-    riceCount: 1,
+    riceCount: 4,
     maxRiceCount: 4,
     rice: null,
     cookTime:15,//seconds
