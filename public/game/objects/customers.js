@@ -218,8 +218,9 @@ export function giveCustomerTea(tea) {
                     customer.temperTime += 10;
                     console.log(customer.temperTime);
                     customer.hadTea = true;
-                    tea.startTea();
-                    teaKettle.removeCup();
+                    
+                    teaKettle.removeCup(tea);
+                    teaKettle.startTea();
                     return;
                 }
             }
