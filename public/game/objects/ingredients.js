@@ -3,7 +3,19 @@ import * as drawing from '../utils/drawing.js';
 import * as shapes  from '../utils/shapes.js';
 
 //export var activeIngredients = [];
+var avocadoImg = new Image(),
+    cucumberImg = new Image(),
+    crabImg  = new Image(),
+    tunaImg  = new Image(),
+    salmonImg = new Image(),
+    eelImg   = new Image();
 
+avocadoImg.src = './game/images/Avocado.png',
+    cucumberImg.src = './game/images/Cucumber_.png',
+    crabImg.src     = './game/images/Crab_stick.png',
+    tunaImg.src     = './game/images/Tuna_Sashimi.png',
+    salmonImg.src   = './game/images/Salmon_Sashimi.png',
+    eelImg.src      = './game/images/Eel_sashimi.png';
 var mySelect;
 
 export const ingredients = Object.freeze({
@@ -18,15 +30,42 @@ export const ingredients = Object.freeze({
 
 
 export class Ingredient {
-    constructor() {
-        this.name = ingredients;
-        this.renderType = null;
+    constructor(name, renderType) {
+        this.name = name;
+        this.renderType = renderType;
         this.canEnterMatt = true;
         this.canEnterCuttingStation = false;
         this.canEnterPlate = false;
         this.canSell = false;
         this.cost    = 10;
         this.id = 0;
+        this.image = null;
+        switch(name) {
+            case ingredients.AVOCADO:
+                this.renderType.image = avocadoImg;
+                this.renderType.type = shapes.shapeType.IMAGE;
+                break;
+            case ingredients.CUCUMBER:
+                this.renderType.image = cucumberImg;
+                this.renderType.type = shapes.shapeType.IMAGE;
+                break;
+            case ingredients.CRAB:
+                this.renderType.image = crabImg;
+                this.renderType.type = shapes.shapeType.IMAGE;
+                break;
+            case ingredients.TUNA:
+                this.renderType.image = tunaImg;
+                this.renderType.type = shapes.shapeType.IMAGE;
+                break;
+            case ingredients.SALMON:
+                this.renderType.image = salmonImg;
+                this.renderType.type = shapes.shapeType.IMAGE;
+                break;
+            case ingredients.EEL:
+                this.renderType.image = eelImg;
+                this.renderType.type = shapes.shapeType.IMAGE;
+                break;
+        }
     }
 
     
@@ -115,13 +154,13 @@ export function getIngredientCost(ingredient) {
             
             break;
         case ingredients.AVOCADO:
-            cost = 30;
+            cost = 2;
             break;
         case ingredients.CRAB:
-            cost = 30;
+            cost = 5;
             break;
         case ingredients.CUCUMBER:
-            cost = 20;
+            cost = 2;
             break;
         case ingredients.EEL:    
             cost = 50;
@@ -146,17 +185,15 @@ export function clearActiveIngredients() {
 
 export function createIngredientWithXY(name, x, y)
 {
-    var ingredient = new Ingredient();
-    ingredient.name = name;
-    ingredient.renderType = getIngredientRenderType(name, x, y);
+    var ingredient = new Ingredient(name, getIngredientRenderType(name, x, y));
+    
     return ingredient;
 }
 
 function createIngredient(name, renderType)
 {
-    var ingredient = new Ingredient();
-    ingredient.name = name;
-    ingredient.renderType = renderType;
+    var ingredient = new Ingredient(name, renderType);
+    
     ingredient.cost = getIngredientCost(name);
     return ingredient;
 }
