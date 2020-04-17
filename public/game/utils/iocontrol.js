@@ -238,6 +238,7 @@ export function myUp() {
       console.log(mySelect[0] instanceof teaKettle.Cup);
       
       customers.giveCustomerTea(mySelect[0]);
+      
     }
   }
   mySelect[0] = null;
@@ -362,8 +363,15 @@ export function drawMySelect(context) {
       rollControl.drawRollWithCoords(context,mySelect[0].renderType.x + mySelect[0].radius*2 , mySelect[0].renderType.y + mySelect[0].radius*2, mySelect[0].radius, mySelect[0]);
     }
     else {
-      
-      if (mySelect[0].renderType.type == shapes.shapeType.ROUNDRECT) {
+      if (mySelect[0] instanceof ingredients.Ingredient){
+        if (mySelect[0].name == ingredients.ingredients.RICE){
+          drawing.drawRoundRect(context, mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h, 
+            mySelect[0].renderType.radius,true, true, mySelect[0].renderType.intColor, mySelectColor, 1);
+        }
+        else {
+          drawing.drawImage(context, mySelect[0].renderType);
+        }
+      } else if (mySelect[0].renderType.type == shapes.shapeType.ROUNDRECT) {
         drawing.drawRoundRect(context, mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h, 
                               mySelect[0].renderType.radius,true, true, mySelect[0].renderType.intColor, mySelectColor, 1);
       }
