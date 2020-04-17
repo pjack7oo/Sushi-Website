@@ -23,7 +23,7 @@ class Customer {
     constructor(difficulty,offset) {
         //this.renderType   = shapes.;
         this.type = shapes.shapeType.IMAGE;
-        this.x = 0 + offset*110;
+        this.x = 5 + offset*110;
         this.y = 100;
         this.w = 100;
         this.h = 200;
@@ -45,6 +45,7 @@ class Customer {
             }
         this.progress = 0;
         this.bar = null;
+        this.hadTea = false;
         //this.difficulty == difficulty;//
         if (difficulty ==1) {
             this.money = 30;
@@ -171,6 +172,7 @@ function drawWantedRolls(ctx, x, y, w, h, customer)
     
     drawing.printAtWordWrap(ctx, customer.want[0].name, x + w/2, y + h+5, 15, w, 'Black', '15px Arial', "center");
     customer.want[0].isCut = true;
+    if (customer.want[0])
     rolls.drawRollWithCoords(ctx, x + w/2, y + h/2, 10, customer.want[0]);
     
 }
@@ -208,19 +210,21 @@ export function giveCustomerPlate(plate)
 }
 
 export function giveCustomerTea(tea) {
-    if (tea != null) {
+    if (tea instanceof teaKettle.Cup) {
         for(let customer of customers) {
             if (!customer.isThinking) {
-                if (checkCustomerBounding(customer, tea.renderType)){
+                if (checkCustomerBounding(customer, tea.renderType) && !customer.hadTea){
                     console.log(customer.temperTime);
                     customer.temperTime += 10;
                     console.log(customer.temperTime);
-                    
-                    
+                    customer.hadTea = true;
+                    tea.startTea();
                     teaKettle.removeCup();
+                    return;
                 }
             }
         }
+        tea.resetPos();
     }
 }
 var rollToRemove;
