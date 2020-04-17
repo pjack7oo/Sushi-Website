@@ -1,6 +1,10 @@
 import * as shapes from '../utils/shapes.js';
 import * as drawing from '../utils/drawing.js';
 import * as ioControl from '../utils/iocontrol.js';
+import * as progBar   from  '../utils/progressBar.js';
+import * as player    from './player.js';
+import * as upgradeMenu from './upgrademenu.js';
+import {Timer} from '../utils/timer.js';
 
 var trayImage = new Image();
 trayImage.src = './game/images/Tray.png';
@@ -11,11 +15,16 @@ export class Cup {
             'White', "Gold",2);
         this.x = x;
         this.y = y;
+        this.oldX = x;
+        this.oldY = y;
         this.w = 20;
         this.h = 20;
         this.radius = 20
         this.image  = null;
         this.canEnterMatt = false;
+        this.canEnterCuttingStation = false;
+        this.canEnterPlate = false;
+        
     }
     draw(context) {
         drawing.drawCircle(context, this.renderType.x, this.renderType.y, this.renderType.radius, true, 'White', "Gold", 2);
@@ -24,6 +33,13 @@ export class Cup {
     checkCup(mouse) {
         let ret = ioControl.moveCircle(mouse, this);
         return ret;
+    }
+    
+    resetPos() {
+        console.log("resetPos", this.x, this.y);
+        
+        this.renderType.x = this.oldX;
+        this.renderType.y = this.oldY;
     }
 
 }
@@ -37,6 +53,18 @@ export class TeaKettle {
         this.trayImage = trayImage;
         this.image = trayImage;//TODO set to kettle image
         this.cup = Cup;
+        this.cup2 = null
+        this.active = false;
+        this.startTime = 0;
+        this.steepingTime = 10; //seconds
+        this.steepingTimeCost = 500;
+        this.storageCount = 1;
+        this.storageCountCost = 500;
+        this.progress = 0;
+        this.bar = null;
+        this.timer = new Timer(this.steepingTime, function() {
+            
+        });
     }
     draw(context) {
         drawing.drawRoundRectImage(this.x, this.y, this.w, this.h, this.trayImage, true, this.w, this.h);
@@ -47,29 +75,158 @@ export class TeaKettle {
         if (this.cup instanceof Cup) {
             this.cup.draw(context);
         }
+        if (this.cup2 instanceof Cup){
+            this.cup2.draw(context);
+        }
+        if (this.isActive) {
+            
+            
+            progBar.drawColorProgressbar(this.progress, this.bar, false);
+        }
         
 
     }
+    checkTea() {
+        if (this.isActive == true) {
+          let currentTime = performance.now(),
+            elapsedTime = currentTime - this.startTime,
+            percentComplete =
+              (elapsedTime / (this.steepingTime * 1000)) * 100;
+          this.progress = percentComplete;
+          drawing.Invalidate();
+            
+            
+          if (percentComplete >= 100) {
+              
+                this.isActive = false;
+                this.startTime = 0;
+                this.progress = 0;
+                if (teaKettle.cup == null) {
+                    this.cup = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2-15);
+                }
+                if (teaKettle.cup2 == null && teaKettle.storageCount ==2) {
+                    teaKettle.cup2 = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2+15);
+                }
+
+                drawing.Invalidate();
+            
+            
+          }
+        }
+    }
+    
+    
 }
 var teaKettle = TeaKettle;
+var bar;       
+function startTimer() {
+    teaKettle.isActive = true;
+    teaKettle.startTime = performance.now();
+}
 
+export function startTea(){
+        
+        
+    if (teaKettle.cup == null && teaKettle.cup2 == null){
+        startTimer();
+    } else if (teaKettle.cup == null && teaKettle.storageCount == 1){
+        
+        startTimer();
+    }
+    
+}
 export function teaKettleInit() {
     teaKettle = new TeaKettle(340,260);
     teaKettle.cup = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2);
+
+    teaKettle.bar  =new progBar.progressbar(teaKettle.x, teaKettle.y  - 20, teaKettle.w, 20);
+}
+export function resetTeaKettle() {
+    teaKettle.cup = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2-15);
+    if (teaKettle.storageCount == 2) {
+        teaKettle.cup2 = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2+15);
+    }
+}
+
+export function getData() {
+    var teaKettleData = {};
+    teaKettleData.steepingTime = teaKettle.steepingTime;
+    teaKettleData.storageCount = teaKettle.storageCount;
+    return teaKettleData;
+}
+
+export function setData(data) {
+    
+    teaKettle.steepingTime = data.steepingTime;
+    teaKettle.storageCount = data.storageCount;
 }
 
 export function drawTeaKettle(context) {
     teaKettle.draw(context);
 }
 
+export function getSteepTimeUpgradeCost () {
+    return teaKettle.steepingTimeCost;
+}
+
+export function getStorageUpgradeCost () {
+    return teaKettle.storageCountCost;
+}
+export function upgradeSteepTime() {
+    if (player.hasEnoughMoney(teaKettle.steepingTimeCost)) {
+        player.removeMoney(teaKettle.steepingTimeCost);
+        teaKettle.steepingTime --;
+        teaKettle.steepingTimeCost += 500;
+        return true
+    }
+    return false;
+}
+
+export function upgradeStorageCount() {
+    if (player.hasEnoughMoney(teaKettle.storageCountCost)) {
+        player.removeMoney(teaKettle.storageCountCost);
+        teaKettle.storageCount ++;
+        teaKettle.storageCountCost += 500;
+
+        upgradeMenu.removeUpgradeButton('Tea kettle Upgrade Storage');
+        return true
+    }
+    return false;
+}
+
+export function getSteepTime(){
+    return teaKettle.steepingTime;
+}
+
+export function getStorageCount() {
+    return teaKettle.storageCount;
+}
 export function checkCup(mouse) {
     if (teaKettle.cup instanceof Cup) {
         let ret = teaKettle.cup.checkCup(mouse);
+        if (ret) {
+            return ret;
+        }
+    
+    }
+    if (teaKettle.cup2 instanceof Cup) {
+        let ret = teaKettle.cup2.checkCup(mouse);
     return ret;
     }
     return false;
 }
 
-export function removeCup() {
-    teaKettle.cup = Cup;
+export function checkTeaTimer() {
+    teaKettle.checkTea();
 }
+
+export function removeCup(cup) {
+
+    
+    if(teaKettle.cup.x == cup.x && teaKettle.cup.y == cup.y){
+        teaKettle.cup = null;
+    } else if (teaKettle.cup2.x == cup.x && teaKettle.cup2.y == cup.y) {
+        teaKettle.cup2 =null;
+    }
+}
+
