@@ -11,6 +11,7 @@ import * as upgradeMenu   from  './objects/upgrademenu.js';
 import * as ingredientBox from './objects/ingredientbox.js';
 import * as saveControl   from './utils/save.js';
 import * as teaKettle     from './objects/teakettle.js';
+import * as timedBox      from './utils/timedBox.js';
 
 var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
@@ -162,7 +163,7 @@ function startGame()
     // //customers.getRandomCustomer();
     // drawing.Invalidate();
     clearInterval(activeInterval);
-    levelControl.startLevel(0);
+    levelControl.startLevel();
 }
 
 // function buttonClick(e)
@@ -177,9 +178,9 @@ export function startScreen()
     ioControl.clearButtons();
     clearInterval(activeInterval);
     ioControl.addButton(shapes.createButton(50,50, 100, 50, "Start", true, 1, startGame, "StartGame-Start"));
-    ioControl.addButton(shapes.createButton(50,100, 100, 50, "Upgrade", true, 1, upgradeMenu.upgradeScreen, "StartGame-Start"));
+    ioControl.addButton(shapes.createButton(50,100, 100, 50, "Upgrade", true, 1, upgradeMenu.upgradeScreen, "StartGame-Upgrade"));
     saveControl.saveINIT(50,150);
-    ioControl.addButton(shapes.createButton(50,350, 100, 50, "About", true, 1, aboutSetup, "StartGame-Start"));
+    ioControl.addButton(shapes.createButton(50,350, 100, 50, "About", true, 1, aboutSetup, "StartGame-About"));
     canvas.addEventListener('click', ioControl.buttonClick, false);
 
     activeInterval = setInterval(startUpdate, interval);
@@ -203,8 +204,10 @@ function aboutDraw() {
 
 function startUpdate()
 {
+    timedBox.checkTimedBoxes();
     drawing.clear(context);
     startDraw();
+    timedBox.drawTimedBoxes(context);
 }
 
 function startDraw()
@@ -219,7 +222,7 @@ function startDraw()
     drawBambooForest(300,0);
     drawBambooForest(600,0);
     drawBambooForest(800,0);
-    drawing.drawTextBox(context, 275, 75, 150, 100, "Sushi Cat", "30px Arial", "Red", "white", "Red");
+    drawing.drawTextBox(context, 275, 75, 150, 100, "Sushi Cat",false,true,-5, "50px Arial", "Red", "white", "Red");
     
     
     
