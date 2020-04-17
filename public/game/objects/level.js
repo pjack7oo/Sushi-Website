@@ -84,7 +84,7 @@ export function startLevel() {
     //         levelUpdate(context);
     //         break
     // }
-    drawing.toggleGrid();
+    //drawing.toggleGrid();
     customers.customerINit(availableCustomerCount);
     getCustomer(currentLevel);
     if (currentLevel == 0) {
