@@ -60,13 +60,27 @@ export function Invalidate() {
     validCanvas = false;
 }
 
-export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana", textColor = 'Black', intColor = '#add8e6', outColor = 'Gray') {
-    drawRoundRect(ctx, x, y, w, h, 5, true, true, intColor, outColor);
+export function drawTextBox(ctx, x, y, w, h, text, fill= true,stroke = true, offset = 5, font = "10px Verdana", textColor = 'Black', intColor = '#add8e6', outColor = 'Gray', alignment = "center", lineHeight = 0, maxWidth = 0) {
+    drawRoundRect(ctx, x, y, w, h, 5, fill, stroke, intColor, outColor);
     ctx.font = font;
     ctx.textAlign = "center";
     ctx.fillStyle = textColor;
+    if (lineHeight == 0) {
+        lineHeight = h/2-10;
+    }
+    if (maxWidth == 0){
+        maxWidth = 174;
+    }
+    
     //ctx.fillText(text,x+ w/2,y+h/1.75);
-    printAtWordWrap(ctx, text, x + w / 2, y + h / 2 + 5, 30, 174, textColor, font, "center");
+    if (alignment == 'center') {
+        printAtWordWrap(ctx, text, x + w / 2, y + h / 2 +offset, lineHeight, maxWidth, textColor, font, alignment);
+    } else if (alignment == 'right') {
+        printAtWordWrap(ctx, text, x, y + h / 2 +offset, lineHeight, maxWidth, textColor, font, alignment);
+    }else {
+        printAtWordWrap(ctx, text, x, y + h / 2 +offset, lineHeight, maxWidth, textColor, font, alignment);
+    }
+    
     Invalidate();
 }
 
@@ -129,7 +143,7 @@ export function drawRoundRectWPoint(ctx, x, y, w, h, radius, fill, stroke = true
     }
 }
 
-export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intColor = 'Blue', outColor = 'Gray', lineWidth = 1) {
+export function drawRoundRect(ctx, x, y, w, h, radius, fill = true, stroke = true, intColor = 'Blue', outColor = 'Gray', lineWidth = 1) {
     if (typeof stroke == "undefined") {
         stroke = true;
     }
@@ -213,13 +227,14 @@ export function draw() {
         // }
         
         plates.drawPlates(context);
-        teaKettle.drawTeaKettle(context);
+        
         
         ingredientMenu.drawMenu();
         ioControl.drawIoButtons();
         rollControl.drawRolls(context);
         ingredientBox.drawIngredientBoxes(context);
         riceCooker.drawRice(context);
+        teaKettle.drawTeaKettle(context);
         // if (mySelect != null)
         // {
         //     context.strokeStyle = mySelectColor;
@@ -375,7 +390,7 @@ export function drawUpgradeButtons(ctx, buttons) {
         printAtWordWrap(ctx, button.text, button.x + button.w / 2+3, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
     }
 }
-function drawImage(ctx, object) {
+export function drawImage(ctx, object) {
     ctx.drawImage(object.image, object.x, object.y, object.w, object.h);
 }
 
