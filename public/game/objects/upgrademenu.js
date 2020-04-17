@@ -30,6 +30,7 @@ export function upgradeScreen()
     storageBoxUpgradesSetup(50,10);
     rollingMattUpgradesSetup(450,10);
     cuttingBoardUpgradesSetup(251,200);
+    teaKettleUpgradesSetup(450,200);
     canvas.onmousemove = function(e) {
         checkButtons(e);
     }
@@ -84,7 +85,7 @@ function upgradeDraw()
 {
     drawing.clear(context);
     drawing.drawRectangle(context, 0,0,700,500,true,"LightBlue", "LightBlue",1);
-    drawing.drawTextBox(context, 275, 0, 150, 100, "Upgrade Menu", "30px Arial", "Red", "white", "Red");
+    drawing.drawTextBox(context, 275, 0, 150, 100, "Upgrade Menu", false, true,-5, "30px Arial", "Red", "white", "Red");
     drawing.printAtWordWrap(context,"Money: ",300, 115, 10, 100, "Green", "20px Arial", "left");
     drawing.printAtWordWrap(context,player.getCurrentMoney().toString(),370, 115, 10, 100, "Green", "20px Arial", "left");
     
@@ -132,16 +133,24 @@ function rollingMattUpgradesSetup(x,y) {//400 10
         'Black', "25px Arial", "Gray", "Green", "Red", rollingMatt.upgradeSpeed, rollingMatt.getSpeedUpgradeCost, "RollingMatt Upgrade Speed"));
 }
 function cuttingBoardUpgradesSetup(x,y) { //201 200
+    var data = cuttingStation.getData();
     upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,x+ 140,y+25,58,50, 10, cuttingStation.getCuttingSpeedCost(),
         'Black', "25px Arial", "Gray", "Green", "Red", cuttingStation.upgradeCuttingSpeed, cuttingStation.getCuttingSpeedCost, "Cutting Board Upgrade Speed"));
-    upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,x+ 140,y+85,58,50, 10, cuttingStation.getSecondBoardCost(),
+        if (data.useSecondBoard == false){
+            upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,x+ 140,y+85,58,50, 10, cuttingStation.getSecondBoardCost(),
         'Black', "25px Arial", "Gray", "Green", "Red", cuttingStation.buyNewCuttingBoard, cuttingStation.getSecondBoardCost, "Cuttin Board Upgrade Second Board"));
+        }
+        
 }
 function teaKettleUpgradesSetup(x,y) { //401 200
-    upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,x + 140,y+25,58,50, 10, riceCooker.getCookTimeUpgradeCost(),
-        'Black', "25px Arial", "Gray", "Green", "Red", riceCooker.riceCookerUpgradeCookTime, riceCooker.getCookTimeUpgradeCost, "Tea kettle Upgrade Speed"));
-    upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,x+140,y+85,58,50, 10, riceCooker.getRiceCountUpgradeCost(),
-        'Black', "25px Arial", "Gray", "Green", "Red", riceCooker.riceCookerUpgradeRiceCount, riceCooker.getRiceCountUpgradeCost, "Tea kettle Upgrade Storage"));
+    
+    upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,x + 140,y+25,58,50, 10, teaKettle.getSteepTimeUpgradeCost(),
+        'Black', "25px Arial", "Gray", "Green", "Red", teaKettle.upgradeSteepTime, teaKettle.getSteepTimeUpgradeCost, "Tea kettle Upgrade Speed"));
+    
+        upgradeButtons.push(new shapes.UpgradeButton(shapes.shapeType.ROUNDRECT,x+140,y+85,58,50, 10, teaKettle.getStorageUpgradeCost(),
+        'Black', "25px Arial", "Gray", "Green", "Red", teaKettle.upgradeStorageCount, teaKettle.getStorageUpgradeCost, "Tea kettle Upgrade Storage"));
+    
+    
 }
 
 function riceCookerUpgradesDraw(x,y) {//200
@@ -150,8 +159,8 @@ function riceCookerUpgradesDraw(x,y) {//200
     drawing.printAtWordWrap(context, "RiceCooker", x + 100, y + 18, 20, 50, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Cooking Time", x + 5, y + 40, 20, 50, 'Green', "20px Arial", "left" );
     drawing.printAtWordWrap(context, "Storage count", x + 5, y + 100, 20, 50, 'Green', "20px Arial", "left" );
-    drawing.drawTextBox(context, x + 100, y + 30, 30,30, data.cookTime.toString(), "20px Arial");
-    drawing.drawTextBox(context, x + 100, y + 90, 30,30, data.riceCount.toString(), "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 30, 30,30, data.cookTime.toString(),true,true,5,  "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 90, 30,30, data.maxRiceCount.toString(),true,true,5,  "20px Arial");
 }
 function storageBoxUpgradesDraw(x,y) {//0 10
     var data = storage.getData();
@@ -159,15 +168,15 @@ function storageBoxUpgradesDraw(x,y) {//0 10
     drawing.printAtWordWrap(context, "Storage", x+100, y+18, 20, 50, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Veg Max Storage", x+5, y+40, 20, 100, 'Green', "20px Arial", "left" );
     drawing.printAtWordWrap(context, "Fish Max Storage", x+5, y+100, 20, 100, 'Green', "20px Arial", "left" );
-    drawing.drawTextBox(context, x + 100, y + 30, 30,30, data.ingredientBox1.maxStorage.toString(), "20px Arial");
-    drawing.drawTextBox(context, x + 100, y + 90, 30,30, data.ingredientBox2.maxStorage.toString(), "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 30, 30,30,data.ingredientBox1.maxStorage.toString(),true,true,5,  "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 90, 30,30, data.ingredientBox2.maxStorage.toString(),true,true,5,  "20px Arial");
 }
 function rollingMattUpgradesDraw(x,y) {//400 10
     var data = rollingMatt.getData();
     drawing.drawRoundRect(context, x, y, 200, 150, 5, true, true, 'Gray', "Green", 1);
     drawing.printAtWordWrap(context, "Rolling Matt", x+100, y+18, 20, 150, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Rolling Speed", x+5, y+85, 20, 50, 'Green', "20px Arial", "left" );
-    drawing.drawTextBox(context, x + 100, y + 75, 30,30, data.speed.toString(), "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 75, 30,30, data.speed.toString(),true,true,5,  "20px Arial");
     
 }
 function cuttingBoardUpgradesDraw(x,y) {//201 200
@@ -176,7 +185,8 @@ function cuttingBoardUpgradesDraw(x,y) {//201 200
     drawing.printAtWordWrap(context, "Cutting Board", x+100, y+18, 20, 150, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Cutting Speed", x+5, y+40, 20, 50, 'Green', "20px Arial", "left" );
     drawing.printAtWordWrap(context, "Second Board", x+5, y+100, 20, 50, 'Green', "20px Arial", "left" );
-    drawing.drawTextBox(context, x + 100, y + 30, 30,30, data.cuttingSpeed.toString(), "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 30, 30,30, data.cuttingSpeed.toString(),true,true, 5, "20px Arial");
+    drawing.drawTextBox(context, x + 90, y + 90, 50,30, data.useSecondBoard.toString(),true,true, 5, "20px Arial");
     
 }
 function teaKettleUpgradesDraw(x,y) {//401 200
@@ -184,6 +194,8 @@ function teaKettleUpgradesDraw(x,y) {//401 200
     drawing.printAtWordWrap(context, "Tea Kettle", x+100, y+18, 20, 100, "Green", "20px Arial", "center");
     drawing.printAtWordWrap(context, "Boiling Time", x+5, y+40, 20, 50, 'Green', "20px Arial", "left" );
     drawing.printAtWordWrap(context, "Storage count", x+5, y+100, 20, 50, 'Green', "20px Arial", "left" );
+    drawing.drawTextBox(context, x + 100, y + 30, 30,30,teaKettle.getSteepTime().toString(),true,true,5,  "20px Arial");
+    drawing.drawTextBox(context, x + 100, y + 90, 30,30, teaKettle.getStorageCount().toString(),true,true,5,  "20px Arial");
 }
 
 function drawSpeedUpgrade(x,y, callback, name, cost) {
@@ -192,4 +204,18 @@ function drawSpeedUpgrade(x,y, callback, name, cost) {
 
 function setupMaxStorageUpgrade(x, y, callback, name, cost) {
     ioControl.addButton(shapes.createButton(x,y,100,50,cost.toString(), true, 1, callback, name));
+}
+
+export function removeUpgradeButton(buttonToRemove) {
+    let buttn= null;
+    let max = upgradeButtons.length;
+    for (let i = 0; i < max; i++) {
+        if (buttonToRemove == upgradeButtons[i].name) {
+            buttn = i;
+        }
+    }
+    if (buttn != null) {
+        upgradeButtons.splice(buttn, 1);
+    }
+    
 }
