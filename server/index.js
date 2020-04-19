@@ -13,7 +13,7 @@ const path = require('path');
 const http = require('http');
 const PORT = process.env.PORT || 5000;
 const router = express.Router();
-
+var rollUpload = require('./uploadRolls.js');
 
 var app = express();
 
@@ -118,7 +118,7 @@ var db = mongoose.connection;
 //   calliforniaRoll.save();
 //   AlaskaRoll.save();
 // })  
-
+rollUpload(db);
 app.use(expressSession({
   ker: 'session',
   secret: 'foo',
