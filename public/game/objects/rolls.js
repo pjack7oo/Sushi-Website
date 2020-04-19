@@ -172,7 +172,7 @@ export function pushRoll(roll)
 // }
 
 export function getRoll(number) {
-    return rollList.rolls[number];
+    return rollList[number];
 }
 
 export function removeRoll(roll)
