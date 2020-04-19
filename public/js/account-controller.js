@@ -285,6 +285,8 @@ function populateRolls(data){
         var imgStr = bufferToBase64(roll.image.data.data);
         var str = base64Flag+imgStr;
         var img = document.createElement('img');
+        img.style.width = "500px";
+        img.style.height = '500px';
         img.src = str;
         itemImg.appendChild(img);
         //TODO store and retrieve img of roll
