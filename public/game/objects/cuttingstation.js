@@ -185,7 +185,7 @@ export function getSecondBoardCost() {
   return 2000;
 }
 export function hasSecondBoard(){
-  return cuttingStation2 != null || cuttingStation2!= undefined;
+  return useSecondBoard;
 }
 
 export function checkCutRoll() {
@@ -339,6 +339,14 @@ export function insertFish(Fish, num) {
     cuttingStation2.item = Fish;
     cuttingStation2.item.x = cuttingStation2.x;
     cuttingStation2.item.y = cuttingStation2.y;
+  }
+}
+
+export function isntActive(num) {
+  if (num == 0) {
+    return !cuttingStation.isActive;
+  } else if (num == 1) {
+    return !cuttingStation2.isActive;
   }
 }
 
