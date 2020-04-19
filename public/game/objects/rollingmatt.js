@@ -8,7 +8,8 @@ import * as  riceCooker  from './riceCooker.js';
 import * as player       from './player.js';
 
 var canvas = document.getElementById('canvas');
-
+var rollImg = new Image();
+rollImg.src = './game/images/Assembled_sushi_roll.png';
 var mypick;
 var isInner = true;
 export var innerIngredients = [];
@@ -140,6 +141,8 @@ export function assembleRoll()
     {
         outer.push(outerIngredients[i].name);
     }  
+    box1.type = shapes.shapeType.IMAGE;
+    box1.image = rollImg;
     var roll = rollControl.createRoll(true, inner, outer, box1);
     innerIngredients.splice(0, innerIngredients.length);
     outerIngredients.splice(0,outerIngredients.length); 
