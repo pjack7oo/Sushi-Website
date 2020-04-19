@@ -8,35 +8,45 @@ import {Timer} from '../utils/timer.js';
 
 var trayImage = new Image();
 trayImage.src = './game/images/Tray.png';
+var cupImage = new Image();
+cupImage.src = './game/images/Full_teacup.png';
+var teaKettleDoneImage = new Image();
+teaKettleDoneImage.src = './game/images/teapot_with_steam.png';
+var teaKettleSteepingImage= new Image();
+teaKettleSteepingImage.src = './game/images/teapot.png';
 
 export class Cup {
     constructor(x,y) {
-        this.renderType = new shapes.createCircle(x,y, 20, true,
-            'White', "Gold",2);
+        this.renderType = new shapes.createBox(x,y,40,40,true, "Gray", "Gray");
+         
         this.x = x;
         this.y = y;
         this.oldX = x;
         this.oldY = y;
-        this.w = 20;
-        this.h = 20;
+        this.w = 40;
+        this.h = 40;
         this.radius = 20
-        this.image  = null;
+        this.renderType.type = shapes.shapeType.IMAGE;
+        this.renderType.image = cupImage;
         this.canEnterMatt = false;
         this.canEnterCuttingStation = false;
         this.canEnterPlate = false;
         
     }
     draw(context) {
-        drawing.drawCircle(context, this.renderType.x, this.renderType.y, this.renderType.radius, true, 'White', "Gold", 2);
+        //drawing.drawCircle(context, this.renderType.x, this.renderType.y, this.renderType.radius, true, 'White', "Gold", 2);
+        
+        
+        drawing.drawImage(context,this.renderType);
     }
 
     checkCup(mouse) {
-        let ret = ioControl.moveCircle(mouse, this);
+        let ret = ioControl.moveItem(mouse, this);
         return ret;
     }
     
     resetPos() {
-        console.log("resetPos", this.x, this.y);
+        
         
         this.renderType.x = this.oldX;
         this.renderType.y = this.oldY;
@@ -51,7 +61,8 @@ export class TeaKettle {
         this.w = 170;
         this.h = 80;
         this.trayImage = trayImage;
-        this.image = trayImage;//TODO set to kettle image
+        this.image = teaKettleDoneImage;
+        this.activeImage = teaKettleSteepingImage;
         this.cup = Cup;
         this.cup2 = null
         this.active = false;
@@ -69,8 +80,12 @@ export class TeaKettle {
     draw(context) {
         drawing.drawRoundRectImage(this.x, this.y, this.w, this.h, this.trayImage, true, this.w, this.h);
         
+        if (this.isActive) {
+            drawing.drawRoundRectImage(this.x + 5, this.y+10, this.w-100, this.h- 10, this.activeImage, true, this.w-100, this.h -20);
+        }else {
+            drawing.drawRoundRectImage(this.x + 5, this.y+10, this.w-100, this.h- 10, this.image, true, this.w-100, this.h -20);
+        }
         
-        drawing.drawRoundRectImage(this.x + 5, this.y+10, this.w-100, this.h- 10, this.image, true, this.w-100, this.h -20);
         
         if (this.cup instanceof Cup) {
             this.cup.draw(context);
@@ -102,10 +117,10 @@ export class TeaKettle {
                 this.startTime = 0;
                 this.progress = 0;
                 if (teaKettle.cup == null) {
-                    this.cup = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2-15);
+                    this.cup = new Cup(teaKettle.x + teaKettle.w/2, teaKettle.y +10);
                 }
                 if (teaKettle.cup2 == null && teaKettle.storageCount ==2) {
-                    teaKettle.cup2 = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2+15);
+                    teaKettle.cup2 = new Cup(teaKettle.x + teaKettle.w/2 + 30, teaKettle.y +10);
                 }
 
                 drawing.Invalidate();
@@ -137,14 +152,14 @@ export function startTea(){
 }
 export function teaKettleInit() {
     teaKettle = new TeaKettle(340,260);
-    teaKettle.cup = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2);
+    teaKettle.cup = new Cup(teaKettle.x + teaKettle.w/2 , teaKettle.y +10);
 
     teaKettle.bar  =new progBar.progressbar(teaKettle.x, teaKettle.y  - 20, teaKettle.w, 20);
 }
 export function resetTeaKettle() {
-    teaKettle.cup = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2-15);
+    teaKettle.cup = new Cup(teaKettle.x + teaKettle.w/2 , teaKettle.y +10);
     if (teaKettle.storageCount == 2) {
-        teaKettle.cup2 = new Cup(teaKettle.x + teaKettle.w/2 + teaKettle.w/4, teaKettle.y + teaKettle.h/2+15);
+        teaKettle.cup2 = new Cup(teaKettle.x + teaKettle.w/2 + 30, teaKettle.y +10);
     }
 }
 
