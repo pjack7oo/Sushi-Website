@@ -150,7 +150,7 @@ export function getIngredientCost(ingredient) {
     switch(ingredient)
     {
         default:
-            console.log("no shape");
+            //console.log("no shape");
             
             break;
         case ingredients.AVOCADO:
