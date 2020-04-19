@@ -10,6 +10,9 @@ const mainIngredientTypes = Object.freeze({
     FISH      : Symbol("Fish")
 });
 
+var boxImage = new Image();
+boxImage.src = './game/images/Storage_bin.png';
+
 class IngredientBox {
     constructor(x , y, w, h, type, intColor, outColor) {
         this.x = x;
@@ -35,7 +38,7 @@ class IngredientBox {
         this.typeStorage2Missing = [0,1,2,3];
         this.typeStorage3 = [];
         this.typeStorage3Missing = [0,1,2,3];
-    
+        this.image = boxImage;
         this.maxStorage   = 4;
         this.maxStorageUpgradeCost = 500;
     }
@@ -58,8 +61,8 @@ class IngredientBox {
     }
 
     drawBox(context) {
-        drawing.drawRectangle(context, this.x, this.y, this.w, this.h, true, "#B87C4B", "#966047", 5 );
-        
+        //drawing.drawRectangle(context, this.x, this.y, this.w, this.h, true, "#B87C4B", "#966047", 5 );
+        drawing.drawImage(context, this);
     }
 
     getStorageAmount(type) {
@@ -109,7 +112,7 @@ class IngredientBox {
                 //console.log(i);
                 
                 let x = this.x + 10,
-                    y = this.y + 5 + 15*(this.typeStorage1Missing[i]);
+                    y = this.y + 15 + 15*(this.typeStorage1Missing[i]);
                     let ingredient = ingredients.createIngredientWithXY(this.typeStorage1name, x, y);
                     ingredient.id = i;
                 this.typeStorage1.push(ingredient);
@@ -123,7 +126,7 @@ class IngredientBox {
             let max = this.typeStorage2Missing.length;
             for (let i = 0; i <max;i++) {
                 let x = this.x + 70,
-                    y = this.y + 5 + 15*(this.typeStorage2Missing[i]);
+                    y = this.y + 15 + 15*(this.typeStorage2Missing[i]);
                     let ingredient = ingredients.createIngredientWithXY(this.typeStorage2name, x, y);
                     ingredient.id = i;
                 this.typeStorage2.push(ingredient);
@@ -136,7 +139,7 @@ class IngredientBox {
             
             for (let i = 0; i <max;i++) {
                 let x = this.x + 135,
-                    y = this.y + 5 + 15*(this.typeStorage3Missing[i]);
+                    y = this.y + 15 + 15*(this.typeStorage3Missing[i]);
                     let ingredient = ingredients.createIngredientWithXY(this.typeStorage3name, x, y);
                     ingredient.id = i;
                 this.typeStorage3.push(ingredient);
