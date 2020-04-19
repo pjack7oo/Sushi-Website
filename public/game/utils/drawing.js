@@ -25,6 +25,8 @@ var context = canvas.getContext('2d');
 var validCanvas = false;
 var gridActive  = false;// for faster drawing during building
 
+var backgroundImg = new Image();
+backgroundImg.src = './game/images/Foodstall_Background.png';
 
 
 export function getCanvasValidity() {
@@ -185,6 +187,7 @@ export function draw() {
         clear(context);
 
         //background
+        drawRectImage(0,0,700,200, backgroundImg);
         customers.drawCustomers(context);
 
         drawTable(context);
