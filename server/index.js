@@ -90,8 +90,8 @@ router.get('/about', function(req, res) {
 
 var dbName = 'SushiCatDB';
 var connectionString = 'mongodb://localhost:27017/' + dbName;
-
-mongoose.connect(connectionString);
+var mongodbString = process.env.MONGODB_URI +"/" + dbName;
+mongoose.connect(mongodbString);
 var db = mongoose.connection;
 // var callrollImage = './public/Images/californiaRoll.png';
 // var alsakarollImage = './public/Images/alaskaroll.png'
