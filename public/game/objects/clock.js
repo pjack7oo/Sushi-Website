@@ -110,7 +110,7 @@ function drawBackground (context, x, y, pos, radius) {
     
     
     if (pos*100-oldnum > 10 && i >0) {
-        console.log(i,pos*100);
+        
         
         oldnum = pos*100;
         i--
