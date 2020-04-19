@@ -235,7 +235,7 @@ export function myUp() {
     plates.addRollToPlate(mySelect[0]);
     customers.giveCustomerPlate(mySelect[0]);
     if(mySelect[0] instanceof teaKettle.Cup) {
-      console.log(mySelect[0] instanceof teaKettle.Cup);
+      //console.log(mySelect[0] instanceof teaKettle.Cup);
       
       customers.giveCustomerTea(mySelect[0]);
       
@@ -251,7 +251,7 @@ function checkButtons(mouse) {
   
   for (let button of buttons) {
     if (inBounds(mouse, button)) {
-      console.log(true);
+     // console.log(true);
 
       button.callBack();
     }
@@ -261,7 +261,7 @@ function checkButtons(mouse) {
 function checkUpgradeButtons(mouse) {
   for (let button of buttons) {
     if (inBounds(mouse, button)) {
-      console.log(true);
+      //console.log(true);
       if (button.containsArgs) {
         button.callBack(argv[0], argv[1]);
       }
@@ -275,7 +275,7 @@ export function checkButtonsGiven(e, buttons) {
   var mouse = getMouse(e);
   for (let button of buttons) {
     if (inBounds(mouse, button)) {
-      console.log(true);
+      //console.log(true);
 
       button.callBack();
     }
@@ -374,6 +374,8 @@ export function drawMySelect(context) {
       } else if (mySelect[0].renderType.type == shapes.shapeType.ROUNDRECT) {
         drawing.drawRoundRect(context, mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h, 
                               mySelect[0].renderType.radius,true, true, mySelect[0].renderType.intColor, mySelectColor, 1);
+      } else if (mySelect[0] instanceof teaKettle.Cup) {
+        drawing.drawImage(context,mySelect[0].renderType);
       }
       else {
         context.strokeStyle = mySelectColor;
