@@ -1,6 +1,6 @@
 var SushiCat = SushiCat || {};
-var rollUrl = "http://localhost:5000/api/account/rolls",
-    logoutUrl = "http://localhost:5000/api/account/logoff";
+var rollUrl =     "https://sushicat-meow.herokuapp.com/api/account/rolls",           //"http://localhost:5000/api/account/rolls",
+    logoutUrl =   "https://sushicat-meow.herokuapp.com/api/account/logoff";  //"http://localhost:5000/api/account/logoff";
 SushiCat.Controller = function () {
     this.localStorageKey = "SushiCat profile";
     this.save= {};
