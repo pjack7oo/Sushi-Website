@@ -66,7 +66,7 @@ export class CuttingStation{
               roll.pushRoll(this.item);
               this.item = null;
   
-              console.log("Cut roll");
+              //console.log("Cut roll");
   
               drawing.Invalidate();
           }
@@ -90,7 +90,7 @@ export class CuttingStation{
         this.item == null
       ) {
         this.item = mySelect;
-        console.log(this.item);
+        //console.log(this.item);
         roll.removeRoll(mySelect);
       }
     }
