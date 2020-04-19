@@ -135,7 +135,7 @@ export function drawRolls(ctx)
                 drawRollWithCoords(ctx,roll.renderType.x + roll.radius*2 , roll.renderType.y + roll.radius*2, roll.radius, roll);
             }
             else{
-                console.log(roll.renderType);
+                //console.log(roll.renderType);
                 
                 drawing.drawShape(ctx, roll.renderType);
             }
