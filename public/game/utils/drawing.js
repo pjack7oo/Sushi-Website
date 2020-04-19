@@ -188,6 +188,7 @@ export function draw() {
         customers.drawCustomers(context);
 
         drawTable(context);
+        clock.drawClock(context);
         rollMatt.drawRollingMatt(context);
         
         drawShape(context, plates.plateHolder);
@@ -231,17 +232,18 @@ export function draw() {
         
         ingredientMenu.drawMenu();
         ioControl.drawIoButtons();
-        rollControl.drawRolls(context);
+        
         ingredientBox.drawIngredientBoxes(context);
         riceCooker.drawRice(context);
         teaKettle.drawTeaKettle(context);
+        rollControl.drawRolls(context);
         // if (mySelect != null)
         // {
         //     context.strokeStyle = mySelectColor;
         //     context.lineWidth = mySelectWidth;
         //     context.strokeRect(mySelect.renderType.x, mySelect.renderType.y, mySelect.renderType.w, mySelect.renderType.h);
         // }
-        clock.drawClock(context);
+        
         printAtWordWrap(context,"Level: ",300, 20, 10, 100, "Blue", "20px Arial", "center");
         printAtWordWrap(context,levelControl.getCurrentLevel().toString(),330, 20, 10, 30, "Blue", "20px Arial");
         printAtWordWrap(context,"Money: ",0, 20, 10, 100, "Green", "20px Arial", "left");
@@ -475,12 +477,36 @@ function drawPieCuts(ctx, x, y, radius, roll) {
         ctx.strokeStyle = color.outColor;
         ctx.lineWidth = 1;
         ctx.moveTo(x, y);
+        
         ctx.arc(x, y, radius, beginAngle, endAngle);
+        
         ctx.lineTo(x, y);
         ctx.stroke();
 
         ctx.fill();
     }
+}
+
+export function drawPieCut(ctx, x, y, radius,roll) {
+    let angle = 2/3 * Math.PI;
+
+    let beginAngle = 0,
+    endAngle = 1.2*Math.PI;
+    let color = ingredients.getIngredientColor(roll.outer[0]);
+    beginAngle = endAngle;
+    endAngle = endAngle + angle;
+
+    ctx.beginPath();
+
+    ctx.fillStyle = color.intColor;
+    ctx.fillStyle = color.outColor;
+    ctx.lineWidth = 4;
+    ctx.moveTo(x,y);
+    ctx.arc(x,y,radius+2, beginAngle, endAngle);
+    ctx.lineTo(x,y);
+    
+    ctx.fill();
+
 }
 
 //TODO make every ingredient take different size of pie cut
