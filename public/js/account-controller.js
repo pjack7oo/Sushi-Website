@@ -56,7 +56,29 @@ function getRolls() {
 function drawAccount() {
     var user = JSON.parse(localStorage.getItem('sushicat-session'));
     var $username = document.getElementById("accountUsername");
+    var $ctnErr = $('#account-ctn-err'),
+        invisibleStyle = 'bi-invisible';
     if (user) {
+        var element = document.getElementById('accountLogout');
+
+        if (typeof(element) == undefined || element == null){
+            console.log("adding logout");
+            
+            createAccountControllogOut();
+        }
+        var loginButton = document.getElementById('login');
+        if (typeof(loginButton) != undefined || loginButton != null){
+            
+            
+            $('#accountLogin').remove();
+        }
+        var register = document.getElementById("accountLogin");
+        if (typeof(register)!= 'undefined' || register != null){
+            $("#accountRegister").remove();
+        }
+
+        $ctnErr.removeClass().addClass(invisibleStyle);
+        $ctnErr.hide().slideUp();    
         console.log(user);
         // var para = document.createElement("p");
         // var node = document.createTextNode(user.userProfileModel.username);
@@ -66,12 +88,84 @@ function drawAccount() {
         document.getElementById("accountName").innerHTML = "<b>Name: </b>" + user.userProfileModel.name;
         createAccountControlResetPassword();
         createAccountControlClearSave();
+    } else {
+        
+        $ctnErr.html("<p> Oops! Please login or Register");
+            $ctnErr.addClass("bi-ctn-err").slideDown();
+        $('#accountLogout').remove();
+        var loginButton = document.getElementById('login');
+        if (typeof(loginButton) == undefined && loginButton == null){
+            console.log("creating login");
+            
+            
+            createAccountControllogIn();
+        }
+        var register = document.getElementById("accountLogin");
+        if (typeof(register)!= 'undefined' && register != null){
+            createAccountControlRegister();
+        }
     }
 
+}
+
+function createAccountControlRegister() {
+    var accountButtons = document.getElementById('accountContainer');
+    var element = document.getElementById("accountRegister");
+    if (typeof(element)!= 'undefined' && element != null){
+        return;
+    }
+    console.log("creating login");
+    
+    var registerBtn = document.createElement("button");
+    registerBtn.innerHTML= "Register";
+    registerBtn.id = "accountRegister";
+    registerBtn.className = 'registerButton';
+    registerBtn.onclick = registerPage;
+    accountButtons.appendChild(registerBtn);
+}
+
+function registerPage() {
+    document.getElementById('register').style.display='block';
+}
+
+function createAccountControllogIn() {
+    var accountButtons = document.getElementById('accountContainer');
+    var element = document.getElementById("accountLogin");
+    if (typeof(element)!= 'undefined' && element != null){
+        return;
+    }
+    console.log("creating login");
+    
+    var logInBtn = document.createElement("button");
+    logInBtn.innerHTML= "LogIn";
+    logInBtn.id = "accountLogin";
+    logInBtn.className = 'loginButton';
+    logInBtn.onclick = loginPage;
+    accountButtons.appendChild(logInBtn);
+}
+
+function loginPage() {
+    document.getElementById('login').style.display='block';
+}
+
+function createAccountControllogOut() {
+    var accountButtons = document.getElementById('accountContainer');
+    var element = document.getElementById("accountLogout");
+    if (typeof(element)!= 'undefined' && element != null){
+        return;
+    }
+    
+    var logOutBtn = document.createElement("button");
+    logOutBtn.innerHTML= "LogOut";
+    logOutBtn.id = "accountLogout";
+    logOutBtn.className = 'logoutButton';
+    logOutBtn.onclick = logOut;
+    accountButtons.appendChild(logOutBtn);
 }
 function createAccountControlClearSave() {
     var accountButtons = document.getElementById('accountButtons');
     var element = document.getElementById("clearSave");
+
     if (typeof(element)!= 'undefined' && element != null){
         return;
     }
@@ -112,9 +206,12 @@ function logOut() {
         type:'POST',
         url: logoutUrl,
         success: function(response) {
+            document.getElementById('Account').style.display='none';
             console.log(response);
             localStorage.removeItem('sushicat-session');
             clearAccount();
+            createAccountControllogIn();
+            createAccountControlRegister()
         }
     })
 }
