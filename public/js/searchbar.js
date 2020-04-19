@@ -1,19 +1,19 @@
 function setUpSearch() {
 
-    console.log(rollsLoaded);
+    //console.log(rollsLoaded);
     
     if (rollsLoaded) {
         $('#submitSearch').click(function() {
             var $input = $('#searchText');
             //var specificRolls = document.getElementById("SpecificRolls");
             var rolls = document.getElementsByName("roll");
-            console.log(rolls);
+            //console.log(rolls);
             var tags = document.getElementsByTagName("a");
             var input = $input.val().trim();
             var length = tags.length;
             if (input !==""){
             for (let i = 0; i < length; i++){
-                console.log(tags[i].name == input);
+                //console.log(tags[i].name == input);
                 
                 if (tags[i].name == input) {
                     window.location.hash = tags[i].name;
