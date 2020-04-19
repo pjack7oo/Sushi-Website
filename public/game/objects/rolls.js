@@ -39,8 +39,37 @@ export function rollListInit()
         
     // })
     var rolls = localStorage.getItem("rollList");
+    var rollsToModify = JSON.parse(rolls);
+    var rollsToRemove = [];
+    console.log(rollsToModify);
     
-    rollList = JSON.parse(rolls);
+    var length = rollsToModify.length;
+    console.log(length);
+    
+    for (var i = 0; i<length;i++ ){
+        let innerLength = rollsToModify[i].inner.length; 
+        
+        
+        for (let k = 0;k<innerLength;k++) {
+            
+            
+            
+            if(rollsToModify[i].inner[k] == "Tempura shrimp"){
+                rollsToRemove.push(i);
+            } else if (rollsToModify[i].inner[k] == "Spicy Tuna"){
+                rollsToRemove.push(i);
+            }
+        }
+    }
+
+    for(let i = 0; i < rollsToRemove.length;i++) {
+        console.log(rollsToModify[rollsToRemove[i]]);
+        
+        delete rollsToModify[rollsToRemove[i]];
+    }
+    var cleanArray = rollsToModify.filter(function() {return true});
+    rollList = cleanArray;
+    //rollList = JSON.parse(rolls);
     console.log(rollList);
     
 }
@@ -118,10 +147,10 @@ export function drawRollWithCoords(ctx, x, y, radius, roll){
     //drawing.drawRectangle(ctx, x, y, w, h, true, "red", "white", 5);
     if (roll.isCut)
     {
-        drawRoll(ctx, x + radius, y - radius, radius, roll);
-        drawRoll(ctx, x + radius, y + radius, radius, roll);
-        drawRoll(ctx, x - radius, y + radius, radius, roll);
-        drawRoll(ctx, x - radius, y - radius, radius, roll);
+        drawRoll(ctx, x + radius+2, y - radius-2, radius, roll);
+        drawRoll(ctx, x + radius+2, y + radius+2, radius, roll);
+        drawRoll(ctx, x - radius-2, y + radius+2, radius, roll);
+        drawRoll(ctx, x - radius-2, y - radius-2, radius, roll);
     }
     
 }
@@ -131,7 +160,14 @@ export function drawRoll(ctx, x, y, radius, roll)
     if (roll.outer.length == 1)
     {
         drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'white', 4.25);
-    }
+    } else if (roll.outer.length == 2) {
+        drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'white', 4.25);
+        drawing.drawPieCut(ctx, x, y, radius, roll);
+        //drawing.drawAnyQuad(new shapes.Point(x- 5,y -radius-2), 
+                            // new shapes.Point(x  +5,y -radius-2), 
+                            // new shapes.Point(x +5,y -radius+2), 
+                            // new shapes.Point(x -5,y -radius +2),false, true, 'Green');
+    }   
     else
     {
         drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'black', .1);
