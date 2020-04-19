@@ -7,19 +7,23 @@ SushiCat.Controller = function () {
 };
 
 
-SushiCat.Controller.getSaveData = function (successCallback, errCallback) {
-    var session = SushiCat.Session.getInstance().get();
+// SushiCat.Controller.getSaveData = function (successCallback, errCallback) {
+//     var session = SushiCat.Session.getInstance().get();
 
-    if (!session) {
-        return errCallback({
-            err: SushiCat.ApiMessages.SESSION_NOT_FOUND
-        });
-    }
+//     if (!session) {
+//         return errCallback({
+//             err: SushiCat.ApiMessages.SESSION_NOT_FOUND
+//         });
+//     }
     
+// }
+
+var rollsLoaded = false;
+
+
+function checkRollsLoaded() {
+    return rollsLoaded;
 }
-
-
-
 function uploadServerData (data) {
 
 }
@@ -41,7 +45,9 @@ function getRolls() {
             console.log("loaded rolllist into localStorage");
             $(document).ready(function(){
                 populateRolls(data);
+                setUpSearch();
             })
+            
             
         }
     })
@@ -135,7 +141,8 @@ function populateRolls(data){
             itemIngredients = document.createElement('div'),
             itemImg         = document.createElement('div'),
             itemInner       = document.createElement('div'),
-            itemOuter       = document.createElement('div');
+            itemOuter       = document.createElement('div'),
+            itemLink        = document.createElement('a');
 
         
         
@@ -147,10 +154,12 @@ function populateRolls(data){
         itemImg.className         = 'Image';
         itemInner.className       = 'nestedRollIngrd';
         itemOuter.className       = 'nestedRollIngrd';
+        itemLink.name             = roll.name;
         
         var rollName = document.createElement('p');
             rollName.innerHTML = roll.name;
         item.appendChild(rollName);
+        item.appendChild(itemLink);
 
         var description = document.createElement('p');
         description.innerHTML = roll.description;
@@ -189,8 +198,10 @@ function populateRolls(data){
         itemContent.appendChild(itemDescription);
         itemContent.appendChild(itemBox);
         item.appendChild(itemContent);
+        
         rollContainer.appendChild(item);
     }   
+    rollsLoaded = true;
 }
 
 function bufferToBase64(buffer) {
