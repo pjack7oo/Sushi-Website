@@ -161,9 +161,10 @@
                 }
             </script>
             <div class="search-bar">
-                <form>
-                    <input type="text" placeholder="Search Rolls.." name="search">
-                    <button type="submit"><i class="fa fa-search"></i></button>
+                <form onsubmit="event.preventDefault()">
+                    <input type="text" placeholder="Search Rolls.." name="search" id="searchText">
+                    <button id="submitSearch" type="search"><i class="fa fa-search"></i></button>
+                    <script src = './js/searchbar.js'></script>
                 </form>
             </div>
         </header>
@@ -240,8 +241,9 @@
         </div>
         <div class="learn" id="SpecificRolls">
             <h2 align = "center">Specific Rolls</h2>
-            <div class="learn-item">
+            <div class="learn-item" name="roll">
                 <p> California Roll</p>
+                
                 
                     
                 
@@ -276,6 +278,7 @@
                         </div>
                     </div>
                 </div>
+                <a name='California'></a>
             </div>
         </div>
         
