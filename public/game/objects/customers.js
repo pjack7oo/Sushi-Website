@@ -87,7 +87,7 @@ export function getLevelCustomer(level, difficulty) {
     }
     var customer = new Customer(difficulty,offset);
     startTime(customer);
-    console.log(customer);
+    //console.log(customer);
     customer.bar =new progBar.progressbar(customer.x, customer.y -72, customer.w, 20);
     customer.id = customers.length;
     switch(level) {
@@ -117,7 +117,7 @@ export function getRandomInt(max) {
 function getWantedRoll(customer, level = 0)
 {
    
-    console.log(level, level%10===0);
+    //console.log(level, level%10===0);
     
     switch(level) {
         
@@ -213,7 +213,9 @@ export function giveCustomerTea(tea) {
     if (tea instanceof teaKettle.Cup) {
         for(let customer of customers) {
             if (!customer.isThinking) {
-                if (checkCustomerBounding(customer, tea.renderType) && !customer.hadTea){
+                
+                
+                if (shapes.Contains(customer, tea.renderType) && !customer.hadTea){
                     console.log(customer.temperTime);
                     customer.temperTime += 10;
                     console.log(customer.temperTime);
@@ -279,6 +281,8 @@ function checkCustomerBounding(customer, circle)
     if (!shapes.inRect(circle.x, circle.y + circle.radius, rect)) return false;
     return true;
 }
+
+
 
 export function updateCustomers() {
     let currentTime = performance.now();
