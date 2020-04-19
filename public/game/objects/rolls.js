@@ -41,10 +41,10 @@ export function rollListInit()
     var rolls = localStorage.getItem("rollList");
     var rollsToModify = JSON.parse(rolls);
     var rollsToRemove = [];
-    console.log(rollsToModify);
+    //console.log(rollsToModify);
     
     var length = rollsToModify.length;
-    console.log(length);
+    //console.log(length);
     
     for (var i = 0; i<length;i++ ){
         let innerLength = rollsToModify[i].inner.length; 
@@ -63,14 +63,14 @@ export function rollListInit()
     }
 
     for(let i = 0; i < rollsToRemove.length;i++) {
-        console.log(rollsToModify[rollsToRemove[i]]);
+        //console.log(rollsToModify[rollsToRemove[i]]);
         
         delete rollsToModify[rollsToRemove[i]];
     }
     var cleanArray = rollsToModify.filter(function() {return true});
     rollList = cleanArray;
     //rollList = JSON.parse(rolls);
-    console.log(rollList);
+    //console.log(rollList);
     
 }
 
@@ -135,6 +135,8 @@ export function drawRolls(ctx)
                 drawRollWithCoords(ctx,roll.renderType.x + roll.radius*2 , roll.renderType.y + roll.radius*2, roll.radius, roll);
             }
             else{
+                console.log(roll.renderType);
+                
                 drawing.drawShape(ctx, roll.renderType);
             }
             
