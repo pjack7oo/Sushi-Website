@@ -151,7 +151,7 @@ function getDataFromServer () {
             
             
             
-            timedBox.createTimedBox(325,200,170,50,"Data Retrieved!", 2,'center',true, true, "white", "red");
+            
             load();
             console.log("successfully loaded data");
            }
