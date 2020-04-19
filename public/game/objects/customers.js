@@ -152,7 +152,7 @@ export function drawCustomers(ctx)
 function drawCustomer(ctx, customer)
 {
     drawing.drawShape(ctx, customer);
-    drawing.drawRectangle(ctx,customer.x, customer.y, customer.w, customer.h, false, "white", "blue", 1); //temp bounding box
+    //drawing.drawRectangle(ctx,customer.x, customer.y, customer.w, customer.h, false, "white", "blue", 1); //temp bounding box
     if (customer.isThinking)
     {
         drawing.drawSpeechBubble(customer.x, customer.y - 50, customer.w, 50,
