@@ -92,11 +92,11 @@ export function getTuna() {
     let name = ingredients.ingredients.TUNA, 
         cost = ingredients.getIngredientCost(name);
     let tuna = fish.createTuna(cost);
-    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(0)) {
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(0) && cutSt.isntActive(0)) {
         cutSt.insertFish(tuna,0);
         //ingredientBox.fillBoxes(name);
         money -=cost;
-    } else if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(1)) {
+    } else if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(1) && cutSt.isntActive(1) && cutSt.hasSecondBoard()) {
         cutSt.insertFish(tuna,1);
         //ingredientBox.fillBoxes(name);
         money -=cost;
@@ -113,14 +113,16 @@ export function getSalmon() {
         cost = ingredients.getIngredientCost(name);
     let salmon =  fish.createSalmon(cost);
     
-    // console.log(salmon instanceof fish.Fish);
-    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(0)) {
+    
+    
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(0) && cutSt.isntActive(0)) {
         cutSt.insertFish(salmon,0);
         //ingredientBox.fillBoxes(name);
         money -=cost;
-    } else if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(1)) {
+    } else if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(1) && cutSt.isntActive(1) && cutSt.hasSecondBoard()) {
         cutSt.insertFish(salmon,1);
         //ingredientBox.fillBoxes(name);
+        
         money -=cost;
     }else {
         if (!hasEnoughMoney(cost) ){
@@ -134,11 +136,11 @@ export function getEel() {
     let name = ingredients.ingredients.EEL, 
         cost = ingredients.getIngredientCost(name);
     let eel = fish.createEel(cost);  
-    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(0)) {
+    if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(0) && cutSt.isntActive(0)) {
         cutSt.insertFish(eel,0);
         //ingredientBox.fillBoxes(name);
         money -=cost;
-    } else if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(1)) {
+    } else if (hasEnoughMoney(cost) && !ingredientBox.isFullStorage(name) && cutSt.hasNoItem(1) && cutSt.isntActive(1) && cutSt.hasSecondBoard()) {
         cutSt.insertFish(eel,1);
         //ingredientBox.fillBoxes(name);
         money -=cost;
