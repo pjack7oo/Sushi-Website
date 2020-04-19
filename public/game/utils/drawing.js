@@ -14,6 +14,7 @@ import * as clock       from   '../objects/clock.js';
 import { drawTable } from '../objects/table.js'
 import * as levelControl from '../objects/level.js';
 import * as player from '../objects/player.js';
+import * as teaKettle from '../objects/teakettle.js';
 
 
 
@@ -24,6 +25,8 @@ var context = canvas.getContext('2d');
 var validCanvas = false;
 var gridActive  = false;// for faster drawing during building
 
+var backgroundImg = new Image();
+backgroundImg.src = './game/images/Foodstall_Background.png';
 
 
 export function getCanvasValidity() {
@@ -59,13 +62,27 @@ export function Invalidate() {
     validCanvas = false;
 }
 
-export function drawTextBox(ctx, x, y, w, h, text, font = "10px Verdana", textColor = 'Black', intColor = '#add8e6', outColor = 'Gray') {
-    drawRoundRect(ctx, x, y, w, h, 5, true, true, intColor, outColor);
+export function drawTextBox(ctx, x, y, w, h, text, fill= true,stroke = true, offset = 5, font = "10px Verdana", textColor = 'Black', intColor = '#add8e6', outColor = 'Gray', alignment = "center", lineHeight = 0, maxWidth = 0) {
+    drawRoundRect(ctx, x, y, w, h, 5, fill, stroke, intColor, outColor);
     ctx.font = font;
     ctx.textAlign = "center";
     ctx.fillStyle = textColor;
+    if (lineHeight == 0) {
+        lineHeight = h/2-10;
+    }
+    if (maxWidth == 0){
+        maxWidth = 174;
+    }
+    
     //ctx.fillText(text,x+ w/2,y+h/1.75);
-    printAtWordWrap(ctx, text, x + w / 2, y + h / 2, 30, 174, textColor, font, "center");
+    if (alignment == 'center') {
+        printAtWordWrap(ctx, text, x + w / 2, y + h / 2 +offset, lineHeight, maxWidth, textColor, font, alignment);
+    } else if (alignment == 'right') {
+        printAtWordWrap(ctx, text, x, y + h / 2 +offset, lineHeight, maxWidth, textColor, font, alignment);
+    }else {
+        printAtWordWrap(ctx, text, x, y + h / 2 +offset, lineHeight, maxWidth, textColor, font, alignment);
+    }
+    
     Invalidate();
 }
 
@@ -128,7 +145,7 @@ export function drawRoundRectWPoint(ctx, x, y, w, h, radius, fill, stroke = true
     }
 }
 
-export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intColor = 'Blue', outColor = 'Gray', lineWidth = 1) {
+export function drawRoundRect(ctx, x, y, w, h, radius, fill = true, stroke = true, intColor = 'Blue', outColor = 'Gray', lineWidth = 1) {
     if (typeof stroke == "undefined") {
         stroke = true;
     }
@@ -157,7 +174,7 @@ export function drawRoundRect(ctx, x, y, w, h, radius, fill, stroke = true, intC
 
 export function clear(ctx) {
     ctx.fillStyle = 'White';
-    ctx.fillRect(0, 0, 600, 500);
+    ctx.fillRect(0, 0, 700, 500);
 }
 
 export function clearArea(ctx, x, y, w, h, color = "white") {
@@ -170,9 +187,11 @@ export function draw() {
         clear(context);
 
         //background
+        drawRectImage(0,0,700,200, backgroundImg);
         customers.drawCustomers(context);
 
         drawTable(context);
+        clock.drawClock(context);
         rollMatt.drawRollingMatt(context);
         
         drawShape(context, plates.plateHolder);
@@ -197,8 +216,7 @@ export function draw() {
         cutStation.drawCuttingStation(context);//cuttingStation
         riceCooker.drawRiceCooker(context); //ricecooker
 
-        rollControl.drawRolls(context);
-        ingredientBox.drawIngredientBoxes(context);
+       
         //ingredients.drawActiveIngredients(context);
         // rollMatt.drawIngredients(context);
         //drawShapes(context, ingredients.activeIngredients);
@@ -214,23 +232,28 @@ export function draw() {
         
         plates.drawPlates(context);
         
-        ioControl.drawMySelect(context);
+        
         ingredientMenu.drawMenu();
         ioControl.drawIoButtons();
+        
+        ingredientBox.drawIngredientBoxes(context);
         riceCooker.drawRice(context);
+        teaKettle.drawTeaKettle(context);
+        rollControl.drawRolls(context);
         // if (mySelect != null)
         // {
         //     context.strokeStyle = mySelectColor;
         //     context.lineWidth = mySelectWidth;
         //     context.strokeRect(mySelect.renderType.x, mySelect.renderType.y, mySelect.renderType.w, mySelect.renderType.h);
         // }
-        clock.drawClock(context);
+        
         printAtWordWrap(context,"Level: ",300, 20, 10, 100, "Blue", "20px Arial", "center");
         printAtWordWrap(context,levelControl.getCurrentLevel().toString(),330, 20, 10, 30, "Blue", "20px Arial");
         printAtWordWrap(context,"Money: ",0, 20, 10, 100, "Green", "20px Arial", "left");
         printAtWordWrap(context,player.getCurrentMoney().toString(),70, 20, 10, 100, "Green", "20px Arial", "left");
         //draw on top like stats
         drawGrid();
+        ioControl.drawMySelect(context);
         validCanvas = true;
     }
 }
@@ -372,7 +395,7 @@ export function drawUpgradeButtons(ctx, buttons) {
         printAtWordWrap(ctx, button.text, button.x + button.w / 2+3, button.y + button.h / 1.5, button.h, button.w, "black", button.font, button.fontLoc);
     }
 }
-function drawImage(ctx, object) {
+export function drawImage(ctx, object) {
     ctx.drawImage(object.image, object.x, object.y, object.w, object.h);
 }
 
@@ -457,12 +480,36 @@ function drawPieCuts(ctx, x, y, radius, roll) {
         ctx.strokeStyle = color.outColor;
         ctx.lineWidth = 1;
         ctx.moveTo(x, y);
+        
         ctx.arc(x, y, radius, beginAngle, endAngle);
+        
         ctx.lineTo(x, y);
         ctx.stroke();
 
         ctx.fill();
     }
+}
+
+export function drawPieCut(ctx, x, y, radius,roll) {
+    let angle = 2/3 * Math.PI;
+
+    let beginAngle = 0,
+    endAngle = 1.2*Math.PI;
+    let color = ingredients.getIngredientColor(roll.outer[0]);
+    beginAngle = endAngle;
+    endAngle = endAngle + angle;
+
+    ctx.beginPath();
+
+    ctx.fillStyle = color.intColor;
+    ctx.fillStyle = color.outColor;
+    ctx.lineWidth = 4;
+    ctx.moveTo(x,y);
+    ctx.arc(x,y,radius+2, beginAngle, endAngle);
+    ctx.lineTo(x,y);
+    
+    ctx.fill();
+
 }
 
 //TODO make every ingredient take different size of pie cut

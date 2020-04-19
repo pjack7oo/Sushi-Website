@@ -1,5 +1,5 @@
 
-var signUp = "http://localhost:5000/api/account/register";
+var signUp = "https://sushicat-meow.herokuapp.com/api/account/register"       //          "http://localhost:5000/api/account/register";
 // (function () {
 
 // })();
@@ -20,6 +20,21 @@ var passwordsMatch = function (password, passwordConfirm) {
 var passwordIsComplex = function(password) {
     //todo set some rules
     return true;
+}
+
+function resetSignUpVals() {
+    var $ctnErr = $('#ctn-err'),
+    $txtEmail = $('#txt-email'),
+    $txtName  = $('#txt-name'),
+    $txtUname = $('#txt-username'),
+    $txtPassword = $('#txt-password'),
+    $txtPasswordConfirm = $('#txt-password-confirm');
+    $ctnErr.val('');
+    $txtEmail.val('');
+    $txtName.val('');
+    $txtPassword.val('');
+    $txtPasswordConfirm.val('');
+    $txtUname.val('');
 }
 
 $(document).ready(function() {
@@ -86,6 +101,7 @@ $(document).ready(function() {
                 console.log("success signup");
 
                 if ( resp.success === true) {
+                    resetSignUpVals();
                     document.getElementById('register').style.display='none';
                     return;
                 } else {

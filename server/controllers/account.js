@@ -5,6 +5,8 @@ var AccountController = function(userModel, session, userSession, mailer) {
     this.ApiMessages      = require('../models/api-messages.js');
     this.UserProfileModel = require('../models/user-profile.js');
     this.User             = require('../models/user.js');
+    this.UserSaves        = require('../models/user-saves');
+    this.Rolls            = require('../models/rolls.js');
     this.userModel        = userModel;
     this.session          = session;
     this.userSession      = userSession;
@@ -30,12 +32,14 @@ AccountController.prototype.logon = function(username, password, callback) {
     var me = this;
 
     me.userModel.findOne({ username: username}, function (err, user) {
-
+        //console.log(user);
+        
         if (err) {
             return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR } }));
         }
+        
 
-        if (user && user.passwordSalt) {
+        if (user !=null && user.passwordSalt) {
             
             me.hashPassword(password, user.passwordSalt, function (err, passwordHash) {
 
@@ -43,9 +47,11 @@ AccountController.prototype.logon = function(username, password, callback) {
 
                     var userProfileModel = new me.UserProfileModel({
                         username: user.username,
-                        name: user.name
+                        name: user.name,
+                        email: user.email
                     });
 
+                   //console.log(userProfileModel);
                    
                     me.session.userProfileModel = userProfileModel;
                     me.session.id = me.uuid.v4();
@@ -83,6 +89,102 @@ AccountController.prototype.logon = function(username, password, callback) {
 
     });
 };
+
+AccountController.prototype.saveData = function(username, data, date, money, callback) {
+    var me = this;
+
+    me.UserSaves.findOne({username: username}, function(err, userSave) {
+        if (err) {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+        }
+
+        if (userSave) {
+            userSave.userMoney = money;
+            userSave.gameData      = data;
+            userSave.creationDate = date;
+            userSave.saveNumber++;
+
+            userSave.save(function (err, saveData) {
+                if (err) {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+                }
+
+                if (saveData) {
+                    return callback(err, new me.ApiResponse({
+                        success: true, extras: {
+                            userSave: saveData
+                        }
+                    }));
+                } else {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_CREATE_USERSAVE }}));
+                }
+            });
+        } else {
+            var userSave = new me.UserSaves ({
+                username     : username,
+                creationDate : date,
+                userMoney    : money,
+                saveNumber   : 1,
+                gameData     : data
+            });
+
+            userSave.save(function (err, saveData) {
+                if (err) {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+                }
+                if (saveData) {
+                    return callback(err, new me.ApiResponse({
+                        success: true, extras: {
+                            userSave: saveData
+                        }
+                    }));
+                } else {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_CREATE_USERSAVE }}));
+                }
+
+            });
+        }
+    });
+}
+
+AccountController.prototype.getRolls = function(callback) {
+    var me = this;
+
+    me.Rolls.find({}, function(err, rolls) {
+        if (err) {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+        }
+        var rollList = [];
+        let length = rolls.length;
+
+        for (let i = 0; i < length; i++) {
+            rollList.push(rolls[i]);
+        }
+
+        return callback(err, new me.ApiResponse({ success: false, extras: {rollList: rollList}}));
+    });
+    
+}
+
+AccountController.prototype.getData = function (username, callback) {
+    var me = this;
+
+    me.UserSaves.findOne({username: username}, function(err, userSave) {
+        if(err) {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+        }
+
+        if (userSave) {
+            return callback(err, new me.ApiResponse({
+                success: true, extras: {
+                    userSave: userSave
+                }
+            }));
+        } else {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_FIND_USERSAVE }}));
+        }
+    })
+}
 
 AccountController.prototype.logoff = function () {
     if (this.session.userProfileModel) delete this.session.userProfileModel;
@@ -157,30 +259,65 @@ AccountController.prototype.resetPassword = function (email, callback) {
     })
 };
 
-AccountController.prototype.resetPasswordFinal = function (email, newPassword, passwordResetHash, callback) {
+
+AccountController.prototype.clearSave = function(username, callback) {
     var me = this;
-    if (!me.session || !me.session.passwordResetHash) {
-        return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EXPIRED } }));
-    }
 
-    if (me.session.passwordResetHash !== passwordResetHash) {
-        return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_HASH_MISMATCH } }));
-    }
-    if (me.session.emailWhoRequestedPasswordReset !== email) {
-        return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EMAIL_MISMATCH } }));
-    }
+    me.UserSaves.findOne({username: username}, function(err, userSave) {
+        if (err) {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+        }
+        
+        
+        if (userSave) {
+            userSave.remove(function(err, save) {
+                if (err) {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR }}));
+                }
 
+                if (save) {
+                    return callback(err, new me.ApiResponse({
+                        success: true, extras: null
+                    }));
+                } else {
+                    return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_FIND_USERSAVE }}));
+                }
+            });
+        } else {
+            return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_FIND_USERSAVE }}));
+        }
+    })
+    
+}
+AccountController.prototype.resetPasswordFinal = function (username, newPassword, newPasswordConfirm, callback) {
+    var me = this;
+    
+    
+    // if (!me.session || !me.session.passwordResetHash) {
+    //     return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EXPIRED } }));
+    // }
+
+    // if (me.session.passwordResetHash !== passwordResetHash) {
+    //     return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_HASH_MISMATCH } }));
+    // }
+    // if (me.session.emailWhoRequestedPasswordReset !== email) {
+    //     return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EMAIL_MISMATCH } }));
+    // }
+    if (newPassword != newPasswordConfirm) {
+        return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_CONFIRM_MISMATCH } }));
+    }
     var passwordSalt = this.uuid.v4();
 
     me.hashPassword(newPassword, passwordSalt, function (err, passwordHash) {
         
-        me.userModel.update({ email: email }, { passwordHash: passwordHash, passwordSalt: passwordSalt }, function (err, numberAffected, raw) {
-
+        me.userModel.updateOne({ username: username }, { passwordHash: passwordHash, passwordSalt: passwordSalt }, function (err, raw) {
+           
+            
             if (err) {
                 return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.DB_ERROR } }));
             }
 
-            if (numberAffected < 1) {
+            if (raw.nModified <1) {
                 return callback(err, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.COULD_NOT_RESET_PASSWORD } }));
             } else {
                 return callback(err, new me.ApiResponse({ success: true, extras: null }));
@@ -218,6 +355,8 @@ AccountController.prototype.getUserFromRegistration = function (userRegistration
         }
     });
 }
+
+
 
                 
 

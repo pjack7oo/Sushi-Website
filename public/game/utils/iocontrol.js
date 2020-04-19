@@ -8,6 +8,8 @@ import * as customers from "../objects/customers.js";
 import * as ingredientBox from '../objects/ingredientbox.js';
 import { shapeType, inCircle } from "./shapes.js";
 import * as riceCooker  from "../objects/riceCooker.js";
+import * as shapes      from '../utils/shapes.js';
+import * as teaKettle   from '../objects/teakettle.js';
 
 //moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 var ghostcanvas;
@@ -156,6 +158,9 @@ export function myDown(e) {
   if (checkShapes(plates.getMoveablePlates(), mouse)) {
     return;
   }
+  if (teaKettle.checkCup(mouse)) {
+    return;
+  }
 
   if (ingredientBox.checkClickOnShapes(e, gctx)) {
     
@@ -229,6 +234,12 @@ export function myUp() {
     cutStation.checkCuttingStation(mySelect[0]);
     plates.addRollToPlate(mySelect[0]);
     customers.giveCustomerPlate(mySelect[0]);
+    if(mySelect[0] instanceof teaKettle.Cup) {
+      //console.log(mySelect[0] instanceof teaKettle.Cup);
+      
+      customers.giveCustomerTea(mySelect[0]);
+      
+    }
   }
   mySelect[0] = null;
   canvas.onmousemove = null;
@@ -240,7 +251,7 @@ function checkButtons(mouse) {
   
   for (let button of buttons) {
     if (inBounds(mouse, button)) {
-      console.log(true);
+     // console.log(true);
 
       button.callBack();
     }
@@ -250,7 +261,7 @@ function checkButtons(mouse) {
 function checkUpgradeButtons(mouse) {
   for (let button of buttons) {
     if (inBounds(mouse, button)) {
-      console.log(true);
+      //console.log(true);
       if (button.containsArgs) {
         button.callBack(argv[0], argv[1]);
       }
@@ -264,7 +275,7 @@ export function checkButtonsGiven(e, buttons) {
   var mouse = getMouse(e);
   for (let button of buttons) {
     if (inBounds(mouse, button)) {
-      console.log(true);
+      //console.log(true);
 
       button.callBack();
     }
@@ -346,15 +357,44 @@ function myMove(e) {
   }
 }
 
-export function drawMySelect(ctx) {
+export function drawMySelect(context) {
   if (mySelect[0] != null) {
-    context.strokeStyle = mySelectColor;
-    context.lineWidth = mySelectWidth;
-    context.strokeRect(
-      mySelect[0].renderType.x,
-      mySelect[0].renderType.y,
-      mySelect[0].renderType.w,
-      mySelect[0].renderType.h
-    );
+    if (mySelect[0] instanceof rollControl.Roll) {
+      rollControl.drawRollWithCoords(context,mySelect[0].renderType.x + mySelect[0].radius*2 , mySelect[0].renderType.y + mySelect[0].radius*2, mySelect[0].radius, mySelect[0]);
+    }
+    else {
+      if (mySelect[0] instanceof ingredients.Ingredient){
+        if (mySelect[0].name == ingredients.ingredients.RICE){
+          drawing.drawRoundRect(context, mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h, 
+            mySelect[0].renderType.radius,true, true, mySelect[0].renderType.intColor, mySelectColor, 1);
+        }
+        else {
+          drawing.drawImage(context, mySelect[0].renderType);
+        }
+      } else if (mySelect[0].renderType.type == shapes.shapeType.ROUNDRECT) {
+        drawing.drawRoundRect(context, mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h, 
+                              mySelect[0].renderType.radius,true, true, mySelect[0].renderType.intColor, mySelectColor, 1);
+      } else if (mySelect[0] instanceof teaKettle.Cup) {
+        drawing.drawImage(context,mySelect[0].renderType);
+      }
+      else {
+        context.strokeStyle = mySelectColor;
+        context.lineWidth = mySelectWidth;
+        context.fillStyle = mySelect[0].renderType.intColor;
+        context.strokeRect(
+          mySelect[0].renderType.x,
+          mySelect[0].renderType.y,
+          mySelect[0].renderType.w,
+          mySelect[0].renderType.h
+        );
+        context.fillRect(
+          mySelect[0].renderType.x,
+          mySelect[0].renderType.y,
+          mySelect[0].renderType.w,
+          mySelect[0].renderType.h
+        );
+      }
+    }
+    
   }
 }

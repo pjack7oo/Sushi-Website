@@ -3,6 +3,8 @@ import * as drawing from '../utils/drawing.js';
 import * as ingredients from './ingredients.js';
 import * as ioControl   from '../utils/iocontrol.js';
 import * as player from './player.js';
+import * as progBar from '../utils/progressBar.js';
+import { Timer } from '../utils/timer.js';
 
 
 
@@ -20,11 +22,43 @@ export const riceCooker = {
     startTime: 0,
     isActive: false,
     riceCount: 4,
+    maxRiceCount: 4,
     rice: null,
     cookTime:15,//seconds
     cookTimeUpgradeCost: 500,
-    riceCountUpgradeCost: 500
+    riceCountUpgradeCost: 500,
+    timer: new Timer(15,new progBar.progressbar(30,200,100,20),function() {
+        resetRiceCount();
+    })
 
+}
+
+
+export function checkRiceCooker() {
+    if (riceCooker.riceCount == 0 && !riceCooker.timer.isActive) {
+        riceCooker.timer.startTimer();
+    }
+    else {
+        riceCooker.timer.checkTime();
+    }
+
+}
+
+
+export function setData(data) {
+    riceCooker.cookTime = data.cookTime;
+    riceCooker.riceCount = data.maxRiceCount;
+    riceCooker.cookTimeUpgradeCost = data.cookTimeUpgradeCost;
+    riceCooker.riceCountUpgradeCost = data.riceCountUpgradeCost;
+}
+
+export function getData() {
+    var riceCookerData = {};
+    riceCookerData.cookTime = riceCooker.cookTime;
+    riceCookerData.maxRiceCount = riceCooker.maxRiceCount
+    riceCookerData.cookTimeUpgradeCost = riceCooker.cookTimeUpgradeCost;
+    riceCookerData.riceCountUpgradeCost = riceCooker.riceCountUpgradeCost;
+    return riceCookerData;
 }
 
 export function getCookTimeUpgradeCost () {
@@ -47,11 +81,16 @@ export function riceCookerUpgradeCookTime() {
 export function riceCookerUpgradeRiceCount() {
     if (player.hasEnoughMoney(riceCooker.riceCountUpgradeCost)) {
         player.removeMoney(riceCooker.riceCountUpgradeCost);
+        riceCooker.maxRiceCount ++;
         riceCooker.riceCount ++;
         riceCooker.riceCountUpgradeCost += 500;
         return true
     }
     return false;
+}
+
+function resetRiceCount() {
+    riceCooker.riceCount = riceCooker.maxRiceCount;
 }
 
 
@@ -86,10 +125,15 @@ export function drawRiceCooker(ctx)
     ctx.stroke();
     drawing.printAtWordWrap(ctx, riceCooker.riceCount.toString(), 
             riceCooker.x + riceCooker.w/2, riceCooker.y + riceCooker.h/1.5,10,20, "Red", '20px Arial', 'Center');
+    
+    riceCooker.timer.drawProgress();
 }
 
 export function drawRice(context) {
-    drawing.drawShape(context, riceCooker.rice.renderType);
+    if (riceCooker.rice != null) {
+        drawing.drawShape(context, riceCooker.rice.renderType);
+    }
+    
 }
 
 export function addRice(rice) {
@@ -98,8 +142,15 @@ export function addRice(rice) {
 }
 
 export function removeRice(rice) {
-    createRice();
     riceCooker.riceCount -=1;
+    if (riceCooker.riceCount == 0) {
+        
+        riceCooker.rice =null;
+    }else if (riceCooker.riceCount >0) {
+        createRice();
+    }
+    
+    
 }
 
 export function createRice()

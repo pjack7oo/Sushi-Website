@@ -13,7 +13,8 @@ import * as ingredientMenu from './ingredientmenu.js';
 import * as ingredientBox  from './ingredientbox.js';
 import * as clock         from './clock.js';
 import * as upgradeMenu   from './upgrademenu.js';
-
+import * as teaKettle     from './teakettle.js';
+import * as timedBox      from '../utils/timedBox.js';
 
 
 var currentLevel = 0;
@@ -32,7 +33,7 @@ var canvas = document.getElementById('canvas');
 /**@type {CanvasRenderingContext2D} */
 var context = canvas.getContext('2d');
 //level number determines number of customers in the level
-export function startLevel(level) {
+export function startLevel() {
     cancelAnimationFrame(activeInterval);
     ioControl.clearButtons();
     startTime = performance.now();
@@ -66,6 +67,8 @@ export function startLevel(level) {
     //ingredients.clearActiveIngredients();
     // addBox(shapeType.RECTANGLE, 200, 200, 40, 40, ingredients.RICE, true, 'White', 'White');
     riceCooker.createRice();
+    ingredientBox.resetIngredientBoxes();
+    teaKettle.resetTeaKettle();
     
     // addBox(shapeType.RECTANGLE, 25, 90, 25, 25, ingredients.AVOCADO,true, 'Yellow', 'Green');
     //ingredients.createAvocado(50, 320);
@@ -81,15 +84,34 @@ export function startLevel(level) {
     //         levelUpdate(context);
     //         break
     // }
-    if (level == 3) {
+    //drawing.toggleGrid();
+    customers.customerINit(availableCustomerCount);
+    getCustomer(currentLevel);
+    if (currentLevel == 0) {
+        timedBox.createTimedBox(250,50,100,50,"1)Welcome!",4,'center',false,false);
+        timedBox.createTimedBox(110,100,100,50,"<-- 2)Ohh! look theres a customer.",10,'left',false,false);
+        
+        timedBox.createTimedBox(300,100,100,50,"3)Hes gonna want a California roll,cucumber, crab, and avocado.",25,'left',false,false,'green', 'white', 25);
+        timedBox.createTimedBox(330,400,160,50,"10)plate it",55,'center',true,true,);
+        timedBox.createTimedBox(330,400,160,50,"9)put roll here",55,'center',true,true,);
+        timedBox.createTimedBox(330,400,160,50,"<-- 8)press r",50,'center',true,true,);
+        timedBox.createTimedBox(330,400,160,50,"<-- 7)put rice",46,'center',true,true,);
+        timedBox.createTimedBox(330,400,160,50,"<-- 6)Flip with F",33,'center',true,true,);
+        timedBox.createTimedBox(330,400,160,50,"<-- 4)Put Here",30,'center',true,true,);
+       
+        timedBox.createTimedBox(500,275,160,50,"<-- 5)give him tea",30,'center',true,true,);
+        
+
+        
+    }
+    if (currentLevel == 3) {
         availableCustomerCount++;
     }
-    if (level ==10) {
+    if (currentLevel ==10) {
         difficulty++;
         availableCustomerCount++;
     }
-    customers.customerINit(availableCustomerCount);
-    getCustomer(level);
+    
     levelUpdate(context);
 }
 
@@ -104,7 +126,7 @@ function levelUpdate() {
     }
     if (checkCustomerAvailable() && levelActive) {
         if (customers.updateGetCustomer()) {
-
+            
             if (customers.getCustomerLength()==0) {
                 getCustomer();
                 customers.enableWait();
@@ -144,9 +166,24 @@ function levelUpdate() {
     //     //getCustomer();
     // }
     cutSt.checkCutRoll();
-
-
+    teaKettle.checkTeaTimer();
+    timedBox.checkTimedBoxes();
+    riceCooker.checkRiceCooker();
     levelDraw();
+}
+
+export function getData() {
+    var levelData = {};
+    levelData.level = currentLevel;
+    levelData.difficulty = difficulty;
+    levelData.availableCustomerCount = availableCustomerCount;
+    return levelData;
+}
+
+export function setData(data) {
+    currentLevel = data.level;
+    difficulty   = data.difficulty;
+    availableCustomerCount = data.availableCustomerCount;
 }
 
 export function getCurrentLevel() {
@@ -156,6 +193,7 @@ export function getCurrentLevel() {
 function levelDraw() {
 
     drawing.draw();
+    timedBox.drawTimedBoxes(context);
     
 }
 function checkCustomerAvailable() {

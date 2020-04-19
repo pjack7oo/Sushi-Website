@@ -1,6 +1,15 @@
-var signIn = "http://localhost:5000/api/account/login",
+var signIn = "https://sushicat-meow.herokuapp.com/api/account/login", //"http://localhost:5000/api/account/login",
     sessionTimeout = 1000*60*60*24;
 
+
+function resetSignInVals(){
+    var $ctnErr = $('#login-ctn-err'),
+        $txtUsername = $('#login-username'),
+        $txtPassword = $('#login-password');
+    $ctnErr.val('');
+    $txtPassword.val('');
+    $txtUsername.val('');
+}
 $(document).ready(function () {
     
     
@@ -9,7 +18,7 @@ $(document).ready(function () {
         var $ctnErr = $('#login-ctn-err'),
             $txtUsername = $('#login-username'),
             $txtPassword = $('#login-password'),
-            $keepsignedIn = $('#checked');
+            $keepsignedIn = document.getElementById('checkedLogin');
         
         var username = $txtUsername.val().trim(),
             password = $txtPassword.val().trim(),
@@ -26,7 +35,9 @@ $(document).ready(function () {
             data: "username=" + username + "&password=" + password,
             success: function (resp) {
                 console.log("success signin");
-                if ( resp.success === true) {
+                console.log(resp);
+                
+                if ( resp.success == true) {
                     var today = new Date(),
                         expirationDate = new Date();
                     expirationDate.setTime(today.getTime() + sessionTimeout);
@@ -35,19 +46,21 @@ $(document).ready(function () {
                         userProfileModel: resp.extras.userProfileModel,
                         sessionId: resp.extras.sessionId,
                         expirationDate: expirationDate,
-                        keepSignedIn: $keepsignedIn.is(":checked")
+                        keepSignedIn: $keepsignedIn.checked
                     });
-
+                    drawAccount();
+                    resetSignInVals();
                     document.getElementById('login').style.display='none';
                     return;
                 } else {
-                    if (resp.extras.msg) {
+                    
                         switch (resp.extras.msg) {
                             case SushiCat.ApiMessages.DB_ERROR:
                                 $ctnErr.html("<p> Oops! SushiCat had a problem and can't login right now. Try again in a bit.");
                                 $ctnErr.addClass("bi-ctn-err").slideDown();
                                 break;
                             case SushiCat.ApiMessages.INVALID_PWD:
+                            default:
                             case SushiCat.ApiMessages.USERNAME_NOT_FOUND:
                                 $ctnErr.html("<p>You entered a wrong username or password.  Please try again.</p>");
                                 $ctnErr.addClass("bi-ctn-err").slideDown();
@@ -56,7 +69,7 @@ $(document).ready(function () {
                                 break;
 
                         }
-                    }
+                    
                 }
             },
             error: function (e) {

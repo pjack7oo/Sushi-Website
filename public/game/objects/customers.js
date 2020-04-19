@@ -4,6 +4,7 @@ import * as rolls   from  './rolls.js';
 import * as progBar from '../utils/progressBar.js';
 import * as plateControl from './plates.js';
 import * as player   from './player.js';
+import * as teaKettle from './teakettle.js';
 
 var customers = [];
 var customerImage = new Image();
@@ -22,14 +23,14 @@ class Customer {
     constructor(difficulty,offset) {
         //this.renderType   = shapes.;
         this.type = shapes.shapeType.IMAGE;
-        this.x = 0 + offset*110;
+        this.x = 5 + offset*110;
         this.y = 100;
         this.w = 100;
         this.h = 200;
         this.xOffset = -30;
         this.yOffset = -20;
         this.thinkingTime = 5; //seconds
-        this.temperTime = 40; //seconds
+        this.temperTime = 30; //seconds
         this.startTime = 0;
         this.isThinking = true;
         this.want = [];
@@ -44,12 +45,23 @@ class Customer {
             }
         this.progress = 0;
         this.bar = null;
+        this.hadTea = false;
         //this.difficulty == difficulty;//
         if (difficulty ==1) {
             this.money = 30;
             //this.temperTime = 50;
         }
     }
+}
+
+export function getData() {
+    var customerData = {};
+    customerData.waitTime = waitTime;
+    return customerData;
+}
+
+export function setData(data) {
+    waitTime = data.waitTime;
 }
 
 export function getRandomCustomer(difficulty)
@@ -75,7 +87,7 @@ export function getLevelCustomer(level, difficulty) {
     }
     var customer = new Customer(difficulty,offset);
     startTime(customer);
-    console.log(customer);
+    //console.log(customer);
     customer.bar =new progBar.progressbar(customer.x, customer.y -72, customer.w, 20);
     customer.id = customers.length;
     switch(level) {
@@ -105,7 +117,7 @@ export function getRandomInt(max) {
 function getWantedRoll(customer, level = 0)
 {
    
-    console.log(level, level%10===0);
+    //console.log(level, level%10===0);
     
     switch(level) {
         
@@ -140,7 +152,7 @@ export function drawCustomers(ctx)
 function drawCustomer(ctx, customer)
 {
     drawing.drawShape(ctx, customer);
-    drawing.drawRectangle(ctx,customer.x, customer.y, customer.w, customer.h, false, "white", "blue", 1); //temp bounding box
+    //drawing.drawRectangle(ctx,customer.x, customer.y, customer.w, customer.h, false, "white", "blue", 1); //temp bounding box
     if (customer.isThinking)
     {
         drawing.drawSpeechBubble(customer.x, customer.y - 50, customer.w, 50,
@@ -160,6 +172,7 @@ function drawWantedRolls(ctx, x, y, w, h, customer)
     
     drawing.printAtWordWrap(ctx, customer.want[0].name, x + w/2, y + h+5, 15, w, 'Black', '15px Arial', "center");
     customer.want[0].isCut = true;
+    if (customer.want[0])
     rolls.drawRollWithCoords(ctx, x + w/2, y + h/2, 10, customer.want[0]);
     
 }
@@ -193,6 +206,28 @@ export function giveCustomerPlate(plate)
                 }
             } 
         }
+    }
+}
+
+export function giveCustomerTea(tea) {
+    if (tea instanceof teaKettle.Cup) {
+        for(let customer of customers) {
+            if (!customer.isThinking) {
+                
+                
+                if (shapes.Contains(customer, tea.renderType) && !customer.hadTea){
+                    console.log(customer.temperTime);
+                    customer.temperTime += 10;
+                    console.log(customer.temperTime);
+                    customer.hadTea = true;
+                    
+                    teaKettle.removeCup(tea);
+                    teaKettle.startTea();
+                    return;
+                }
+            }
+        }
+        tea.resetPos();
     }
 }
 var rollToRemove;
@@ -246,6 +281,8 @@ function checkCustomerBounding(customer, circle)
     if (!shapes.inRect(circle.x, circle.y + circle.radius, rect)) return false;
     return true;
 }
+
+
 
 export function updateCustomers() {
     let currentTime = performance.now();

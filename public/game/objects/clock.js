@@ -7,7 +7,7 @@ var oldnum = 0;
 var i = 9;
 
 export function drawClock (context) {
-    var x      = 545,
+    var x      = 645,
         y      = 55,
         radius = 50;
     drawFace(context, x, y, radius);
@@ -110,7 +110,7 @@ function drawBackground (context, x, y, pos, radius) {
     
     
     if (pos*100-oldnum > 10 && i >0) {
-        console.log(i,pos*100);
+        
         
         oldnum = pos*100;
         i--

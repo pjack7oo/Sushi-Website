@@ -1,17 +1,19 @@
 //Server routes and controllers were built from tutorial https://jorgeramon.me/the-meeting-room-booking-app-tutorial/
-
+var fs = require('fs');
 const express = require('express'),
       bodyParser = require('body-parser'),
       mongoose   = require('mongoose'),
       expressSession = require('express-session'),
       MongoStore    = require('connect-mongo')(expressSession),
-      accountRoutes = require('../server/routes/account');
+      accountRoutes = require('../server/routes/account'),
+      RollSchema    = require('./models/rolls.js'),
+      RollImageSchema = require('./models/rollImage.js');      
 
 const path = require('path');
 const http = require('http');
 const PORT = process.env.PORT || 5000;
 const router = express.Router();
-
+var rollUpload = require('./uploadRolls.js');
 
 var app = express();
 
@@ -88,16 +90,41 @@ router.get('/about', function(req, res) {
 
 var dbName = 'SushiCatDB';
 var connectionString = 'mongodb://localhost:27017/' + dbName;
+var mongodbString = process.env.MONGODB_URI +"/" + dbName;
+mongoose.connect(mongodbString);
+var db = mongoose.connection;
+// var callrollImage = './public/Images/californiaRoll.png';
+// var alsakarollImage = './public/Images/alaskaroll.png'
+// var calliforniaRoll = new RollSchema({
+//   name: 'California Roll',
+//   type: 'Roll',
+//   inner: ["Avocado", "Crab", "Cucumber"],
+//   outer: ["Rice"],
+//   nori : true,
+//   description: "Standard roll follow basic instructions",
+//   image: {data: fs.readFileSync(callrollImage),contentType: "image/png"}
+// });
+// var AlaskaRoll = new RollSchema({
+//   name: 'Alaska Roll',
+//   type: 'Roll',
+//   inner: ["Avocado", "Salmon"],
+//   outer: ["Rice"],
+//   nori : true,
+//   description: "Standard roll follow basic instructions",
+//   image: {data: fs.readFileSync(alsakarollImage), contentType: "image/png"}
+// });
 
-mongoose.connect(connectionString);
-
-
+// db.once('open', function() {
+//   calliforniaRoll.save();
+//   AlaskaRoll.save();
+// })  
+rollUpload(db);
 app.use(expressSession({
   ker: 'session',
   secret: 'foo',
   resave: true,
   store : new MongoStore({
-    mongooseConnection: mongoose.connection,
+    mongooseConnection: db,
     secret: 'bar',
     autoRemove: 'disabled'
   }),

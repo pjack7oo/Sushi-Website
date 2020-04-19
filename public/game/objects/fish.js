@@ -10,7 +10,9 @@ const fishTypes = Object.freeze({
 var salmonImage = new Image(150,100);
 salmonImage.src = './game/images/Salmon.png';
 var tunaImage = new Image(150,100);
+tunaImage.src = './game/images/Tuna.png';
 var eelImage  = new Image(150,100);
+eelImage.src  = './game/images/Eel.png';
 
 export class Fish {
     constructor(fishType, x ,y, w, h, intColor, outColor, cost) {
@@ -25,10 +27,14 @@ export class Fish {
         if (this.fishType == fishTypes.SALMON) {
             this.image = salmonImage;
             
+        } else if (this.fishType == fishTypes.TUNA) {
+            this.image = tunaImage;
+        } else if (this.fishType == fishTypes.EEL) {
+            this.image = eelImage;
         }
     }
     draw() {
-        console.log("drawing fish");
+        //console.log("drawing fish");
         
         
         drawing.drawRectImage(this.x, this.y, this.w, this.h, this.image, true, this.w, this.h);

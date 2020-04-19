@@ -33,11 +33,45 @@ export function rollListInit()
     // $.getJSON("./actualRolls.json", function(json){
     //     rollList = json;
     // });
-    LoadJSON(function(response){
-        rollList = JSON.parse(response);
-        console.log(rollList);
+    // LoadJSON(function(response){
+    //     rollList = JSON.parse(response);
+    //     console.log(rollList);
         
-    })
+    // })
+    var rolls = localStorage.getItem("rollList");
+    var rollsToModify = JSON.parse(rolls);
+    var rollsToRemove = [];
+    //console.log(rollsToModify);
+    
+    var length = rollsToModify.length;
+    //console.log(length);
+    
+    for (var i = 0; i<length;i++ ){
+        let innerLength = rollsToModify[i].inner.length; 
+        
+        
+        for (let k = 0;k<innerLength;k++) {
+            
+            
+            
+            if(rollsToModify[i].inner[k] == "Tempura shrimp"){
+                rollsToRemove.push(i);
+            } else if (rollsToModify[i].inner[k] == "Spicy Tuna"){
+                rollsToRemove.push(i);
+            }
+        }
+    }
+
+    for(let i = 0; i < rollsToRemove.length;i++) {
+        //console.log(rollsToModify[rollsToRemove[i]]);
+        
+        delete rollsToModify[rollsToRemove[i]];
+    }
+    var cleanArray = rollsToModify.filter(function() {return true});
+    rollList = cleanArray;
+    //rollList = JSON.parse(rolls);
+    //console.log(rollList);
+    
 }
 
 function LoadJSON(callback)
@@ -101,6 +135,8 @@ export function drawRolls(ctx)
                 drawRollWithCoords(ctx,roll.renderType.x + roll.radius*2 , roll.renderType.y + roll.radius*2, roll.radius, roll);
             }
             else{
+                //console.log(roll.renderType);
+                
                 drawing.drawShape(ctx, roll.renderType);
             }
             
@@ -113,10 +149,10 @@ export function drawRollWithCoords(ctx, x, y, radius, roll){
     //drawing.drawRectangle(ctx, x, y, w, h, true, "red", "white", 5);
     if (roll.isCut)
     {
-        drawRoll(ctx, x + radius, y - radius, radius, roll);
-        drawRoll(ctx, x + radius, y + radius, radius, roll);
-        drawRoll(ctx, x - radius, y + radius, radius, roll);
-        drawRoll(ctx, x - radius, y - radius, radius, roll);
+        drawRoll(ctx, x + radius+2, y - radius-2, radius, roll);
+        drawRoll(ctx, x + radius+2, y + radius+2, radius, roll);
+        drawRoll(ctx, x - radius-2, y + radius+2, radius, roll);
+        drawRoll(ctx, x - radius-2, y - radius-2, radius, roll);
     }
     
 }
@@ -126,7 +162,14 @@ export function drawRoll(ctx, x, y, radius, roll)
     if (roll.outer.length == 1)
     {
         drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'white', 4.25);
-    }
+    } else if (roll.outer.length == 2) {
+        drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'white', 4.25);
+        drawing.drawPieCut(ctx, x, y, radius, roll);
+        //drawing.drawAnyQuad(new shapes.Point(x- 5,y -radius-2), 
+                            // new shapes.Point(x  +5,y -radius-2), 
+                            // new shapes.Point(x +5,y -radius+2), 
+                            // new shapes.Point(x -5,y -radius +2),false, true, 'Green');
+    }   
     else
     {
         drawing.drawCircle(ctx, x, y, radius,  true, 'black', 'black', .1);
@@ -167,7 +210,7 @@ export function pushRoll(roll)
 // }
 
 export function getRoll(number) {
-    return rollList.rolls[number];
+    return rollList[number];
 }
 
 export function removeRoll(roll)
@@ -189,13 +232,13 @@ function getRollName(roll, acceptedRolls = [])
     var rollsToDel = [];
     if (acceptedRolls.length == 0)
     {
-        let rl = rollList.rolls.length;
+        let rl = rollList.length;
         
         for (let i = 0; i < rl;i++)
         {
             //console.log(rollList[i].inner.length + rollList[i].outer.length);//
             
-            if (((roll.inner.length + roll.outer.length) === (rollList.rolls[i].inner.length + rollList.rolls[i].outer.length)))
+            if (((roll.inner.length + roll.outer.length) === (rollList[i].inner.length + rollList[i].outer.length)))
             {
                 acceptedRolls.push(i);
                 console.log(i);
@@ -214,7 +257,7 @@ function getRollName(roll, acceptedRolls = [])
         let aRl = acceptedRolls.length;
         for (let i = 0; i < aRl; i++)
         {   
-            if (roll.inner.length > rollList.rolls[acceptedRolls[i]].inner.length)
+            if (roll.inner.length > rollList[acceptedRolls[i]].inner.length)
             {
                 rollsToDel.push(i);
                 continue;
@@ -222,14 +265,14 @@ function getRollName(roll, acceptedRolls = [])
             let rIl = roll.inner.length;
             for(let k = 0; k < rIl; k++)
             {
-                if (roll.inner[k] != rollList.rolls[acceptedRolls[i]].inner[k])
+                if (roll.inner[k] != rollList[acceptedRolls[i]].inner[k])
                 {
                     rollsToDel.push(i);
                     break;
                 }
             }
             
-            if (roll.outer.length > rollList.rolls[acceptedRolls[i]].outer.length)
+            if (roll.outer.length > rollList[acceptedRolls[i]].outer.length)
             {
                 rollsToDel.push(i);
                 continue;
@@ -238,7 +281,7 @@ function getRollName(roll, acceptedRolls = [])
             for(let k = 0; k < rOl; k++)
             {
                 
-                if (roll.outer[k] != rollList.rolls[acceptedRolls[i]].outer[k])
+                if (roll.outer[k] != rollList[acceptedRolls[i]].outer[k])
                 {
                     rollsToDel.push(i);
                     break;
@@ -263,7 +306,7 @@ function getRollName(roll, acceptedRolls = [])
     }
     else if (cleanArray.length == 1)
     {
-        return rollList.rolls[cleanArray[0]].name;
+        return rollList[cleanArray[0]].name;
     }
     else
     {

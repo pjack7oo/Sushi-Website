@@ -26,24 +26,27 @@ function reset(bar) {
     ctx.fillRect(bar.x, bar.y , bar.w, bar.h);
 }
 
-export function progressbar(x, y, w, h) {
-    this.widths = 0;
-    this.hue = 0;
-    this.w= w;
-    this.x = x;
-    this.y = y;
-    this.h = h;
-    this.draw = function(progress) {
-        ctx.fillStyle = "gray";
-        ctx.fillRect(this.x, this.y, this.w, this.h)
-        ctx.fillStyle = 'hsla(' + this.hue + ', 100%, 40%, 1)';
-        ctx.fillRect(this.x, this.y, this.w*progress, this.h);
-        var grad = ctx.createLinearGradient(this.x, this.y, this.x +this.w, this.y + this.h);
-        grad.addColorStop(0, "Red");
-        grad.addColorStop(.5, "Yellow")
-        grad.addColorStop(1, "Green");
-        ctx.fillStyle = grad;
-        ctx.fillRect(this.x, this.y, this.w*progress, this.h);
+export class progressbar {
+    constructor(x, y, w, h) {
+        this.widths = 0;
+        this.hue = 0;
+        this.w = w;
+        this.x = x;
+        this.y = y;
+        this.h = h;
+        this.draw = function (progress) {
+            ctx.fillStyle = "gray";
+            ctx.fillRect(this.x, this.y, this.w, this.h);
+            ctx.fillStyle = 'hsla(' + this.hue + ', 100%, 40%, 1)';
+            ctx.fillRect(this.x, this.y, this.w * progress, this.h);
+            var grad = ctx.createLinearGradient(this.x, this.y, this.x + this.w, this.y + this.h);
+            grad.addColorStop(0, "Red");
+            grad.addColorStop(.5, "Yellow");
+            grad.addColorStop(1, "Green");
+            ctx.fillStyle = grad;
+            ctx.fillRect(this.x, this.y, this.w * progress, this.h);
+        };
+        
     }
 }
 

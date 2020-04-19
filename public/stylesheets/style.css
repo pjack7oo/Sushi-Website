@@ -3,7 +3,7 @@ body {
 }
 .page-container {
     display: grid;
-    grid-template-columns: 40px 95px 10% auto 10% 95px 40px;
+    grid-template-columns: 40px 92px 25% auto 25% 92px 40px;
     grid-template-rows: auto auto auto auto auto auto;
     /* grid-template-areas:
         "header header header"
@@ -120,6 +120,9 @@ header a:hover {
     display: inline-block;
     border-radius: 20px;
 }
+.learn-item>p {
+    padding: 5px;
+}
 .learn-item>.content {
     display: none;
     overflow: hidden;
@@ -163,6 +166,54 @@ header a:hover {
     justify-content: center;
     gap: 10px;
 }
+.box2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 10px;
+}
+.box2> .item > p {
+    padding: 5px;
+    font-size: xx-large;
+    font-family: Verdana;
+    line-height: normal;
+}
+.box2> .steps {
+    padding: 10px;
+    font-size: xx-large;
+    font-family: Verdana;
+    
+}
+
+.box2> .item {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 80px auto;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 10px;
+    border-bottom: black solid;
+}
+.box2>.item:last-child {
+    border-bottom: none;
+}
+.box2 > .item > #itemName {
+    grid-row: 1 ;
+    grid-column: 1/2;
+
+}
+.box2 > .item > #itemDesc {
+    grid-row: 2;
+    grid-column: 2/3;
+}
+.box2 > .item > #itemImage {
+    grid-row: 2;
+    grid-column: 1/2;
+    justify-content: center;
+    align-self: center;
+    padding: 2px;
+}
 .image {
     justify-content: center;
     padding:10px ;
@@ -179,7 +230,7 @@ header a:hover {
 }
 .Ingredients {
     justify-content: space-between;
-    border: 2px dashed black;
+    
     gap: 10px;
     padding: 10px;
 }
