@@ -42,7 +42,7 @@ if(rollsLoaded) {
 } else {
     setTimeout(function() {
         init();
-    }, 10*1000);
+    }, 20*1000);
 }
 
 
