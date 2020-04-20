@@ -13,8 +13,8 @@ import * as teaKettle     from '../objects/teakettle.js';
 
 
 var gameData = {};
-var saveUrl = "http://localhost:5000/api/account/save",
-    dataUrl = "http://localhost:5000/api/account/data";
+var saveUrl = "https://sushicat-meow.herokuapp.com/api/account/save", //"http://localhost:5000/api/account/save",
+    dataUrl = "https://sushicat-meow.herokuapp.com/api/account/data"; //"http://localhost:5000/api/account/data";
 var riceCookerUpgrades = {};
 var upgrades = {};
 var testObject = {'level': 2, 'money': 1500, 'upgrades': upgrades, 'saveNum': 1};
