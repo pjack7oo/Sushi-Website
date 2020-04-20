@@ -37,15 +37,18 @@ var offsetX, offsetY;
 var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
 
 context.fillStyle = 'Gray';
-if(rollsLoaded) {
-    init();
-} else {
-    setTimeout(function() {
+loadGame();
+
+function loadGame() {
+    if(rollsLoaded) {
         init();
-    }, 20*1000);
+    }
+    else {
+        setTimeout(function() {
+            loadGame();
+        }, 10*1000);
+    }
 }
-
-
 
 function init()
 {
