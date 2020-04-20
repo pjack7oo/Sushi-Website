@@ -3,7 +3,7 @@ import * as ingredients   from './ingredients.js';
 import * as cutSt         from './cuttingstation.js';
 import * as timedBox      from '../utils/timedBox.js';
 import * as fish          from './fish.js';
-var money = 2000;
+var money = 5000;
 var currentLevel = 0;
 
 export function getCurrentMoney() {
