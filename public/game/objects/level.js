@@ -89,7 +89,7 @@ export function startLevel() {
     getCustomer(currentLevel);
     if (currentLevel == 0) {
         timedBox.createTimedBox(250,50,100,50,"1)Welcome!",4,'center',true,true,"white", "red");
-        timedBox.createTimedBox(110,100,100,200,"<-- 2)Ohh! look theres a customer.",10,'left',true,true, "white", "red");
+        timedBox.createTimedBox(110,100,150,100,"<-- 2)Ohh! look theres a customer.",10,'left',true,true, "white", "red");
         
         timedBox.createTimedBox(300,100,200,150,"3)Hes gonna want a California roll,cucumber, crab, and avocado.",25,'center',true,true,'white', 'red', 25);
         timedBox.createTimedBox(330,400,160,50,"10)plate it",55,'center',true,true,);
