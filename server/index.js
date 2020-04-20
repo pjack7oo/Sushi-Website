@@ -89,9 +89,9 @@ router.get('/about', function(req, res) {
   
 
 var dbName = 'SushiCatDB';
-var connectionString = 'mongodb://localhost:27017/' + dbName;
+var connectionString = "mongodb+srv://piotr:12345@cluster0-q866k.mongodb.net/" + dbName;
 var mongodbString = process.env.MONGODB_URI +"/" + dbName;
-mongoose.connect(mongodbString);
+mongoose.connect(connectionString);
 var db = mongoose.connection;
 // var callrollImage = './public/Images/californiaRoll.png';
 // var alsakarollImage = './public/Images/alaskaroll.png'
@@ -118,7 +118,7 @@ var db = mongoose.connection;
 //   calliforniaRoll.save();
 //   AlaskaRoll.save();
 // })  
-rollUpload(db);
+//rollUpload(db);
 app.use(expressSession({
   ker: 'session',
   secret: 'foo',
