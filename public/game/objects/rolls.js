@@ -39,6 +39,11 @@ export function rollListInit()
         
     // })
     var rolls = localStorage.getItem("rollList");
+    if (rolls == undefined || rolls == null) {
+        $(document).ready(function() {
+            rolls = localStorage.getItem("rollList");
+        })
+    }
     var rollsToModify = JSON.parse(rolls);
     var rollsToRemove = [];
     //console.log(rollsToModify);
