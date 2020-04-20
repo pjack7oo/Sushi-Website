@@ -249,9 +249,9 @@ export function checkTeaTimer() {
 }
 
 export function removeCup(cup) {
-  if (teaKettle.cup.x == cup.x && teaKettle.cup.y == cup.y) {
+  if (teaKettle.cup.renderType.x == cup.renderType.x && teaKettle.cup.renderType.y == cup.renderType.y) {
     teaKettle.cup = null;
-  } else if (teaKettle.cup2.x == cup.x && teaKettle.cup2.y == cup.y) {
+  } else if (teaKettle.cup2.renderType.x == cup.renderType.x && teaKettle.cup2.renderType.y == cup.renderType.y) {
     teaKettle.cup2 = null;
   }
 }
