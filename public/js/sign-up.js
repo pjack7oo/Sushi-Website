@@ -1,5 +1,5 @@
 
-var signUp = "https://sushicat-meow.herokuapp.com/api/account/register"       //          "http://localhost:5000/api/account/register";
+var signUp = "https://sushicat-meow.herokuapp.com/api/account/register"               //"http://localhost:5000/api/account/register";
 // (function () {
 
 // })();
