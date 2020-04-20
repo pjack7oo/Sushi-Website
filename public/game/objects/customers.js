@@ -91,7 +91,7 @@ export function getCustomerLength() {
 export function getLevelCustomer(level, difficulty) {
   let offset = 0;
   if (customers.length > 0) {
-    if (customers[0].x == 0) {
+    if (customers[0].x == 5) {
       offset = 1;
     }
   }
