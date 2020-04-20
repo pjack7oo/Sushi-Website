@@ -92,7 +92,7 @@ export function drawTextBox(
       ctx,
       text,
       x + w / 2,
-      y + h / 2 + offset,
+      y+ offset,
       lineHeight,
       maxWidth,
       textColor,

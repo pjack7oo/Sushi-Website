@@ -102,7 +102,7 @@ export function startLevel() {
     timedBox.createTimedBox(
       110,
       100,
-      150,
+      170,
       100,
       "<-- 2)Ohh! look theres a customer.",
       10,
