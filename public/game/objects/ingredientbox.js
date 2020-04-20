@@ -312,11 +312,11 @@ export function checkClickOnShapes(e, context) {
 export function fillBoxes(type) {
   if (ingredientBox1.contains(type)) {
     let ret = ingredientBox1.fillIngredient(type);
-    console.log(ingredientBox1);
+    //console.log(ingredientBox1);
     return ret;
   } else if (ingredientBox2.contains(type)) {
     let ret = ingredientBox2.fillIngredient(type);
-    console.log(ingredientBox2);
+    //console.log(ingredientBox2);
     return ret;
   }
   return 0;
