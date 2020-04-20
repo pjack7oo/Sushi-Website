@@ -326,7 +326,7 @@ function startDraw() {
     "Sushi Cat",
     false,
     true,
-    +15,
+    +30,
     "50px Arial",
     "Red",
     "white",

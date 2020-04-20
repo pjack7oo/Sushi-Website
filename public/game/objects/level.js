@@ -93,6 +93,7 @@ export function startLevel() {
       50,
       "1)Welcome!",
       4,
+      15,
       "center",
       true,
       true,
@@ -106,6 +107,7 @@ export function startLevel() {
       100,
       "<-- 2)Ohh! look theres a customer.",
       10,
+      15,
       "left",
       true,
       true,
@@ -120,6 +122,7 @@ export function startLevel() {
       150,
       "3)Hes gonna want a California roll,cucumber, crab, and avocado.",
       25,
+      15,
       "center",
       true,
       true,
@@ -134,6 +137,7 @@ export function startLevel() {
       50,
       "10)plate it",
       55,
+      15,
       "center",
       true,
       true
@@ -145,6 +149,7 @@ export function startLevel() {
       50,
       "9)put roll here",
       55,
+      15,
       "center",
       true,
       true
@@ -156,6 +161,7 @@ export function startLevel() {
       50,
       "<-- 8)press r",
       50,
+      15,
       "center",
       true,
       true
@@ -167,6 +173,7 @@ export function startLevel() {
       50,
       "<-- 7)put rice",
       46,
+      15,
       "center",
       true,
       true
@@ -178,6 +185,7 @@ export function startLevel() {
       50,
       "<-- 6)Flip with F",
       33,
+      15,
       "center",
       true,
       true
@@ -189,6 +197,7 @@ export function startLevel() {
       50,
       "<-- 4)Put Here",
       30,
+      15,
       "center",
       true,
       true
@@ -201,6 +210,7 @@ export function startLevel() {
       50,
       "<-- 5)give him tea",
       30,
+      15,
       "center",
       true,
       true

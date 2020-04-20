@@ -14,6 +14,7 @@ class TimedTextBox {
     stroke,
     intColor,
     outColor,
+    offset = 5,
     lineHeight = 0,
     maxWidth = 0
   ) {
@@ -32,6 +33,7 @@ class TimedTextBox {
     this.id = 0;
     this.alignment = alignment;
     this.maxWidth = maxWidth;
+    this.offset = offset;
     this.lineHeight = lineHeight;
   }
 
@@ -48,7 +50,7 @@ class TimedTextBox {
         this.text,
         this.fill,
         this.stroke,
-        -5,
+        this.offset,
         "20px Verdana",
         "Black",
         "White",
@@ -92,6 +94,7 @@ export function createTimedBox(
   h,
   txt,
   duration = 20,
+  offset = 5,
   alignment = "center",
   fill = false,
   stroke = true,
@@ -112,6 +115,7 @@ export function createTimedBox(
     stroke,
     intColor,
     outColor,
+    offset,
     lineHeight,
     maxWidth
   );
