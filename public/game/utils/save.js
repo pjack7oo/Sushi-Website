@@ -43,6 +43,10 @@ export function save() {
 
 function load() {
     let retrievedItem = localStorage.getItem('gameData');
+    if (typeof(retrievedItem) == undefined || retrievedItem == null) {
+        timedBox.createTimedBox(280,200,170,50,"Not Logged In!", 2,'center',true, true, "white", "red");
+        return;
+    }
     retrievedItem = decrypt(retrievedItem);
     // retrievedItem = JSON.parse(retrievedItem);
     gameData = JSON.parse(retrievedItem);
