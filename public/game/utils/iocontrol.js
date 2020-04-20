@@ -5,11 +5,11 @@ import * as cutStation from "../objects/cuttingstation.js";
 import * as rollControl from "../objects/rolls.js";
 import * as plates from "../objects/plates.js";
 import * as customers from "../objects/customers.js";
-import * as ingredientBox from '../objects/ingredientbox.js';
+import * as ingredientBox from "../objects/ingredientbox.js";
 import { shapeType, inCircle } from "./shapes.js";
-import * as riceCooker  from "../objects/riceCooker.js";
-import * as shapes      from '../utils/shapes.js';
-import * as teaKettle   from '../objects/teakettle.js';
+import * as riceCooker from "../objects/riceCooker.js";
+import * as shapes from "../utils/shapes.js";
+import * as teaKettle from "../objects/teakettle.js";
 
 //moving shapes around code from https://dzone.com/articles/making-and-moving-selectable
 var ghostcanvas;
@@ -44,7 +44,6 @@ export function delButton(name) {
   let buttonsLength = buttons.length;
   var buttonToRemove = undefined;
   for (let i = 0; i < buttonsLength; i++) {
-    
     if (buttons[i].name == name) {
       buttonToRemove = i;
     }
@@ -87,7 +86,7 @@ export function getFromMatt() {
 }
 
 export function getButtons() {
-    return buttons;
+  return buttons;
 }
 
 export function getMouse(e) {
@@ -108,10 +107,11 @@ export function getMouse(e) {
   // my = e.pageY - offsetY;
 
   var rect = canvas.getBoundingClientRect();
-  
-  
-  
-  return { x: e.clientX - rect.left- 10, y: e.clientY - Math.floor(rect.top) - 10 };
+
+  return {
+    x: e.clientX - rect.left - 10,
+    y: e.clientY - Math.floor(rect.top) - 10,
+  };
 }
 
 export function initGhost(height, width) {
@@ -163,8 +163,6 @@ export function myDown(e) {
   }
 
   if (ingredientBox.checkClickOnShapes(e, gctx)) {
-    
-    
     return;
   }
   if (riceCooker.checkRiceShape(mouse, gctx)) {
@@ -234,11 +232,10 @@ export function myUp() {
     cutStation.checkCuttingStation(mySelect[0]);
     plates.addRollToPlate(mySelect[0]);
     customers.giveCustomerPlate(mySelect[0]);
-    if(mySelect[0] instanceof teaKettle.Cup) {
+    if (mySelect[0] instanceof teaKettle.Cup) {
       //console.log(mySelect[0] instanceof teaKettle.Cup);
-      
+
       customers.giveCustomerTea(mySelect[0]);
-      
     }
   }
   mySelect[0] = null;
@@ -248,10 +245,9 @@ export function myUp() {
 }
 
 function checkButtons(mouse) {
-  
   for (let button of buttons) {
     if (inBounds(mouse, button)) {
-     // console.log(true);
+      // console.log(true);
 
       button.callBack();
     }
@@ -269,7 +265,6 @@ function checkUpgradeButtons(mouse) {
     }
   }
 }
-
 
 export function checkButtonsGiven(e, buttons) {
   var mouse = getMouse(e);
@@ -360,24 +355,49 @@ function myMove(e) {
 export function drawMySelect(context) {
   if (mySelect[0] != null) {
     if (mySelect[0] instanceof rollControl.Roll) {
-      rollControl.drawRollWithCoords(context,mySelect[0].renderType.x + mySelect[0].radius*2 , mySelect[0].renderType.y + mySelect[0].radius*2, mySelect[0].radius, mySelect[0]);
-    }
-    else {
-      if (mySelect[0] instanceof ingredients.Ingredient){
-        if (mySelect[0].name == ingredients.ingredients.RICE){
-          drawing.drawRoundRect(context, mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h, 
-            mySelect[0].renderType.radius,true, true, mySelect[0].renderType.intColor, mySelectColor, 1);
-        }
-        else {
+      rollControl.drawRollWithCoords(
+        context,
+        mySelect[0].renderType.x + mySelect[0].radius * 2,
+        mySelect[0].renderType.y + mySelect[0].radius * 2,
+        mySelect[0].radius,
+        mySelect[0]
+      );
+    } else {
+      if (mySelect[0] instanceof ingredients.Ingredient) {
+        if (mySelect[0].name == ingredients.ingredients.RICE) {
+          drawing.drawRoundRect(
+            context,
+            mySelect[0].renderType.x,
+            mySelect[0].renderType.y,
+            mySelect[0].renderType.w,
+            mySelect[0].renderType.h,
+            mySelect[0].renderType.radius,
+            true,
+            true,
+            mySelect[0].renderType.intColor,
+            mySelectColor,
+            1
+          );
+        } else {
           drawing.drawImage(context, mySelect[0].renderType);
         }
       } else if (mySelect[0].renderType.type == shapes.shapeType.ROUNDRECT) {
-        drawing.drawRoundRect(context, mySelect[0].renderType.x, mySelect[0].renderType.y, mySelect[0].renderType.w, mySelect[0].renderType.h, 
-                              mySelect[0].renderType.radius,true, true, mySelect[0].renderType.intColor, mySelectColor, 1);
+        drawing.drawRoundRect(
+          context,
+          mySelect[0].renderType.x,
+          mySelect[0].renderType.y,
+          mySelect[0].renderType.w,
+          mySelect[0].renderType.h,
+          mySelect[0].renderType.radius,
+          true,
+          true,
+          mySelect[0].renderType.intColor,
+          mySelectColor,
+          1
+        );
       } else if (mySelect[0] instanceof teaKettle.Cup) {
-        drawing.drawImage(context,mySelect[0].renderType);
-      }
-      else {
+        drawing.drawImage(context, mySelect[0].renderType);
+      } else {
         context.strokeStyle = mySelectColor;
         context.lineWidth = mySelectWidth;
         context.fillStyle = mySelect[0].renderType.intColor;
@@ -395,6 +415,5 @@ export function drawMySelect(context) {
         );
       }
     }
-    
   }
 }

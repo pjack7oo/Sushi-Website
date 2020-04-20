@@ -42,7 +42,7 @@ export function rollListInit()
     if (rolls == undefined || rolls == null) {
         $(document).ready(function() {
             rolls = localStorage.getItem("rollList");
-        })
+        });
     }
     var rollsToModify = JSON.parse(rolls);
     var rollsToRemove = [];
@@ -73,6 +73,8 @@ export function rollListInit()
         delete rollsToModify[rollsToRemove[i]];
     }
     var cleanArray = rollsToModify.filter(function() {return true});
+    console.log(cleanArray);
+    
     rollList = cleanArray;
     //rollList = JSON.parse(rolls);
     //console.log(rollList);

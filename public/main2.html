@@ -1,149 +1,162 @@
 <!-- HTML5 -->
 <html>
- <head>
-  <meta charset="utf-8">
-  
-  <title>Sushi</title>
-  <meta name="description" content="This website shows how to make sushi and a fun sushi making game">
-  <meta name="Author" content="Piotr Jackowski">
 
-  <link rel="icon" type="image/gif" href="./Images/animated_favicon1.gif" >
-  <link href="./stylesheets/style.css" rel="stylesheet">
-  <link href="./stylesheets/login.css" rel='stylesheet'>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-  <script src="js/session.js" type="text/javascript"></script>
+<head>
+    <meta charset="utf-8">
 
-  <script src="js/api-messages.js" type="text/javascript"></script>
+    <title>Sushi</title>
+    <meta name="description" content="This website shows how to make sushi and a fun sushi making game">
+    <meta name="Author" content="Piotr Jackowski">
 
-  <script src="js/sign-up.js" type="text/javascript"></script>
-  <script src="js/sign-in.js" type="text/javascript"></script>
-  <script src="js/accountFunctions.js" type="text/javascript"></script>
-  <script src= "js/account-controller.js" type="text/javascript"></script>
-  <script>getRolls()</script>  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  
+    <link rel="icon" type="image/gif" href="./Images/animated_favicon1.gif">
+    <link href="./stylesheets/style.css" rel="stylesheet">
+    <link href="./stylesheets/login.css" rel='stylesheet'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="js/session.js" type="text/javascript"></script>
+
+    <script src="js/api-messages.js" type="text/javascript"></script>
+
+    <script src="js/sign-up.js" type="text/javascript"></script>
+    <script src="js/sign-in.js" type="text/javascript"></script>
+    <script src="js/accountFunctions.js" type="text/javascript"></script>
+    <script src="js/account-controller.js" type="text/javascript"></script>
+    <script>getRolls()</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-    
+
 </head>
+
 <body>
     <div id="Account" class="modal">
-  
+
         <div class="modal-content animate" onsubmit="event.preventDefault()">
-          <div class="imgcontainer">
-            <span onclick="document.getElementById('Account').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <img src="../Images/Cat.png" alt="Avatar" class="avatar">
-          </div>
-      
-          <div class="container">
-            <div id="account-ctn-err" class="bi-invisible"></div>
-            <div id="accountInfo">
-                <p id="accountUsername"><b>Username: </b></p>
-                <p id="accountEmail"><b>Email: </b></p>
-                <p id="accountName"><b>Name: </b></p>
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('Account').style.display='none'" class="close"
+                    title="Close Modal">&times;</span>
+                <img src="../Images/Cat.png" alt="Avatar" class="avatar">
             </div>
-            
-            <div id="accountButtons">
+
+            <div class="container">
+                <div id="account-ctn-err" class="bi-invisible"></div>
+                <div id="accountInfo">
+                    <p id="accountUsername"><b>Username: </b></p>
+                    <p id="accountEmail"><b>Email: </b></p>
+                    <p id="accountName"><b>Name: </b></p>
+                </div>
+
+                <div id="accountButtons">
+
+                </div>
 
             </div>
-            
-          </div>
-      
-          <div class="AccountContainer" id='accountContainer' style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('Account').style.display='none';logOut();" class="logoutButton" id="accountLogout">LogOut</button>
-            <button type="button" onclick="document.getElementById('login').style.display='block';" class="loginButton" id="accountLogin">Login</button>
-            <button type="button" onclick="document.getElementById('register').style.display='block'" class="registerButton" id= "accountRegister">Register</button>
-            
-          </div>
-          <script>drawAccount()</script>
+
+            <div class="AccountContainer" id='accountContainer' style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('Account').style.display='none';logOut();"
+                    class="logoutButton" id="accountLogout">LogOut</button>
+                <button type="button" onclick="document.getElementById('login').style.display='block';"
+                    class="loginButton" id="accountLogin">Login</button>
+                <button type="button" onclick="document.getElementById('register').style.display='block'"
+                    class="registerButton" id="accountRegister">Register</button>
+
+            </div>
+            <script>drawAccount()</script>
         </div>
     </div>
     <div id="resetPassword" class="modal">
-  
-        <form class="modal-content animate" onsubmit="event.preventDefault()">
-          <div class="imgcontainer">
-            <span onclick="document.getElementById('resetPassword').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <img src="../Images/Cat.png" alt="Avatar" class="avatar">
-          </div>
-      
-          <div class="container">
-            <div id="resetPassword-ctn-err" class="bi-invisible"></div>
-      
-            <label for="newPassword"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="newPassword" id="newPassword" required>
 
-            <label for="newPasswordConfirm"><b>Confirm Password</b></label>
-            <input type="password" placeholder="Enter Password" name="newPasswordConfirm" id="newPasswordConfirm" required>
-              
-            <button type="submit" id="resetPassword-submit">Reset Password</button>
-            
-          </div>
-      
-          <div class="container" style="background-color:#f1f1f1">
-            
-          </div>
+        <form class="modal-content animate" onsubmit="event.preventDefault()">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('resetPassword').style.display='none'" class="close"
+                    title="Close Modal">&times;</span>
+                <img src="../Images/Cat.png" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="container">
+                <div id="resetPassword-ctn-err" class="bi-invisible"></div>
+
+                <label for="newPassword"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="newPassword" id="newPassword" required>
+
+                <label for="newPasswordConfirm"><b>Confirm Password</b></label>
+                <input type="password" placeholder="Enter Password" name="newPasswordConfirm" id="newPasswordConfirm"
+                    required>
+
+                <button type="submit" id="resetPassword-submit">Reset Password</button>
+
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+
+            </div>
         </form>
     </div>
     <div id="login" class="modal">
-  
+
         <form class="modal-content animate" onsubmit="event.preventDefault()">
-          <div class="imgcontainer">
-            <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <img src="../Images/Cat.png" alt="Avatar" class="avatar">
-          </div>
-      
-          <div class="container">
-            <div id="login-ctn-err" class="bi-invisible"></div>
-            <label for="uname"><b>Username</b></label>
-            <input type="username" placeholder="Enter Username" name="uname" id="login-username" required>
-      
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" id="login-password" required>
-              
-            <button type="submit" id="login-submit">Login</button>
-            <label>
-              <input type="checkbox"  id="checkedLogin" name="remember"> Remember me
-            </label>
-          </div>
-      
-          <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('login').style.display='none'; document.getElementById('register').style.display='block'" class="registerButton">Register</button>
-            <span class="psw">Forgot <a href="#">password?</a></span>
-          </div>
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('login').style.display='none'" class="close"
+                    title="Close Modal">&times;</span>
+                <img src="../Images/Cat.png" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="container">
+                <div id="login-ctn-err" class="bi-invisible"></div>
+                <label for="uname"><b>Username</b></label>
+                <input type="username" placeholder="Enter Username" name="uname" id="login-username" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" id="login-password" required>
+
+                <button type="submit" id="login-submit">Login</button>
+                <label>
+                    <input type="checkbox" id="checkedLogin" name="remember"> Remember me
+                </label>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button"
+                    onclick="document.getElementById('login').style.display='none'; document.getElementById('register').style.display='block'"
+                    class="registerButton">Register</button>
+                <span class="psw">Forgot <a href="#">password?</a></span>
+            </div>
         </form>
     </div>
     <div id="register" class="modal">
-  
+
         <form class="modal-content animate" onsubmit="event.preventDefault()">
-          <div class="imgcontainer">
-            <span onclick="document.getElementById('register').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <img src="../Images/Cat.png" alt="Avatar" class="avatar">
-          </div>
-      
-          <div class="container">
-            <div id="ctn-err" class="bi-invisible"></div>
-            <label for="txt-email"><b>Email Address</b></label>
-            <input type="text-email" name="txt-email" placeholder= "Enter Email" id="txt-email" required>  
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('register').style.display='none'" class="close"
+                    title="Close Modal">&times;</span>
+                <img src="../Images/Cat.png" alt="Avatar" class="avatar">
+            </div>
 
-            <label for="txt-name"><b>First Name</b></label>
-            <input type="text-name" name="txt-name" placeholder= "Enter First Name" id="txt-name" required>  
+            <div class="container">
+                <div id="ctn-err" class="bi-invisible"></div>
+                <label for="txt-email"><b>Email Address</b></label>
+                <input type="text-email" name="txt-email" placeholder="Enter Email" id="txt-email" required>
 
-            <label for="uname"><b>Username</b></label>
-            <input type="username" placeholder="Enter Username" name="uname" id='txt-username' required>
-      
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" id='txt-password' required>
-            
-            <label for="confirmpsw"><b>Confirm Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw-confirm" id="txt-password-confirm" required>
+                <label for="txt-name"><b>First Name</b></label>
+                <input type="text-name" name="txt-name" placeholder="Enter First Name" id="txt-name" required>
 
-            <button type="submit" id="register-submit">Submit</button>
-          </div>
-      
-          <div class="container" style="background-color:#f1f1f1">
-            
-            
-          </div>
+                <label for="uname"><b>Username</b></label>
+                <input type="username" placeholder="Enter Username" name="uname" id='txt-username' required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" id='txt-password' required>
+
+                <label for="confirmpsw"><b>Confirm Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw-confirm" id="txt-password-confirm"
+                    required>
+
+                <button type="submit" id="register-submit">Submit</button>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+
+
+            </div>
         </form>
     </div>
     <div class="page-container">
@@ -152,10 +165,11 @@
             <li><a href="#game">Game</a></li>
             <li><a href="#learn">Learn</a></li>
             <li><a href="#about">About</a></li>
-            <button id='accountButton' onclick="document.getElementById('Account').style.display='block';drawAccount();" style="width:auto;">Account</button>
+            <button id='accountButton' onclick="document.getElementById('Account').style.display='block';drawAccount();"
+                style="width:auto;">Account</button>
             <script>
                 var loginForm = document.getElementById('login');
-                window.onclick = function(e) {
+                window.onclick = function (e) {
                     if (e.target == loginForm) {
                         loginForm.style.display = 'none';
                     }
@@ -165,33 +179,33 @@
                 <form onsubmit="event.preventDefault()">
                     <input type="text" placeholder="Search Rolls.." name="search" id="searchText">
                     <button id="submitSearch" type="search"><i class="fa fa-search"></i></button>
-                    <script src = './js/searchbar.js'></script>
+                    <script src='./js/searchbar.js'></script>
                 </form>
             </div>
         </header>
         <div class="borderLeft"></div>
         <div class="borderRight"></div>
-        
+
         <div class=Main>
             <a id="main"></a>
             <h1 align='center'>Sushi 101</h1>
         </div>
-        <div class= game>
+        <div class=game>
             <a id="game"></a>
             <h1 align='center'>Sushi Cat</h1>
-                <main>
-                    <!-- add canvas -->
-                    <canvas id="canvas" width="700" height="500" align='center'></canvas>
-                </main>
-                    <!-- script files -->
-                    <script src="./game/game.js" type="module"></script>
+            <main>
+                <!-- add canvas -->
+                <canvas id="canvas" width="700" height="500" align='center'></canvas>
+            </main>
+            <!-- script files -->
+            <script src="./game/game.js" type="module"></script>
         </div>
         <div class="learn">
             <a id="learn"></a>
             <h1 align="center">How to make sushi</h1>
             <p align="center">Below are basic instructions on making sushi.</p>
             <p align="center">After that there are specific instructions and ingredients for specific rolls.</p>
-            
+
             <div class="learn-item">
                 <P>
                     Necessary Tools
@@ -201,49 +215,56 @@
                     <div class='box2'>
                         <div class="item">
                             <p align="center" id='itemName'>Rice cooker:</p>
-                            <img id= "itemImage"src="../Images/RiceCooker.jpg" alt="RiceCooker"
-                            width="300" height="300">
-                            <p id='itemDesc'> Electric Rice Cookers can make making rice a lot more convenient. Preferable use Japanese sushi rice. Go to your local Asian market if you can't find it. </p>
+                            <img id="itemImage" src="../Images/RiceCooker.jpg" alt="RiceCooker" width="300"
+                                height="300">
+                            <p id='itemDesc'> Electric Rice Cookers can make making rice a lot more convenient.
+                                Preferable use Japanese sushi rice. Go to your local Asian market if you can't find it.
+                            </p>
                         </div>
                         <div class="item">
                             <p align="center" id='itemName'>Rice paddle:</p>
-                            <img id= "itemImage"src="../Images/ricePaddle.jpg" alt="RiceCooker"
-                            width="300" height="300">
-                            <p id='itemDesc'> After the rice is cooked you need to mix in rice vinegar into the rice. A paddle helps disperse the vinegar easily.</p>
+                            <img id="itemImage" src="../Images/ricePaddle.jpg" alt="RiceCooker" width="300"
+                                height="300">
+                            <p id='itemDesc'> After the rice is cooked you need to mix in rice vinegar into the rice. A
+                                paddle helps disperse the vinegar easily.</p>
                         </div>
-                        
+
                         <div class="item">
                             <p align="center" id='itemName'>Bowl of Water:</p>
-                            <img id= "itemImage"src="../Images/water.jpg" alt="RiceCooker"
-                            width="300" height="300">
-                            <p id='itemDesc'> Your hands will get sticky from working and placing rice onto the mat. So wash your hands often.</p>
+                            <img id="itemImage" src="../Images/water.jpg" alt="RiceCooker" width="300" height="300">
+                            <p id='itemDesc'> Your hands will get sticky from working and placing rice onto the mat. So
+                                wash your hands often.</p>
                         </div>
                         <div class="item">
                             <p align="center" id='itemName'>Rolling Mat:</p>
-                            <img id= "itemImage"src="../Images/rollingMat.jpg" alt="RiceCooker"
-                            width="300" height="300">
-                            <p id='itemDesc'> Cover your mat in plastic wrap to keep rice from sticking to your mat. The mat is used to roll and shape your sushi.</p>
+                            <img id="itemImage" src="../Images/rollingMat.jpg" alt="RiceCooker" width="300"
+                                height="300">
+                            <p id='itemDesc'> Cover your mat in plastic wrap to keep rice from sticking to your mat. The
+                                mat is used to roll and shape your sushi.</p>
                         </div>
                         <div class="item">
                             <p align="center" id='itemName'>Sharp Knife:</p>
-                            <img id= "itemImage"src="../Images/SushiKnife.jpg" alt="RiceCooker"
-                            width="300" height="300">
-                            <p id='itemDesc'> Remember to make clean cuts. Make sure your knife isn't dull otherwise it will squash your rolls. Wrapping the roll before cutting can help keep roll together but is optional.If you are cutting your ingredients remember to slice into strips approximately the diameter of a dime to make roll assembly easier.</p>
-                            
+                            <img id="itemImage" src="../Images/SushiKnife.jpg" alt="RiceCooker" width="300"
+                                height="300">
+                            <p id='itemDesc'> Remember to make clean cuts. Make sure your knife isn't dull otherwise it
+                                will squash your rolls. Wrapping the roll before cutting can help keep roll together but
+                                is optional.If you are cutting your ingredients remember to slice into strips
+                                approximately the diameter of a dime to make roll assembly easier.</p>
+
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="learn-item">
                 <p>
                     Perfect Rice for 3 rolls
                 </p>
-                
+
                 <div class="content">
                     <div class="box1">
-                    <div class="Ingredients">
-                        
+                        <div class="Ingredients">
+
                             <div class="nestedIngrd">
                                 <p>1 Cup</p>
                                 <p>Rice</p>
@@ -265,7 +286,7 @@
                                 <p>Salt</p>
                             </div>
                         </div>
-                        <div class= "Image">
+                        <div class="Image">
                             <img src="../Images/RiceCooker.jpg" alt="RiceCooker">
                             <p>Remember to add the vinegar afterwards.</p>
                             <p>Scale numbers to however amount of rolls you want to make.</p>
@@ -275,39 +296,44 @@
             </div>
             <div class="learn-item">
                 <p>Assembly Instructions</p>
-            
-            <div class="content">
-                <div class="box2">
-                    <div class="steps">
-                        <li>1) Place down nori onto your mat.</li>
-                        <li>2) On one side spread rice in an even layer.</li>
-                        <li>3) Flip over and assemble your roll inner ingredients. Make sure to line them up so each roll has the same stuff when cut.</li>
-                        <li>4) Roll the mat from the buttom going upwards. Here you can decide if you want your roll to be squared or circular by adjusting how you press on the roll with the mat.</li>
-                        <li>5) If your roll has ingredients on the outside other than Rice you can layer them on evenly onto the made roll on top. Optionally cover assembled roll in plastic wrap to make cutting easier (recommended if you put ingredients on outside). </li>
-                        <li>6) Cut your roll into 8 even segments. Easiest way to do this is first cut in half, then cut the two halves in half, and repeat one more time for the two halves.</li>
-                        <li>7) Ready to serve.</li>
+
+                <div class="content">
+                    <div class="box2">
+                        <div class="steps">
+                            <li>1) Place down nori onto your mat.</li>
+                            <li>2) On one side spread rice in an even layer.</li>
+                            <li>3) Flip over and assemble your roll inner ingredients. Make sure to line them up so each
+                                roll has the same stuff when cut.</li>
+                            <li>4) Roll the mat from the buttom going upwards. Here you can decide if you want your roll
+                                to be squared or circular by adjusting how you press on the roll with the mat.</li>
+                            <li>5) If your roll has ingredients on the outside other than Rice you can layer them on
+                                evenly onto the made roll on top. Optionally cover assembled roll in plastic wrap to
+                                make cutting easier (recommended if you put ingredients on outside). </li>
+                            <li>6) Cut your roll into 8 even segments. Easiest way to do this is first cut in half, then
+                                cut the two halves in half, and repeat one more time for the two halves.</li>
+                            <li>7) Ready to serve.</li>
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
         </div>
         <div class="learn" id="SpecificRolls">
-            <h2 align = "center">Specific Rolls</h2>
-            
+            <h2 align="center">Specific Rolls</h2>
+
         </div>
-        
+
         <div class="aboutWrap">
-        <a id="about">
-            <h1>About</h1>
-            <p>Created by Piotr Jackowski</p>
-            <p>Project for Comp 324/424</p>
-            <p>Source code: <a href="https://github.com/pjack7oo/Sushi-Website">Github</a></p>
-            <p>More Projects by me can be found <a href="#insert other website">Here.</p>
-        </a>
-    </div>
+            <a id="about">
+                <h1>About</h1>
+                <p>Created by Piotr Jackowski</p>
+                <p>Project for Comp 324/424</p>
+                <p>Source code: <a href="https://github.com/pjack7oo/Sushi-Website">Github</a></p>
+                <p>More Projects by me can be found <a href="#insert other website">Here.</p>
+            </a>
+        </div>
         <script>
             $(document).on('click', '.learn-item', function () {
-                
+
 
                 $(this).toggleClass('learnActive');
                 $('roll').toggle();
@@ -317,8 +343,9 @@
         <footer id="footer">
             <!--external link-->
             <a href="http://www.youtube.com/">Youtube</a>
-            <a href="https://www.freepik.com/free-photos-vectors/fish">Fish vector created by agnessz_arts - www.freepik.com</a>
-        </footer>    
+            <a href="https://www.freepik.com/free-photos-vectors/fish">Fish vector created by agnessz_arts -
+                www.freepik.com</a>
+        </footer>
     </div>
-    
+
 </body>
