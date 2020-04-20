@@ -13,7 +13,7 @@ const express = require("express"),
   UserClearSave = require("../models/user-clearSave.js");
 mailer = new MailerMock(); //TODO or remove
 var session = [],
-  url = "http://localhost:42550";
+  url = "http://sushicat-meow.herokuapp.com/";
 
 router
   .route("/account/register")
@@ -35,7 +35,7 @@ router
       userRegistration
     );
 
-    res.set("Access-Control-Allow-Origin", url);
+    res.set("Access-Control-Allow-Origin", '*');
 
     if (apiResponse1.success) {
       accountController.register(apiResponse1.extras.user, function (
