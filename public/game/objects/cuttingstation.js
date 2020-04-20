@@ -219,7 +219,7 @@ export function drawCuttingStation(context) {
           "Cutting!",
           true,
           true,
-          5,
+          10,
           " 20px Verdana"
         );
         progBar.drawColorProgressbar(cuttingStation2.progress, bar2, false);
@@ -233,7 +233,7 @@ export function drawCuttingStation(context) {
           "Ready to cut! Press C key",
           true,
           true,
-          5,
+          10,
           "10px Verdana"
         );
       }
@@ -259,7 +259,7 @@ export function drawCuttingStation(context) {
         "Cutting!",
         true,
         true,
-        5,
+        10,
         " 20px Verdana"
       );
       progBar.drawColorProgressbar(cuttingStation.progress, bar, false);
@@ -273,7 +273,7 @@ export function drawCuttingStation(context) {
         "Ready to cut! Press C key",
         true,
         true,
-        5,
+        10,
         " 10px Verdana"
       );
     }
