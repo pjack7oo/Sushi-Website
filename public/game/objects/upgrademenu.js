@@ -516,7 +516,7 @@ function storageBoxUpgradesDraw(x, y) {
     data.ingredientBox1.maxStorage.toString(),
     true,
     true,
-    5,
+    10,
     "20px Arial"
   );
   drawing.drawTextBox(
@@ -528,7 +528,7 @@ function storageBoxUpgradesDraw(x, y) {
     data.ingredientBox2.maxStorage.toString(),
     true,
     true,
-    5,
+    10,
     "20px Arial"
   );
 }
