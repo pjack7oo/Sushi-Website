@@ -90,8 +90,8 @@ router.get('/about', function(req, res) {
 
 var dbName = 'SushiCatDB';
 var connectionString = "mongodb+srv://piotr:12345@cluster0-q866k.mongodb.net/" + dbName;
-var mongodbString = process.env.MONGODB_URI +"/" + dbName;
-mongoose.connect(connectionString);
+var mongodbString = process.env.MONGODB_URI;
+mongoose.connect(mongodbString);
 var db = mongoose.connection;
 // var callrollImage = './public/Images/californiaRoll.png';
 // var alsakarollImage = './public/Images/alaskaroll.png'
