@@ -37,7 +37,15 @@ var offsetX, offsetY;
 var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
 
 context.fillStyle = 'Gray';
-init();
+if(rollsLoaded) {
+    init();
+} else {
+    setTimeout(function() {
+        init();
+    }, 10*1000);
+}
+
+
 
 function init()
 {
