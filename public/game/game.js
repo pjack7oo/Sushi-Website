@@ -46,7 +46,7 @@ function loadGame() {
     else {
         setTimeout(function() {
             loadGame();
-        }, 10*1000);
+        }, (5*1000));
     }
 }
 
