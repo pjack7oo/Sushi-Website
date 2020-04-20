@@ -138,6 +138,29 @@ function getWantedRoll(customer, level = 0) {
 
       break;
     case 1:
+      var i = getRandomInt(2);
+      var roll = rolls.getRoll(i);
+      customer.want.push(roll);
+      break;
+    case 2:
+      var i = getRandomInt(2);
+      var roll = rolls.getRoll(i);
+      customer.want.push(roll);
+      break;
+    case 3:
+      var i = getRandomInt(4);
+      var roll = rolls.getRoll(i);
+      customer.want.push(roll);
+      break;
+    case 4:
+      var i = getRandomInt(4);
+      var roll = rolls.getRoll(i);
+      customer.want.push(roll);
+      break;
+    case 5:
+      var i = getRandomInt(5);
+      var roll = rolls.getRoll(i);
+      customer.want.push(roll);
       break;
     default:
       var i = getRandomInt(7);
@@ -371,7 +394,7 @@ export function updateGetCustomer() {
 }
 
 function customerLeave(customer) {
- // console.log(customer.id, "Bye");
+  // console.log(customer.id, "Bye");
 
   //customers.splice(customer.id,1);//
   removeCustomer(customer.id);
