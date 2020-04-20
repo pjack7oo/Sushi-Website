@@ -21,6 +21,7 @@ router
     res.send("hello");
   })
   .post(function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     var userSession = new UserSession(),
       accountController = new AccountController(
         User,
