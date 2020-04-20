@@ -19,6 +19,11 @@ var app = express();
 
 const publicDir = path.join(__dirname, '../');
 
+app.use((req,res, next)=> {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+})
+
 router.get('/',function(req,res){
   res.sendFile(path.join(publicDir + '/public/main2.html'));
   //__dirname : It will resolve to your project folder.
@@ -119,6 +124,8 @@ var db = mongoose.connection;
 //   AlaskaRoll.save();
 // })  
 //rollUpload(db);
+
+
 app.use(expressSession({
   ker: 'session',
   secret: 'foo',
