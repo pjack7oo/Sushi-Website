@@ -142,7 +142,7 @@ function upgradeDraw() {
     "Upgrade Menu",
     false,
     true,
-    -5,
+    40,
     "30px Arial",
     "Red",
     "white",
@@ -442,7 +442,7 @@ function riceCookerUpgradesDraw(x, y) {
     data.cookTime.toString(),
     true,
     true,
-    5,
+    20,
     "20px Arial"
   );
   drawing.drawTextBox(
@@ -454,7 +454,7 @@ function riceCookerUpgradesDraw(x, y) {
     data.maxRiceCount.toString(),
     true,
     true,
-    5,
+    20,
     "20px Arial"
   );
 }
