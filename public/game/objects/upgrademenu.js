@@ -579,7 +579,7 @@ function rollingMattUpgradesDraw(x, y) {
     data.speed.toString(),
     true,
     true,
-    5,
+    20,
     "20px Arial"
   );
 }
@@ -641,7 +641,7 @@ function cuttingBoardUpgradesDraw(x, y) {
     data.cuttingSpeed.toString(),
     true,
     true,
-    5,
+    20,
     "20px Arial"
   );
   drawing.drawTextBox(
@@ -653,7 +653,7 @@ function cuttingBoardUpgradesDraw(x, y) {
     data.useSecondBoard.toString(),
     true,
     true,
-    5,
+    20,
     "20px Arial"
   );
 }
@@ -714,7 +714,7 @@ function teaKettleUpgradesDraw(x, y) {
     teaKettle.getSteepTime().toString(),
     true,
     true,
-    5,
+    20,
     "20px Arial"
   );
   drawing.drawTextBox(
@@ -726,7 +726,7 @@ function teaKettleUpgradesDraw(x, y) {
     teaKettle.getStorageCount().toString(),
     true,
     true,
-    5,
+    20,
     "20px Arial"
   );
 }

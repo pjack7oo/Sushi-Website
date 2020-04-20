@@ -108,7 +108,7 @@ export function startLevel() {
       "<-- 2)Ohh! look theres a customer.",
       10,
       15,
-      "left",
+      "center",
       true,
       true,
       "white",
