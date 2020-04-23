@@ -226,8 +226,8 @@ describe('AccountController', function () {
     it('Returns "Password confirm mismatch"', function (done) {
         var testUserRegistration = new UserRegistration({
             email: 'test@test.com',
-            firstName: 'irrelevant',
-            lastName: 'irrelevant',
+            name: 'irrelevant',
+            username: 'irrelevant',
             password: 'password1',
             passwordConfirm: 'password2'
         });
@@ -239,8 +239,8 @@ describe('AccountController', function () {
     it('Returns User Model', function (done) {
         var testUserRegistration = new UserRegistration({
             email: 'test@test.com',
-            firstName: 'irrelevant',
-            lastName: 'irrelevant',
+            name: 'irrelevant',
+            username: 'irrelevant',
             password: 'password',
             passwordConfirm: 'password'
         });

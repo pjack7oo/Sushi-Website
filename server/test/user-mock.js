@@ -27,8 +27,8 @@ UserMock.prototype.seedUsers = function () {
 
         var user = new this.User({
             email: 'Test' + i + '@test.com',
-            name: 'FirstName' + i,
-            username: 'LastName' + i,
+            name: 'name' + i,
+            username: 'username' + i,
             passwordHash: this.crypto.pbkdf2Sync('Password' + i, passwordSaltIn, cryptoIterations, cryptoKeyLen, 'sha512'),
             passwordSalt: passwordSaltIn
         });
