@@ -2,7 +2,7 @@ var resetPasswordUrl =
   "https://sushicat-meow.herokuapp.com/api/account/resetpassword"; //"http://localhost:5000/api/account/resetpassword";
 var clearSaveDataUrl =
   "https://sushicat-meow.herokuapp.com/api/account/clearSave"; //"http://localhost:5000/api/account/clearSave";
-var deleteAccountUrl = "http://sushicat-meow.herokuapp.com/api/account/delete";
+var deleteAccountUrl = "https://sushicat-meow.herokuapp.com/api/account/delete";
 
 function resetPassword() {
   document.getElementById("resetPassword").style.display = "block";
