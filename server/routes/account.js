@@ -173,8 +173,8 @@ router.route("/account/logoff")
 
   router.route("/account/delete")
     .post(function( req, res) {
-      res.header("Access-Control-Allow-Origin", "*");
       
+      res.header("Access-Control-Allow-Origin", "*");
       var userSession = new UserSession(),
       accountController = new AccountController(
         User,
@@ -188,7 +188,8 @@ router.route("/account/logoff")
           console.log(err);
         }
         return res.send(response);
-      })
+      });
+      
     });
 // router.route('/account/resetpassword')
 //     .post(function (req, res) {
