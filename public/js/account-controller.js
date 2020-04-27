@@ -210,6 +210,7 @@ function clearAccount() {
   var buttons = document.getElementById("accountButtons");
   buttons.removeChild(document.getElementById("resetPasswordbtn"));
   buttons.removeChild(document.getElementById("clearSave"));
+  buttons.removeChild(document.getElementById("deleteAccount"));
 }
 
 function logOut() {
