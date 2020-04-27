@@ -176,10 +176,9 @@ router.route("/account/logoff")
   });
 
 
-  router.route("/account/delete")
-    .post(function( req, res) {
+router.route("/account/delete").post(function( req, res) {
       
-      res.header("Access-Control-Allow-Origin", "*");
+      
       
       var userSession = new UserSession(),
       accountController = new AccountController(
@@ -188,7 +187,7 @@ router.route("/account/logoff")
         userSession,
         mailer
       );
-      res.set("Access-Control-Allow-Origin", '*');
+      
       var userGetSave = new UserGetSave(req.body);
       accountController.deleteAccount(userGetSave.username, function (err, response) {
         if (err) {
