@@ -86,9 +86,13 @@ function clearSave() {
         //location.reload();
         return true;
       }
+      else {
+        console.log(resp);
+        
+      }
     },
     error: function (error) {
-      console.log(e.message);
+      console.log(error.message);
       $ctnErr.html(
         "<p>Oops! SushiCat had a problem and could not clear your save.  Please try again in a few minutes.</p>"
       );
@@ -113,6 +117,9 @@ function deleteAccount() {
         localStorage.removeItem("sushicat-session");
         location.reload();
         return true;
+      } else {
+        console.log(resp);
+        
       }
     },
     error: function (error) {
