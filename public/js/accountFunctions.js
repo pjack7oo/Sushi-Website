@@ -83,7 +83,7 @@ function clearSave() {
         $ctnErr.html("<p>SushiCat has cleared your save.</p>");
         $ctnErr.addClass("bi-ctn-err").slideDown();
         localStorage.removeItem("gameData");
-        location.reload();
+        //location.reload();
         return true;
       }
     },
