@@ -110,8 +110,7 @@ router.route("/account/rolls").get(function (req, res) {
   });
 });
 
-router
-  .route("/account/data")
+router.route("/account/data")
   .post(function (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     var userSession = new UserSession(),
@@ -147,8 +146,7 @@ router
     });
   });
 
-router
-  .route("/account/logoff")
+router.route("/account/logoff")
   .get(function (req, res) {
     var userSession = new UserSession(),
       accountController = new AccountController(
@@ -172,6 +170,25 @@ router
     res.send(new ApiResponse({ success: true }));
   });
 
+
+  router.route("/account/delete")
+    .post(function( req, res) {
+      res.header("Access-Control-Allow-Origin", "*");
+      var userSession = new UserSession(),
+      accountController = new AccountController(
+        User,
+        req.session,
+        userSession,
+        mailer
+      );
+      var userGetSave = new UserGetSave(req.body);
+      accountController.deleteAccount(userGetSave.username, function (err, resonse) {
+        if (err) {
+          console.log(err);
+        }
+        return res.send(response);
+      })
+    })
 // router.route('/account/resetpassword')
 //     .post(function (req, res) {
 

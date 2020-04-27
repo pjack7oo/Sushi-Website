@@ -2,6 +2,7 @@ var resetPasswordUrl =
   "https://sushicat-meow.herokuapp.com/api/account/resetpassword"; //"http://localhost:5000/api/account/resetpassword";
 var clearSaveDataUrl =
   "https://sushicat-meow.herokuapp.com/api/account/clearSave"; //"http://localhost:5000/api/account/clearSave";
+var deleteAccountUrl = "https://sushicat-meow.herokuapp.com/api/account/delete";
 
 function resetPassword() {
   document.getElementById("resetPassword").style.display = "block";
@@ -90,6 +91,33 @@ function clearSave() {
       console.log(e.message);
       $ctnErr.html(
         "<p>Oops! SushiCat had a problem and could not clear your save.  Please try again in a few minutes.</p>"
+      );
+      $ctnErr.addClass("bi-ctn-err").slideDown();
+    },
+  });
+}
+
+function deleteAccount() {
+  var $ctnErr = $("#account-ctn-err");
+  var user = JSON.parse(localStorage.getItem("sushicat-session"));
+  var username = user.userProfileModel.username;
+  $.ajax({
+    type: "POST",
+    url: deleteAccountUrl,
+    data: "username=" + username,
+    success: function (resp) {
+      if (resp.success == true) {
+        $ctnErr.html("<p>SushiCat has deleted your account.</p>");
+        $ctnErr.addClass("bi-ctn-err").slideDown();
+        localStorage.removeItem("sushicat-session");
+        location.reload();
+        return true;
+      }
+    },
+    error: function (error) {
+      console.log(e.message);
+      $ctnErr.html(
+        "<p>Oops! SushiCat had a problem and could not delete your account.  Please try again in a few minutes.</p>"
       );
       $ctnErr.addClass("bi-ctn-err").slideDown();
     },

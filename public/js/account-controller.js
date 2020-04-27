@@ -81,6 +81,7 @@ function drawAccount() {
       "<b>Name: </b>" + user.userProfileModel.name;
     createAccountControlResetPassword();
     createAccountControlClearSave();
+    createAccountControlDelete();
   } else {
     $ctnErr.html("<p> Oops! Please login or Register");
     $ctnErr.addClass("bi-ctn-err").slideDown();
@@ -167,6 +168,24 @@ function createAccountControlClearSave() {
   clearSaveBtn.onclick = clearSave;
   accountButtons.appendChild(clearSaveBtn);
 }
+
+function createAccountControlDelete() {
+  var accountButtons = document.getElementById("accountButtons");
+  var element = document.getElementById("deleteAccount");
+
+  if (typeof element != "undefined" && element != null) {
+    return;
+  }
+
+  var deleteAccountBtn = document.createElement("button");
+  deleteAccountBtn.innerHTML = "Clear Save";
+  deleteAccountBtn.id = "clearSave";
+  deleteAccountBtn.style.padding = "10px 10px";
+  deleteAccountBtn.onclick = deleteAccount;
+  accountButtons.appendChild(deleteAccountBtn);
+}
+
+
 function createAccountControlResetPassword() {
   var accountButtons = document.getElementById("accountButtons");
   var element = document.getElementById("resetPasswordbtn");

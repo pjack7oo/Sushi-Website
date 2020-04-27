@@ -435,6 +435,46 @@ AccountController.prototype.clearSave = function (username, callback) {
     }
   });
 };
+
+AccountController.prototype.deleteAccount = function (username, callback) {
+  var me = this;
+
+  me.UserSaves.findOne({ username: username }, function (err, user) {
+    if (err) {
+        return callback(
+          err,
+          new me.ApiResponse({
+            success: false,
+            extras: { msg: me.ApiMessages.DB_ERROR },
+          })
+        );
+      }
+      if (user) {
+        user.remove(function(err,doc) {
+          if (err) {
+            return callback(
+              err,
+              new me.ApiResponse({
+                success: false,
+                extras: { msg: me.ApiMessages.DB_ERROR },
+              })
+            );
+          }
+          if (doc) {
+            return callback(
+              err,
+              new me.ApiResponse({
+                success: true,
+                extras: null,
+              })
+            );
+          }
+        })
+
+      }
+    });
+}
+
 AccountController.prototype.resetPasswordFinal = function (
   username,
   newPassword,
@@ -443,6 +483,7 @@ AccountController.prototype.resetPasswordFinal = function (
 ) {
   var me = this;
 
+  
   // if (!me.session || !me.session.passwordResetHash) {
   //     return callback(null, new me.ApiResponse({ success: false, extras: { msg: me.ApiMessages.PASSWORD_RESET_EXPIRED } }));
   // }
