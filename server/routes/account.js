@@ -148,6 +148,7 @@ router.route("/account/data")
 
 router.route("/account/logoff")
   .get(function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     var userSession = new UserSession(),
       accountController = new AccountController(
         User,
@@ -159,6 +160,7 @@ router.route("/account/logoff")
     res.send(new ApiResponse({ success: true }));
   })
   .post(function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     var userSession = new UserSession(),
       accountController = new AccountController(
         User,

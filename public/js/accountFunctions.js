@@ -105,7 +105,7 @@ function deleteAccount() {
     type: "POST",
     url: deleteAccountUrl,
     data: "username=" + username,
-    
+    headers:{"Access-Control-Allow-Origin": "*",},
     success: function (resp) {
       if (resp.success == true) {
         $ctnErr.html("<p>SushiCat has deleted your account.</p>");
