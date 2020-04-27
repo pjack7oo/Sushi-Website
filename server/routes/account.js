@@ -193,8 +193,10 @@ router.route("/account/logoff")
       accountController.deleteAccount(userGetSave.username, function (err, response) {
         if (err) {
           console.log(err);
+        }else {
+          res.send(response);
         }
-         res.send(response);
+         
       });
       
     });
