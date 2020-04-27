@@ -173,7 +173,7 @@ router.route("/account/logoff")
 
   router.route("/account/delete")
     .post(function( req, res) {
-      res.header("Access-Control-Allow-Origin", "*");
+      //res.header("Access-Control-Allow-Origin", "*");
       var userSession = new UserSession(),
       accountController = new AccountController(
         User,

@@ -115,7 +115,7 @@ function deleteAccount() {
       }
     },
     error: function (error) {
-      console.log(e.message);
+      console.log(error.message);
       $ctnErr.html(
         "<p>Oops! SushiCat had a problem and could not delete your account.  Please try again in a few minutes.</p>"
       );
