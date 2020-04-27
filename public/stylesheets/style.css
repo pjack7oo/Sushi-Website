@@ -57,6 +57,9 @@ header a:hover {
     font-family: 'Ubuntu', sans-serif;
     align-items: center;
 }
+.Main > h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
 @media all and (max-width: 600px) {
     header {
         grid-column: 4 /5;
@@ -107,6 +110,9 @@ header a:hover {
     flex-wrap: wrap;
     background-color: chartreuse;
     border-radius: 20px;
+}
+.learn > h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 .learn-item {
     background-color: darkgreen;

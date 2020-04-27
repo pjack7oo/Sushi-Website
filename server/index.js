@@ -148,6 +148,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", router);
 app.use("/api", accountRoutes);
+
 var server = app.listen(PORT, function () {
   console.log(`Listening on ${PORT}`);
 });
