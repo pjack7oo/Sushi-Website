@@ -221,7 +221,7 @@ router.route("/account/clearSave").post(function (req, res) {
     );
   var userClearSave = new UserClearSave(req.body);
   console.log(userClearSave);
-
+  res.set("Access-Control-Allow-Origin", '*');
   accountController.clearSave(userClearSave.username, function (err, response) {
     return res.send(response);
   });
