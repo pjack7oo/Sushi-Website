@@ -165,6 +165,7 @@ function createAccountControlClearSave() {
   clearSaveBtn.innerHTML = "Clear Save";
   clearSaveBtn.id = "clearSave";
   clearSaveBtn.style.padding = "10px 10px";
+  clearSaveBtn.style.margin = "10px";
   clearSaveBtn.onclick = clearSave;
   accountButtons.appendChild(clearSaveBtn);
 }
@@ -178,9 +179,10 @@ function createAccountControlDelete() {
   }
 
   var deleteAccountBtn = document.createElement("button");
-  deleteAccountBtn.innerHTML = "Clear Save";
-  deleteAccountBtn.id = "clearSave";
+  deleteAccountBtn.innerHTML = "Delete Account";
+  deleteAccountBtn.id = "deleteAccount";
   deleteAccountBtn.style.padding = "10px 10px";
+  deleteAccountBtn.style.margin = "10px";
   deleteAccountBtn.onclick = deleteAccount;
   accountButtons.appendChild(deleteAccountBtn);
 }
