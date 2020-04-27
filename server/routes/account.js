@@ -58,7 +58,7 @@ router.route("/account/login").post(function (req, res) {
       userSession,
       mailer
     );
-
+    res.set("Access-Control-Allow-Origin", '*');
   var userLogon = new UserLogon(req.body);
 
   accountController.logon(userLogon.username, userLogon.password, function (
@@ -78,7 +78,7 @@ router.route("/account/save").post(function (req, res) {
       userSession,
       mailer
     );
-
+    res.set("Access-Control-Allow-Origin", '*');
   var userSendSave = new UserSendSave(req.body);
   //console.log(userSendSave.gameData);
 
@@ -94,6 +94,7 @@ router.route("/account/save").post(function (req, res) {
 });
 
 router.route("/account/rolls").get(function (req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
   var userSession = new UserSession(),
     accountController = new AccountController(
       User,
@@ -101,7 +102,7 @@ router.route("/account/rolls").get(function (req, res) {
       userSession,
       mailer
     );
-
+    res.set("Access-Control-Allow-Origin", '*');
   accountController.getRolls(function (err, response) {
     if (err) {
       console.log(err);
@@ -120,6 +121,7 @@ router.route("/account/data")
         userSession,
         mailer
       );
+      res.set("Access-Control-Allow-Origin", '*');
     var userGetSave = new UserGetSave(req.body);
     console.log(userGetSave);
     accountController.getData(userGetSave.username, function (err, response) {
@@ -156,6 +158,7 @@ router.route("/account/logoff")
         userSession,
         mailer
       );
+      res.set("Access-Control-Allow-Origin", '*');
     accountController.logoff();
     res.send(new ApiResponse({ success: true }));
   })
@@ -184,6 +187,7 @@ router.route("/account/logoff")
         userSession,
         mailer
       );
+      res.set("Access-Control-Allow-Origin", '*');
       var userGetSave = new UserGetSave(req.body);
       accountController.deleteAccount(userGetSave.username, function (err, resonse) {
         if (err) {
