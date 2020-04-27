@@ -193,7 +193,7 @@ router.route("/account/logoff")
         if (err) {
           console.log(err);
         }
-        return res.send(response);
+         res.send(response);
       });
       
     });
