@@ -50,6 +50,7 @@ router
   });
 
 router.route("/account/login").post(function (req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
   var userSession = new UserSession(),
     accountController = new AccountController(
       User,
@@ -69,6 +70,7 @@ router.route("/account/login").post(function (req, res) {
 });
 
 router.route("/account/save").post(function (req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
   var userSession = new UserSession(),
     accountController = new AccountController(
       User,
@@ -111,6 +113,7 @@ router.route("/account/rolls").get(function (req, res) {
 router
   .route("/account/data")
   .post(function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     var userSession = new UserSession(),
       accountController = new AccountController(
         User,
